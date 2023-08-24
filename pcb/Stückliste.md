@@ -1,4 +1,4 @@
-##Stückliste
+# Stückliste
 
 - gedruckte PCB
 - ESP32
