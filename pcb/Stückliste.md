@@ -5,4 +5,5 @@
 - [30 Duo-LEDs  0,19€/Stk.](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
 - 9V Batterie
 - [4 Taster 1,66€/Stk.](https://www.mouser.de/ProductDetail/E-Switch/320E11BLK?qs=3Jlm%2Fl9ddLx6rOdduAcsXA%3D%3D)
+- [Spannungsregler](https://www.conrad.de/de/p/stmicroelectronics-l7805abv-spannungsregler-linear-to-220ab-positiv-fest-1-5-a-1185130.html)
 - 2 5er 221-WAGO-Klemmen
