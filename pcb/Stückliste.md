@@ -2,7 +2,8 @@
 
 - gedruckte PCB
 - ESP32
-- [LED-Stripe  0,23€/Stk.](https://www.amazon.de/BTF-LIGHTING-WS2812B-Adressierbare-Streifen-wasserdicht/dp/B07JBYZRWD/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3A9N1PB357YFC&keywords=btf-ligtin%2B1m%2B100%2Bleds&qid=1693290853&s=lighting&sprefix=btf-ligtin%2B1m%2B100%2Bled%2Clighting%2C77&sr=1-1&th=1)
+- 1. [LED-Stripe  0,23€/Stk.](https://www.amazon.de/BTF-LIGHTING-WS2812B-Adressierbare-Streifen-wasserdicht/dp/B07JBYZRWD/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3A9N1PB357YFC&keywords=btf-ligtin%2B1m%2B100%2Bleds&qid=1693290853&s=lighting&sprefix=btf-ligtin%2B1m%2B100%2Bled%2Clighting%2C77&sr=1-1&th=1)
+- ... oder 2. [Duo-LEDs](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
 - 9V Batterie
 - [4 Taster 1,66€/Stk.](https://www.mouser.de/ProductDetail/E-Switch/320E11BLK?qs=3Jlm%2Fl9ddLx6rOdduAcsXA%3D%3D)
 - [Schiebeschalter 1,29€/Stk.](https://www.conrad.de/de/p/tru-components-1386942-css-1201-schiebeschalter-50-v-dc-0-3-a-1-x-aus-ein-1-st-1570488.html)
