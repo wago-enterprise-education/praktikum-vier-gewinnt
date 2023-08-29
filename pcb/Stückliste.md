@@ -5,6 +5,7 @@
 - [LED-Stripe  0,23€/Stk.](https://www.amazon.de/BTF-LIGHTING-WS2812B-Adressierbare-Streifen-wasserdicht/dp/B07JBYZRWD/ref=sr_1_1?__mk_de_DE=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=3A9N1PB357YFC&keywords=btf-ligtin%2B1m%2B100%2Bleds&qid=1693290853&s=lighting&sprefix=btf-ligtin%2B1m%2B100%2Bled%2Clighting%2C77&sr=1-1&th=1)
 - 9V Batterie
 - [4 Taster 1,66€/Stk.](https://www.mouser.de/ProductDetail/E-Switch/320E11BLK?qs=3Jlm%2Fl9ddLx6rOdduAcsXA%3D%3D)
+- [Schiebeschalter 1,29€/Stk.](https://www.conrad.de/de/p/tru-components-1386942-css-1201-schiebeschalter-50-v-dc-0-3-a-1-x-aus-ein-1-st-1570488.html)
 - [Spannungsregler 0,44€/Stk.](https://www.conrad.de/de/p/stmicroelectronics-l7805abv-spannungsregler-linear-to-220ab-positiv-fest-1-5-a-1185130.html)
 - 2 5er 221-WAGO-Klemmen
 - [Diode 0,04€/Stk.](https://www.conrad.de/de/p/diotec-si-gleichrichterdiode-1n4007-do-204al-1000-v-1-a-162272.html)
