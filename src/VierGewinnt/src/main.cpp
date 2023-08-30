@@ -61,7 +61,6 @@ void updateColumn(){
     if(currentColumn != 0)
     {
       currentColumn = (currentColumn - 1);
-      Serial.println(digitalRead(tasterL));
     }
   }
   else if(digitalRead(tasterR)){
