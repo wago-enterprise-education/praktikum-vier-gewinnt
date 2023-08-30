@@ -11,134 +11,127 @@ class LEDMatrix
     const int flashGreen = 4;
 
     std::vector< std::vector<int> > pins;
-    std::vector< std::vector<byte> > LEDs;
-    byte cColumns; 
-    byte cLines;
-    byte columnN;
+    std::vector< std::vector<byte> > LEDvalues;
+    byte nColumns; 
+    byte nLines;
+    byte currentColumn;
 
     public: 
-    LEDMatrix(int *p[], int pinsColumn, int pinsLine){
-        cColumns = pinsColumn;
-        cLines = pinsLine;
+    LEDMatrix(int *p[], int initNColumns, int initNLines){
+        nColumns = initNColumns;
+        nLines = initNLines;
 
-        int a;
-        if(pinsColumn > pinsLine) { a = pinsColumn;}
-        else { a = pinsLine; }
+        int tmp;
+        if(initNColumns > initNLines) { tmp = initNColumns;}
+        else { tmp = initNLines; }
         for(int i = 0; i < 2; i++)
         {
-            for (int j = 0; j < a; j++)
+            for (int j = 0; j < tmp; j++)
             {
                 pins[i][j] = p[i][j];
             }
         }
 
-        for(int i = 0; i < pinsColumn; i++)
+        for(int i = 0; i < initNColumns; i++)
         {
-            for (int j = 0; j < pinsLine; j++)
+            for (int j = 0; j < initNLines; j++)
             {
-                LEDs[i][j] = 0;
+                LEDvalues[i][j] = 0;
             }
         }
 
-        columnN = 0;
+        currentColumn = 0;
     }
 
-    /*void flashLight(int columnNumber, int color) 
-    {
-        //Der übergeben Block in der matrix bekommt mit color eine case
-
-            LEDs[columnNumber][0] = color;
-
-    }
-    */
-
-    void setNewLigth(int columnNumber, int color){
-        if (LEDs[columnNumber][0] == off){
+    void setLightValue(int currentColumnumber, int color){
+        if (LEDvalues[currentColumnumber][0] == off){
             if (color < 2){
-                for(int i = cLines-1; i >= 0; i--)
+                for(int i = nLines-1; i >= 0; i--)
                 {
-                    if(LEDs[columnNumber][i] == 0)
+                    if(LEDvalues[currentColumnumber][i] == 0)
                     {
-                        LEDs[columnNumber][i] = color;
+                        LEDvalues[currentColumnumber][i] = color;
                     }
                 }
             }
             else {
-                LEDs[columnNumber][0] = color;
+                LEDvalues[currentColumnumber][0] = color;
             }
         }
     }
 
     void reset(){
-        for(int i = 0; i < cColumns; i++)
+        for(int i = 0; i < nColumns; i++)
         {
-            for (int j = 0; j < cLines; j++)
+            for (int j = 0; j < nLines; j++)
             {
-                LEDs[i][j] = 0;
+                LEDvalues[i][j] = 0;
             }
         }
     }
 
     bool update(){
-        bool won = wincontrol();
+        bool won = winControl();
         if(won){
-            gameOver();
+            endAnimation();
         }
         else{
-            setLEDMatrix();
+            setLEDs();
         }
         return won;
     }
 
     private:
-    void setLEDMatrix(){
+    void setLEDs(){
         for (byte l = 0; l < 6; l++)
         {
             digitalWrite(pins[1][l], LOW);
+            digitalWrite(pins[2][l], LOW);
         }
     
         for (byte c = 0; c < 6; c++)
         {
-            digitalWrite(pins[0][c], c != columnN);
+            digitalWrite(pins[0][c], c != currentColumn);
         }
       
         for (int line = 0; line < 5; line++)
         {
-            switch (LEDs[columnN][line])
+            switch (LEDvalues[currentColumn][line])
             {
             case 0: //off
-                digitalWrite(pins[1][line], LOW);
+                digitalWrite(pins[red][line], LOW);
+                digitalWrite(pins[green][line], LOW);
                 break;
       
             case 1: //red
-                digitalWrite(pins[1][line], red);
+                digitalWrite(pins[red][line], HIGH);
                 break;
 
             case 2: //green
-                digitalWrite(pins[1][line], green);
+                digitalWrite(pins[green][line], HIGH);
                 break;
                 
             case 3: //flash red
-                
-            break;
+                digitalWrite(pins[red][0], HIGH);
+                break;
 
             case 4: //flash green
-
-            break;
+                digitalWrite(pins[green][0], HIGH);
+                break;
             }
         }
-        columnN = (columnN + 1) % 6;
+        currentColumn = (currentColumn + 1) % 6;
     }
 
-    bool wincontrol(){
+    bool winControl(){
         int count = 0;
         int currentColor = off;
         // Spalten prüfen
-        for (size_t i = 0; i < cColumns; i++)
+        for (size_t i = 0; i < nColumns; i++)
         {
-            for (size_t j = cLines-1; j >= 0 && count + j >= 4; j--)
+            for (size_t j = nLines-1; j >= 0 && count + j >= 4; j--)
             {
-                int color = LEDs[i][j];
+                int color = LEDvalues[i][j];
                 if(color == currentColor && currentColor != off){
                     count++;
                 }
@@ -147,7 +140,7 @@ class LEDMatrix
                     currentColor = color;
                 }
                 if(count == 4){
-                    gameOver();
+                    endAnimation();
                     return HIGH;
                 }
             }
@@ -156,11 +149,11 @@ class LEDMatrix
         count = 0;
         currentColor = off;
         // Zeilen prüfen
-        for (size_t i = cLines; i >= 0; i--)
+        for (size_t i = nLines; i >= 0; i--)
         {
-            for (size_t j = 0; j < cColumns && count + j < 4; j++)
+            for (size_t j = 0; j < nColumns && count + j < 4; j++)
             {
-                int color = LEDs[i][j];
+                int color = LEDvalues[i][j];
                 if(color == currentColor && currentColor != off){
                     count++;
                 }
@@ -169,7 +162,7 @@ class LEDMatrix
                     currentColor = color;
                 }
                 if(count == 4){
-                    gameOver();
+                    endAnimation();
                     return HIGH;
                 }
             }
@@ -177,12 +170,12 @@ class LEDMatrix
 
         count = 0;
         currentColor = off;
-        // diagonale prüfen
-        for (size_t i = cLines; i >= 0; i--)
-        {
-            for (size_t j = 0; j < cColumns && count + j < 4; j++)
-            {
-                int color = LEDs[i][j];
+        // diagonale prüfen oben 
+        int i = 3;
+        int j = 0;
+        while(i <= 4 && j <= 2){
+            for(int x = j, y = i; x <= 5 && y >= 0; x++, y--){
+                int color = LEDvalues[i][j];
                 if(color == currentColor && currentColor != off){
                     count++;
                 }
@@ -191,9 +184,43 @@ class LEDMatrix
                     currentColor = color;
                 }
                 if(count == 4){
-                    gameOver();
+                    endAnimation();
                     return HIGH;
                 }
+            }
+            if(i < 4){
+                i++;
+            }
+            else{
+                j++;
+            }
+        }
+
+        count = 0;
+        currentColor = off;
+        // diagonale prüfen unten 
+        int i = 1;
+        int j = 0;
+        while(i >= 0 && j <= 2){
+            for(int x = j, y = i; x <= 5 && y <= 4; x++, y++){
+                int color = LEDvalues[i][j];
+                if(color == currentColor && currentColor != off){
+                    count++;
+                }
+                else{
+                    count = 1;
+                    currentColor = color;
+                }
+                if(count == 4){
+                    endAnimation();
+                    return HIGH;
+                }
+            }
+            if(i > 0){
+                i--;
+            }
+            else{
+                j++;
             }
         }
         
@@ -201,18 +228,17 @@ class LEDMatrix
     }
 
     // direction 0 = diagonal unten, 1 = rechts, 2 = diagonal oben, 3 = oben  
-    bool wincontrol(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
-        if(count + currentPos.second >= 4 && count + currentPos.first < 4){}
-        
-        int currentColor = LEDs[currentPos.first][currentPos.second];
-        if(currentColor == lastColor){
-            count++;
-        }
+    // bool winControl(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
+    //     if(count + currentPos.second >= 4 && count + currentPos.first < 4){
+    //         if(direction == 0 || direction == 2 ){}
+    //         int currentColor = LEDvalues[currentPos.first][currentPos.second];
+    //         if(currentColor == lastColor){
+    //             count++;
+    //         }
+    //     }
+    // }
 
-
-    }
-
-    void gameOver(){
+    void endAnimation(){
     
     }
 };

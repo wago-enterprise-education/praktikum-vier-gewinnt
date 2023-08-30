@@ -22,50 +22,58 @@
 
 #define tasterL 34
 #define tasterR 33
-#define tatserRst 35
+#define tasterRst 35
 #define tasterU 32
 
-const int cColumns = 6;
-const int cLines = 5;
+const int nColumns = 6;
+const int nLines = 5;
 const int off = 0;
 const int red = 1;
 const int green = 2;
-const int flahRed = 3;
+const int flashRed = 3;
 const int flashGreen = 4;
 const int startColor = red;
 
 bool player1 = HIGH;
-int currentColor = 2;
+int currentColor = startColor;
 int currentColumn = 0;
-int LEDMatrixPins[3][cColumns] = {{ground1, ground2, ground3, ground4, ground5, ground6},
+int LEDMatrixPins[3][nColumns] = {{ground1, ground2, ground3, ground4, ground5, ground6},
                                     {line1red, line2red, line3red, line4red, line5red, 0},
                                     {line1green, line2green, line3green, line4green, line5green, 0}};
-LEDMatrix lm(&LEDMatrixPins[0][0], cColumns, cLines);
+LEDMatrix lm(&LEDMatrixPins[0][0], nColumns, nLines);
 
 
 void setup() {
-  for(int i = 0; i < 2; i++){
+  for(int i = 0; i < 3; i++){
     for(int j = 0; j < 6; j++){
-      if(i == 1 && j == 5) break;
-      
-      pinMode(LEDMatrixPins[j][i], OUTPUT);
+      if((i == 1 || i == 2) && j == 5) break;
+        pinMode(LEDMatrixPins[i][j], OUTPUT);
     }
   }
 
   pinMode(tasterL, INPUT);
+  pinMode(tasterR, INPUT);
+  pinMode(tasterU, INPUT);
+  pinMode(tasterRst, INPUT);
   Serial.begin(9600);
 }
 
 void loop() {
-  updateColumn();
-  lm.flashLigth(currentColumn, currentColor);
+  readButtons();
+  if(currentColor == red){
+    lm.setLightValue(currentColumn, flashRed);
+  }
+  else{
+    lm.setLightValue(currentColumn, flashGreen);
+  }
+  
   if(lm.update()){
     reset();
   }
   delay(1);
 }
 
-void updateColumn(){
+void readButtons(){
   if(digitalRead(tasterL)){
     if(currentColumn != 0)
     {
@@ -73,13 +81,13 @@ void updateColumn(){
     }
   }
   else if(digitalRead(tasterR)){
-    if(currentColumn != cColumns-1)
+    if(currentColumn != nColumns-1)
     {
       currentColumn = (currentColumn + 1);
     }
   }
   else if(digitalRead(tasterU)){
-    lm.setNewLigth(currentColumn, currentColor);
+    lm.setLightValue(currentColumn, currentColor);
     player1 = !player1;
     if(player1){
       currentColor = startColor;
@@ -88,7 +96,7 @@ void updateColumn(){
       currentColor = green;
     }
   }
-  else if(digitalRead(tatserRst)){
+  else if(digitalRead(tasterRst)){
     reset();
   }
 }

@@ -3,9 +3,12 @@
 class LEDMatrix{
     public:
         LEDMatrix(int*, int, int);
-        void setLEDMatrix();
-        void setNewLigth(int, int);
+        void setLightValue(int, int);
         void reset();
         bool update();
+    private:    
+        void setLEDs();
+        bool winControl();
+        void endAnimation();
 };
 #endif
