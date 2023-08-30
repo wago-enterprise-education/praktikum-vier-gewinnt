@@ -32,7 +32,8 @@ int LEDMatrixPins[2][cColumns] = {{LED1Ground, LED2Ground, LED3Ground, LED4Groun
                                     {LED1, LED2, LED3, LED4, LED5, 0}};
 LEDMatrix lm(&LEDMatrixPins[0][0], cColumns, cLines);
 
-void controlLEDMatrix(byte[2][2] , byte[2][2] );
+void reset();
+void updateColumn();
 
 void setup() {
   for(int i = 0; i < 2; i++){
@@ -49,7 +50,7 @@ void setup() {
 
 void loop() {
   updateColumn();
-  lm.flashLigth(currentColumn, currentColor);
+  lm.flashLight(currentColumn, currentColor);
   if(lm.update()){
     reset();
   }
@@ -70,7 +71,7 @@ void updateColumn(){
     }
   }
   else if(digitalRead(tasterU)){
-    lm.setNewLigth(currentColumn, currentColor);
+    lm.setNewLight(currentColumn, currentColor);
     player1 = !player1;
     if(player1){
       currentColor = startColor;
