@@ -43,7 +43,8 @@ class LEDMatrix
 
     void flashLigth(int columnNumber, int color)
     {
-
+        //test
+        
     }
 
     void setNewLigth(int columnNumber, int color){
@@ -53,6 +54,7 @@ class LEDMatrix
             {
                 LEDs[columnNumber][i] = color;
             }
+
         }
     }
 
