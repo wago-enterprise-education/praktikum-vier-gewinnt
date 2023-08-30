@@ -7,6 +7,8 @@ class LEDMatrix
     const int off = 0;
     const int red = 1;
     const int green = 2;
+    const int flahRed = 3;
+    const int flashGreen = 4;
 
     std::vector< std::vector<int> > pins;
     std::vector< std::vector<byte> > LEDs;

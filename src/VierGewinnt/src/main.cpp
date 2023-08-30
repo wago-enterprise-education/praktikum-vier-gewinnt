@@ -30,6 +30,8 @@ const int cLines = 5;
 const int off = 0;
 const int red = 1;
 const int green = 2;
+const int flahRed = 3;
+const int flashGreen = 4;
 const int startColor = red;
 
 bool player1 = HIGH;
@@ -40,7 +42,6 @@ int LEDMatrixPins[3][cColumns] = {{ground1, ground2, ground3, ground4, ground5, 
                                     {line1green, line2green, line3green, line4green, line5green, 0}};
 LEDMatrix lm(&LEDMatrixPins[0][0], cColumns, cLines);
 
-void controlLEDMatrix(byte[2][2] , byte[2][2] );
 
 void setup() {
   for(int i = 0; i < 2; i++){
