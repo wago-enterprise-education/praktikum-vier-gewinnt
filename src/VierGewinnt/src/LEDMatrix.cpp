@@ -7,8 +7,6 @@ class LEDMatrix
     const int off = 0;
     const int red = 1;
     const int green = 2;
-    const int flashRed = 3;
-    const int flashGreen = 4;
 
     std::vector< std::vector<int> > pins;
     std::vector< std::vector<byte> > LEDs;
@@ -43,20 +41,29 @@ class LEDMatrix
         columnN = 0;
     }
 
-    void flashLight(int columnNumber, int color)
+    /*void flashLight(int columnNumber, int color) 
     {
-        //test
-        
+        //Der übergeben Block in der matrix bekommt mit color eine case
+
+            LEDs[columnNumber][0] = color;
+
     }
+    */
 
-    void setNewLight(int columnNumber, int color){
-        for(int i = cLines-1; i >= 0; i--)
-        {
-            if(LEDs[columnNumber][i] == 0)
-            {
-                LEDs[columnNumber][i] = color;
+    void setNewLigth(int columnNumber, int color){
+        if (LEDs[columnNumber][0] == off){
+            if (color < 2){
+                for(int i = cLines-1; i >= 0; i--)
+                {
+                    if(LEDs[columnNumber][i] == 0)
+                    {
+                        LEDs[columnNumber][i] = color;
+                    }
+                }
             }
-
+            else {
+                LEDs[columnNumber][0] = color;
+            }
         }
     }
 
@@ -97,16 +104,25 @@ class LEDMatrix
         {
             switch (LEDs[columnN][line])
             {
-            case 0:
+            case 0: //off
                 digitalWrite(pins[1][line], LOW);
                 break;
       
-            case 1:
+            case 1: //red
                 digitalWrite(pins[1][line], red);
                 break;
-            case 2:
+
+            case 2: //green
                 digitalWrite(pins[1][line], green);
                 break;
+                
+            case 3: //flash red
+                
+            break;
+
+            case 4: //flash green
+
+            break;
             }
         }
         columnN = (columnN + 1) % 6;
@@ -159,11 +175,11 @@ class LEDMatrix
 
         count = 0;
         currentColor = off;
-        // diagonale prüfen oben 
-        int i = 3;
-        int j = 0;
-        while(i <= 4 && j <= 2){
-            for(int x = j, y = i; x <= 5 && y >= 0; x++, y--){
+        // diagonale prüfen
+        for (size_t i = cLines; i >= 0; i--)
+        {
+            for (size_t j = 0; j < cColumns && count + j < 4; j++)
+            {
                 int color = LEDs[i][j];
                 if(color == currentColor && currentColor != off){
                     count++;
@@ -176,40 +192,6 @@ class LEDMatrix
                     gameOver();
                     return HIGH;
                 }
-            }
-            if(i < 4){
-                i++;
-            }
-            else{
-                j++;
-            }
-        }
-
-        count = 0;
-        currentColor = off;
-        // diagonale prüfen unten 
-        int i = 1;
-        int j = 0;
-        while(i >= 0 && j <= 2){
-            for(int x = j, y = i; x <= 5 && y <= 4; x++, y++){
-                int color = LEDs[i][j];
-                if(color == currentColor && currentColor != off){
-                    count++;
-                }
-                else{
-                    count = 1;
-                    currentColor = color;
-                }
-                if(count == 4){
-                    gameOver();
-                    return HIGH;
-                }
-            }
-            if(i > 0){
-                i--;
-            }
-            else{
-                j++;
             }
         }
         
@@ -217,17 +199,18 @@ class LEDMatrix
     }
 
     // direction 0 = diagonal unten, 1 = rechts, 2 = diagonal oben, 3 = oben  
-    // bool wincontrol(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
-    //     if(count + currentPos.second >= 4 && count + currentPos.first < 4){
-    //         if(direction == 0 || direction == 2 ){}
-    //         int currentColor = LEDs[currentPos.first][currentPos.second];
-    //         if(currentColor == lastColor){
-    //             count++;
-    //         }
-    //     }
-    // }
+    bool wincontrol(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
+        if(count + currentPos.second >= 4 && count + currentPos.first < 4){}
+        
+        int currentColor = LEDs[currentPos.first][currentPos.second];
+        if(currentColor == lastColor){
+            count++;
+        }
+
+
+    }
 
     void gameOver(){
-        
+    
     }
 };

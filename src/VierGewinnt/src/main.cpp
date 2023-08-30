@@ -1,17 +1,24 @@
 #include <Arduino.h>
 #include <LEDMatrix.h>
 
-#define LED1 18
-#define LED2 5
-#define LED3 17
-#define LED4 16
-#define LED5 4
-#define LED1Ground 23
-#define LED2Ground 22
-#define LED3Ground 1
-#define LED4Ground 3
-#define LED5Ground 21
-#define LED6Ground 19
+#define line1red 21
+#define line2red 3
+#define line3red 1
+#define line4red 22
+#define line5red 23
+
+#define line1green 25
+#define line2green 26
+#define line3green 27
+#define line4green 14
+#define line5green 12
+
+#define ground1 19
+#define ground2 18
+#define ground3 5
+#define ground4 17
+#define ground5 16
+#define ground6 4
 
 #define tasterL 34
 #define tasterR 33
@@ -28,12 +35,12 @@ const int startColor = red;
 bool player1 = HIGH;
 int currentColor = 2;
 int currentColumn = 0;
-int LEDMatrixPins[2][cColumns] = {{LED1Ground, LED2Ground, LED3Ground, LED4Ground, LED5Ground, LED6Ground},
-                                    {LED1, LED2, LED3, LED4, LED5, 0}};
+int LEDMatrixPins[3][cColumns] = {{ground1, ground2, ground3, ground4, ground5, ground6},
+                                    {line1red, line2red, line3red, line4red, line5red, 0},
+                                    {line1green, line2green, line3green, line4green, line5green, 0}};
 LEDMatrix lm(&LEDMatrixPins[0][0], cColumns, cLines);
 
-void reset();
-void updateColumn();
+void controlLEDMatrix(byte[2][2] , byte[2][2] );
 
 void setup() {
   for(int i = 0; i < 2; i++){
@@ -50,7 +57,7 @@ void setup() {
 
 void loop() {
   updateColumn();
-  lm.flashLight(currentColumn, currentColor);
+  lm.flashLigth(currentColumn, currentColor);
   if(lm.update()){
     reset();
   }
@@ -71,7 +78,7 @@ void updateColumn(){
     }
   }
   else if(digitalRead(tasterU)){
-    lm.setNewLight(currentColumn, currentColor);
+    lm.setNewLigth(currentColumn, currentColor);
     player1 = !player1;
     if(player1){
       currentColor = startColor;
