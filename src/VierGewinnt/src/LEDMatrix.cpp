@@ -178,11 +178,16 @@ class LEDMatrix
         return LOW;
     }
 
+    // direction 0 = diagonal unten, 1 = rechts, 2 = diagonal oben, 3 = oben  
     bool wincontrol(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
+        if(count + currentPos.second >= 4 && count + currentPos.first < 4){}
+        
         int currentColor = LEDs[currentPos.first][currentPos.second];
         if(currentColor == lastColor){
             count++;
         }
+
+
     }
 
     void gameOver(){
