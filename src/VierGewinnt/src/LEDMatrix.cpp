@@ -45,7 +45,8 @@ class LEDMatrix
 
     void flashLight(int columnNumber, int color)
     {
-
+        //test
+        
     }
 
     void setNewLight(int columnNumber, int color){
@@ -55,6 +56,7 @@ class LEDMatrix
             {
                 LEDs[columnNumber][i] = color;
             }
+
         }
     }
 
