@@ -37,18 +37,31 @@ const int startColor = red;
 bool player1 = HIGH;
 int currentColor = startColor;
 int currentColumn = 0;
-int LEDMatrixPins[3][nColumns] = {{ground1, ground2, ground3, ground4, ground5, ground6},
-                                    {line1red, line2red, line3red, line4red, line5red, 0},
-                                    {line1green, line2green, line3green, line4green, line5green, 0}};
-LEDMatrix lm(&LEDMatrixPins[0][0], nColumns, nLines);
+int LEDMatrixPins[nColumns*3] = {ground1, ground2, ground3, ground4, ground5, ground6,
+                                line1red, line2red, line3red, line4red, line5red, 0,
+                                line1green, line2green, line3green, line4green, line5green, 0};
+LEDMatrix lm(LEDMatrixPins, nColumns, nLines);
 
+void readButtons();
+void reset();
 
 void setup() {
-  for(int i = 0; i < 3; i++){
-    for(int j = 0; j < 6; j++){
-      if((i == 1 || i == 2) && j == 5) break;
-        pinMode(LEDMatrixPins[i][j], OUTPUT);
-    }
+  int count = 0;
+  for(int i = 0; i < nColumns*3; i++){
+      if(i % 6 == 0 && count != 0)
+      {
+
+      }
+      else
+      {
+        pinMode(LEDMatrixPins[i], OUTPUT);
+      }
+
+      if (i % 6 == 0)
+      {
+        count++;
+      }
+      
   }
 
   pinMode(tasterL, INPUT);

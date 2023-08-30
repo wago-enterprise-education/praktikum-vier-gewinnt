@@ -2,33 +2,20 @@
 #include <Arduino.h>
 #include <vector>
 
-class LEDMatrix
-{
-    const int off = 0;
-    const int red = 1;
-    const int green = 2;
-    const int flahRed = 3;
-    const int flashGreen = 4;
-
-    std::vector< std::vector<int> > pins;
-    std::vector< std::vector<byte> > LEDvalues;
-    byte nColumns; 
-    byte nLines;
-    byte currentColumn;
-
-    public: 
-    LEDMatrix(int *p[], int initNColumns, int initNLines){
+    LEDMatrix::LEDMatrix(int *p, int initNColumns, int initNLines){
         nColumns = initNColumns;
         nLines = initNLines;
 
         int tmp;
         if(initNColumns > initNLines) { tmp = initNColumns;}
         else { tmp = initNLines; }
-        for(int i = 0; i < 2; i++)
+        
+        for(int i = 0, x = 0; i < 3; i++)
         {
             for (int j = 0; j < tmp; j++)
             {
-                pins[i][j] = p[i][j];
+                pins[i][j] = p[x];
+                x++;
             }
         }
 
@@ -36,17 +23,17 @@ class LEDMatrix
         {
             for (int j = 0; j < initNLines; j++)
             {
-                LEDvalues[i][j] = 0;
+                LEDvalues[i][j] = 1;
             }
         }
 
         currentColumn = 0;
     }
 
-    void setLightValue(int currentColumnumber, int color){
-        if (LEDvalues[currentColumnumber][0] == off){
+    void LEDMatrix::setLightValue(int currentColumnumber, int color){
+        if (LEDMatrix::LEDvalues[currentColumnumber][0] == off){
             if (color < 2){
-                for(int i = nLines-1; i >= 0; i--)
+                for(int i = LEDMatrix::nLines-1; i >= 0; i--)
                 {
                     if(LEDvalues[currentColumnumber][i] == 0)
                     {
@@ -60,20 +47,21 @@ class LEDMatrix
         }
     }
 
-    void reset(){
-        for(int i = 0; i < nColumns; i++)
+    void LEDMatrix::reset(){
+        for(int i = 0; i < LEDMatrix::nColumns; i++)
         {
-            for (int j = 0; j < nLines; j++)
+            for (int j = 0; j < LEDMatrix::nLines; j++)
             {
-                LEDvalues[i][j] = 0;
+                LEDMatrix::LEDvalues[i][j] = 0;
             }
         }
     }
 
-    bool update(){
+    bool LEDMatrix::update(){
         bool won = winControl();
         if(won){
             endAnimation();
+            delay(2000);
         }
         else{
             setLEDs();
@@ -81,8 +69,7 @@ class LEDMatrix
         return won;
     }
 
-    private:
-    void setLEDs(){
+    void LEDMatrix::setLEDs(){
         for (byte l = 0; l < 6; l++)
         {
             digitalWrite(pins[1][l], LOW);
@@ -123,7 +110,7 @@ class LEDMatrix
         currentColumn = (currentColumn + 1) % 6;
     }
 
-    bool winControl(){
+    bool LEDMatrix::winControl(){
         int count = 0;
         int currentColor = off;
         // Spalten prüfen
@@ -199,8 +186,8 @@ class LEDMatrix
         count = 0;
         currentColor = off;
         // diagonale prüfen unten 
-        int i = 1;
-        int j = 0;
+        i = 1;
+        j = 0;
         while(i >= 0 && j <= 2){
             for(int x = j, y = i; x <= 5 && y <= 4; x++, y++){
                 int color = LEDvalues[i][j];
@@ -238,7 +225,6 @@ class LEDMatrix
     //     }
     // }
 
-    void endAnimation(){
+    void LEDMatrix::endAnimation(){
     
     }
-};
