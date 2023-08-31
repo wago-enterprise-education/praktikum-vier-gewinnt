@@ -12,20 +12,25 @@
         
         for(int i = 0, x = 0; i < 3; i++)
         {
+            std::vector<int> temp3;
             for (int j = 0; j < tmp; j++)
             {
-                pins[i][j] = p[x];
+                int tmp2 = p[x];
+                temp3.push_back(tmp2);
                 x++;
             }
+            pins.push_back(temp3);
         }
 
-        // for(int i = 0; i < initNColumns; i++)
-        // {
-        //     for (int j = 0; j < initNLines; j++)
-        //     {
-        //         LEDvalues[i][j] = 0;
-        //     }
-        // }
+        for(int i = 0; i < initNColumns; i++)
+        {
+            std::vector<int> tmp2;
+            for (int j = 0; j < initNLines; j++)
+            {
+                tmp2.push_back(1);
+            }
+            LEDvalues.push_back(tmp2);
+        }
 
         currentColumn = 0;
     }
