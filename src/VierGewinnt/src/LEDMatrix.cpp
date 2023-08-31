@@ -36,11 +36,11 @@
     }
 
     void LEDMatrix::setLightValue(int currentColumnumber, int color){
-        if (LEDMatrix::LEDvalues[currentColumnumber][0] == off){
+        if (LEDvalues.at(currentColumnumber).at(0) == off){
             if (color < 2){
-                for(int i = LEDMatrix::nLines-1; i >= 0; i--)
+                for(int i = nLines-1; i >= 0; i--)
                 {
-                    if(LEDvalues[currentColumnumber][i] == 0)
+                    if(LEDvalues.at(currentColumnumber).at(i) == 0)
                     {
                         LEDvalues[currentColumnumber][i] = color;
                     }
@@ -53,11 +53,11 @@
     }
 
     void LEDMatrix::reset(){
-        for(int i = 0; i < LEDMatrix::nColumns; i++)
+        for(int i = 0; i < nColumns; i++)
         {
-            for (int j = 0; j < LEDMatrix::nLines; j++)
+            for (int j = 0; j < nLines; j++)
             {
-                LEDMatrix::LEDvalues[i][j] = 0;
+                LEDvalues[i][j] = 0;
             }
         }
     }
