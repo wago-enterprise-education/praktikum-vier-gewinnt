@@ -27,7 +27,7 @@
             std::vector<int> tmp2;
             for (int j = 0; j < initNLines; j++)
             {
-                tmp2.push_back(1);
+                tmp2.push_back(2);
             }
             LEDvalues.push_back(tmp2);
         }
@@ -63,15 +63,16 @@
     }
 
     bool LEDMatrix::update(){
-        bool won = winControl();
-        if(won){
-            endAnimation();
-            delay(2000);
-        }
-        else{
-            setLEDs();
-        }
-        return won;
+        // bool won = winControl();
+        // if(won){
+        //     endAnimation();
+        //     delay(2000);
+        // }
+        // else{
+        //     setLEDs();
+        // }
+        setLEDs();
+        return LOW;//won;
     }
 
     void LEDMatrix::setLEDs(){

@@ -2,8 +2,8 @@
 #include <LEDMatrix.h>
 
 #define line1red 21
-#define line2red 3
-#define line3red 1
+#define line2red 15//3
+#define line3red 2//1
 #define line4red 22
 #define line5red 23
 
@@ -46,41 +46,40 @@ void readButtons();
 void reset();
 
 void setup() {
-  int count = 0;
-    for(int i = 0; i < nColumns*3; i++){
-      if(i % 6 == 0 && count != 0)
-      {
-
-      }
-      else
-      {
-        pinMode(LEDMatrixPins[i], OUTPUT);
-      }
-
-      if (i % 6 == 0)
-      {
-        count++;
-      }
-      
-  }
+  pinMode(ground1,OUTPUT);
+  pinMode(ground2,OUTPUT);
+  pinMode(ground3,OUTPUT);
+  pinMode(ground4,OUTPUT);
+  pinMode(ground5,OUTPUT);
+  pinMode(ground6,OUTPUT);
+  
+  pinMode(line1red, OUTPUT);
+  pinMode(line2red, OUTPUT);
+  pinMode(line3red, OUTPUT);
+  pinMode(line4red, OUTPUT);
+  pinMode(line5red, OUTPUT);
+  
+  pinMode(line1green, OUTPUT);
+  pinMode(line2green, OUTPUT);
+  pinMode(line3green,OUTPUT);
+  pinMode(line4green, OUTPUT);
+  pinMode(line5green,OUTPUT);
 
   pinMode(tasterL, INPUT);
   pinMode(tasterR, INPUT);
   pinMode(tasterU, INPUT);
   pinMode(tasterRst, INPUT);
-  Serial.begin(9600);
-  pinMode(line1red, OUTPUT);
-  pinMode(ground1,OUTPUT);
 }
 
 void loop() {
-  readButtons();
-  if(currentColor == red){
-    lm.setLightValue(currentColumn, flashRed);
-  }
-  else{
-    lm.setLightValue(currentColumn, flashGreen);
-  }
+  //readButtons();
+  
+  // if(currentColor == red){
+  //   lm.setLightValue(currentColumn, flashRed);
+  // }
+  // else{
+  //   lm.setLightValue(currentColumn, flashGreen);
+  // }
   
   if(lm.update()){
     reset();
