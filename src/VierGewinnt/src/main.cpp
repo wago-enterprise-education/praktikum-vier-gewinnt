@@ -72,19 +72,19 @@ void setup() {
 }
 
 void loop() {
-  //readButtons();
-  
-  // if(currentColor == red){
-  //   lm.setLightValue(currentColumn, flashRed);
-  // }
-  // else{
-  //   lm.setLightValue(currentColumn, flashGreen);
-  // }
+  readButtons();
+  Serial.println((int)currentColumn);
+  if(currentColor == red){
+    lm.setLightValue(currentColumn, flashRed);
+  }
+  else{
+    lm.setLightValue(currentColumn, flashGreen);
+  }
   
   if(lm.update()){
     reset();
   }
-  delay(1);
+  delay(1000);
 }
 
 void readButtons(){
@@ -99,6 +99,7 @@ void readButtons(){
     {
       currentColumn = (currentColumn + 1);
     }
+    
   }
   else if(digitalRead(tasterU)){
     lm.setLightValue(currentColumn, currentColor);

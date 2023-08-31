@@ -27,7 +27,13 @@
             std::vector<int> tmp2;
             for (int j = 0; j < initNLines; j++)
             {
-                tmp2.push_back(2);
+                // if(j + i == 4){
+                //     tmp2.push_back(1);
+                // }
+                // else{
+                    tmp2.push_back(0);
+                // }
+                
             }
             LEDvalues.push_back(tmp2);
         }
