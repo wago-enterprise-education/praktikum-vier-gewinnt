@@ -8,7 +8,9 @@ class LEDMatrix
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
     void reset();
-    bool update();    
+    bool update();
+    int findPossibleDestination(int, int); 
+    
 
     private:
     std::vector< std::vector<int> > pins;
@@ -25,5 +27,7 @@ class LEDMatrix
 
     void setLEDs();
     bool winControl();
-    void endAnimation();};
+    void endAnimation();
+    bool possibleDestination(int);  
+};
 #endif

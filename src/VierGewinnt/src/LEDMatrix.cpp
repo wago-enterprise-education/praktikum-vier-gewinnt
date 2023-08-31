@@ -41,23 +41,38 @@
         currentColumn = 0;
     }
 
-    void LEDMatrix::setLightValue(int currentColumnumber, int previousColumnumber,  int color){
+    void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,  int color){
         
-        if (LEDvalues.at(currentColumnumber).at(0) == off){
-            LEDvalues[previousColumnumber][0] = off;
-            if (color < 2){
-                for(int i = nLines-1; i >= 0; i--)
+        LEDvalues[previousColumnnumber][0] = off;
+        if (color < 3){
+            for(int i = nLines-1; i >= 0; i--)
+            {
+            if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                 {
-                    if(LEDvalues.at(currentColumnumber).at(i) == 0)
-                    {
-                        LEDvalues[currentColumnumber][i] = color;
-                    }
+                    LEDvalues[currentColumnnumber][i] = color;
+                    break;
                 }
             }
-            else {
-                LEDvalues[currentColumnumber][0] = color;
+        }
+        else {
+            LEDvalues[currentColumnnumber][0] = color;
+        }
+    }
+
+    bool LEDMatrix::possibleDestination(int currentColumnnumber){
+        return (LEDvalues.at(currentColumnnumber).at(0) == off);
+    }
+
+    int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction){
+        int tmp = -1;
+        for (size_t i = currentColumnnumber; i < nColumns && i >= 0; i = i + direction)
+        {
+            if(possibleDestination(i)){
+                return i;
             }
         }
+        
+        return tmp;
     }
 
     void LEDMatrix::reset(){
