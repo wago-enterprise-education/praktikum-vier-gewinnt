@@ -75,9 +75,6 @@ void setup() {
 
 void loop() {
   readButtons();
-  digitalWrite(line1red, HIGH);
-  digitalWrite(ground1, LOW);
-  delay(4000);
   if(currentColor == red){
     lm.setLightValue(currentColumn, flashRed);
   }

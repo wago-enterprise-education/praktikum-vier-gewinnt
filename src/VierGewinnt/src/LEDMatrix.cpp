@@ -83,7 +83,7 @@
     
         for (byte c = 0; c < nColumns; c++)
         {
-            digitalWrite(pins[off][c], c != currentColumn);
+            digitalWrite(pins[0][c], c != currentColumn);
         }
       
         for (int line = 0; line < nLines; line++)
