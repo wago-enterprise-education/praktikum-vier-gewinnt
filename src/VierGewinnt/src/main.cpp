@@ -70,14 +70,17 @@ void setup() {
   pinMode(tasterR, INPUT);
   pinMode(tasterU, INPUT);
   pinMode(tasterRst, INPUT);
+
+  //Serial.begin(9600);
 }
 
 void loop() {
   readButtons();
-  Serial.println((int)currentColumn);
+  
   
   
   if(lm.update()){
+    //Serial.println("Gewonnen");
     reset();
   }
   delay(1);
