@@ -87,39 +87,51 @@ void readButtons(){
   if(digitalRead(tasterL)){
     if(currentColumn != 0 && lastButton != tasterL)
     {
-      currentColumn = (currentColumn - 1);
-      lastButton = tasterL;
-      if(currentColor == red){
-        lm.setLightValue(currentColumn, currentColumn+1, flashRed);
+      int pos = lm.findPossibleDestination(currentColumn-1, -1);
+      if(pos >= 0){
+        lastButton = tasterL;
+        if(currentColor == red){
+          lm.setLightValue(pos, currentColumn, flashRed);
+        }
+        else{
+          lm.setLightValue(pos, currentColumn, flashGreen);
+        }
+        currentColumn = pos;
       }
-      else{
-        lm.setLightValue(currentColumn, currentColumn+1, flashGreen);
-      }
-      
     }
   }
   else if(digitalRead(tasterR)){
+    
     if(currentColumn != nColumns-1 && lastButton != tasterR)
     {
-      currentColumn = (currentColumn + 1);
-      lastButton = tasterR;
-      if(currentColor == red){
-        lm.setLightValue(currentColumn, currentColumn-1, flashRed);
-      }
-      else{
-        lm.setLightValue(currentColumn, currentColumn-1, flashGreen);
+      int pos = lm.findPossibleDestination(currentColumn+1, 1);
+      if(pos >= 0)
+      {
+        lastButton = tasterR;
+        if(currentColor == red){
+          lm.setLightValue(pos, currentColumn, flashRed);
+        }
+        else{
+          lm.setLightValue(pos, currentColumn, flashGreen);
+        }
+        currentColumn = pos;
       }
     }
     
   }
   else if(digitalRead(tasterU)){
-    lm.setLightValue(currentColumn, currentColumn, currentColor);
-    player1 = !player1;
-    if(player1){
-      currentColor = startColor;
-    }
-    else{
-      currentColor = green;
+    if(lastButton != tasterU)
+    {
+      lastButton = tasterU;
+      lm.setLightValue(currentColumn, currentColumn, currentColor);
+      player1 = !player1;
+      if(player1){
+        currentColor = startColor;
+      }
+      else{
+        currentColor = green;
+      }
+      currentColumn = 0;
     }
   }
   else if(digitalRead(tasterRst)){
