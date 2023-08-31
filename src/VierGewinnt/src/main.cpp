@@ -47,7 +47,7 @@ void reset();
 
 void setup() {
   int count = 0;
-  for(int i = 0; i < nColumns*3; i++){
+    for(int i = 0; i < nColumns*3; i++){
       if(i % 6 == 0 && count != 0)
       {
 
@@ -69,11 +69,16 @@ void setup() {
   pinMode(tasterU, INPUT);
   pinMode(tasterRst, INPUT);
   Serial.begin(9600);
+  pinMode(line1red, OUTPUT);
+  pinMode(ground1,OUTPUT);
 }
 
 void loop() {
-  readButtons();
-  if(currentColor == red){
+  //readButtons();
+  digitalWrite(line1red, HIGH);
+  digitalWrite(ground1, LOW);
+  delay(4000);
+  /*if(currentColor == red){
     lm.setLightValue(currentColumn, flashRed);
   }
   else{
@@ -111,12 +116,13 @@ void readButtons(){
   }
   else if(digitalRead(tasterRst)){
     reset();
-  }
+  }*/
 }
 
-void reset(){
+/*void reset(){
   lm.reset();
   player1 = HIGH;
   currentColor = startColor;
   currentColumn = 0;
 }
+*/

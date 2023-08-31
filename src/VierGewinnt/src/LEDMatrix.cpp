@@ -19,13 +19,13 @@
             }
         }
 
-        for(int i = 0; i < initNColumns; i++)
-        {
-            for (int j = 0; j < initNLines; j++)
-            {
-                LEDvalues[i][j] = 1;
-            }
-        }
+        // for(int i = 0; i < initNColumns; i++)
+        // {
+        //     for (int j = 0; j < initNLines; j++)
+        //     {
+        //         LEDvalues[i][j] = 0;
+        //     }
+        // }
 
         currentColumn = 0;
     }
@@ -70,18 +70,18 @@
     }
 
     void LEDMatrix::setLEDs(){
-        for (byte l = 0; l < 6; l++)
+        for (byte l = 0; l < nLines; l++)
         {
-            digitalWrite(pins[1][l], LOW);
-            digitalWrite(pins[2][l], LOW);
+            digitalWrite(pins[red][l], LOW);
+            digitalWrite(pins[green][l], LOW);
         }
     
-        for (byte c = 0; c < 6; c++)
+        for (byte c = 0; c < nColumns; c++)
         {
-            digitalWrite(pins[0][c], c != currentColumn);
+            digitalWrite(pins[off][c], c != currentColumn);
         }
       
-        for (int line = 0; line < 5; line++)
+        for (int line = 0; line < nLines; line++)
         {
             switch (LEDvalues[currentColumn][line])
             {
