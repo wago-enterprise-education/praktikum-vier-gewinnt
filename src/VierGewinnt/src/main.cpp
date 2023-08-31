@@ -74,11 +74,11 @@ void setup() {
 }
 
 void loop() {
-  //readButtons();
+  readButtons();
   digitalWrite(line1red, HIGH);
   digitalWrite(ground1, LOW);
   delay(4000);
-  /*if(currentColor == red){
+  if(currentColor == red){
     lm.setLightValue(currentColumn, flashRed);
   }
   else{
@@ -116,13 +116,12 @@ void readButtons(){
   }
   else if(digitalRead(tasterRst)){
     reset();
-  }*/
+  }
 }
 
-/*void reset(){
+void reset(){
   lm.reset();
   player1 = HIGH;
   currentColor = startColor;
   currentColumn = 0;
 }
-*/
