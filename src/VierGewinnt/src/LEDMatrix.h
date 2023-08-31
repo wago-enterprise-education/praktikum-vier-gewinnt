@@ -6,7 +6,7 @@ class LEDMatrix
 {
     public:
     LEDMatrix(int *, int, int);
-    void setLightValue(int, int);
+    void setLightValue(int, int,  int);
     void reset();
     bool update();    
 

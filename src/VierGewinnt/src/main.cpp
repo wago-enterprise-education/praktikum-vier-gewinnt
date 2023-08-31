@@ -34,6 +34,7 @@ const int flashRed = 3;
 const int flashGreen = 4;
 const int startColor = red;
 
+int lastButton = 0;
 bool player1 = HIGH;
 int currentColor = startColor;
 int currentColumn = 0;
@@ -74,35 +75,45 @@ void setup() {
 void loop() {
   readButtons();
   Serial.println((int)currentColumn);
-  if(currentColor == red){
-    lm.setLightValue(currentColumn, flashRed);
-  }
-  else{
-    lm.setLightValue(currentColumn, flashGreen);
-  }
+  
   
   if(lm.update()){
     reset();
   }
-  delay(1000);
+  delay(1);
 }
 
 void readButtons(){
   if(digitalRead(tasterL)){
-    if(currentColumn != 0)
+    if(currentColumn != 0 && lastButton != tasterL)
     {
       currentColumn = (currentColumn - 1);
+      lastButton = tasterL;
+      if(currentColor == red){
+        lm.setLightValue(currentColumn, currentColumn+1, flashRed);
+      }
+      else{
+        lm.setLightValue(currentColumn, currentColumn+1, flashGreen);
+      }
+      
     }
   }
   else if(digitalRead(tasterR)){
-    if(currentColumn != nColumns-1)
+    if(currentColumn != nColumns-1 && lastButton != tasterR)
     {
       currentColumn = (currentColumn + 1);
+      lastButton = tasterR;
+      if(currentColor == red){
+        lm.setLightValue(currentColumn, currentColumn-1, flashRed);
+      }
+      else{
+        lm.setLightValue(currentColumn, currentColumn-1, flashGreen);
+      }
     }
     
   }
   else if(digitalRead(tasterU)){
-    lm.setLightValue(currentColumn, currentColor);
+    lm.setLightValue(currentColumn, currentColumn, currentColor);
     player1 = !player1;
     if(player1){
       currentColor = startColor;
@@ -113,6 +124,15 @@ void readButtons(){
   }
   else if(digitalRead(tasterRst)){
     reset();
+  }
+  else{
+    lastButton = 0;
+    if(currentColor == red){
+        lm.setLightValue(currentColumn, currentColumn, flashRed);
+      }
+      else{
+        lm.setLightValue(currentColumn, currentColumn, flashGreen);
+      }
   }
 }
 

@@ -41,8 +41,10 @@
         currentColumn = 0;
     }
 
-    void LEDMatrix::setLightValue(int currentColumnumber, int color){
+    void LEDMatrix::setLightValue(int currentColumnumber, int previousColumnumber,  int color){
+        
         if (LEDvalues.at(currentColumnumber).at(0) == off){
+            LEDvalues[previousColumnumber][0] = off;
             if (color < 2){
                 for(int i = nLines-1; i >= 0; i--)
                 {
