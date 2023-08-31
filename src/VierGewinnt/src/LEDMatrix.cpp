@@ -31,7 +31,7 @@
                 //     tmp2.push_back(1);
                 // }
                 // else{
-                    tmp2.push_back(0);
+                    tmp2.push_back(off);
                 // }
                 
             }
@@ -86,16 +86,14 @@
     }
 
     bool LEDMatrix::update(){
-        // bool won = winControl();
-        // if(won){
-        //     endAnimation();
-        //     delay(2000);
-        // }
-        // else{
-        //     setLEDs();
-        // }
-        setLEDs();
-        return LOW;//won;
+        bool won = winControl();
+        if(won){
+            endAnimation();
+        }
+        else{
+            setLEDs();
+        }
+        return won;
     }
 
     void LEDMatrix::setLEDs(){
@@ -140,119 +138,131 @@
     }
 
     bool LEDMatrix::winControl(){
-        int count = 0;
-        int currentColor = off;
+        // Zeilen Prüfen
+        for (size_t c = 0; c < nColumns; c++)
+        {
+            int lastColor = off;
+            int count = 1;
+            for (size_t l = 0; l < nLines; l++)
+            {
+                int color = LEDvalues[c][l];
+                if(lastColor == off){
+                    lastColor = color;
+                    count = 1;
+                }
+                else if(lastColor == color){
+                    count++;
+                    lastColor = color;
+                }
+                else{
+                    count = 1;
+                    lastColor = color;
+                }
+
+                if(count == 4){
+                    return HIGH;
+                }
+            }
+        }
+
         // Spalten prüfen
-        for (size_t i = 0; i < nColumns; i++)
+        for (size_t l = 0; l < nLines; l++)
         {
-            for (size_t j = nLines-1; j >= 0 && count + j >= 4; j--)
+            int lastColor = off;
+            int count = 1;
+            for (size_t c = 0; c < nColumns; c++)
             {
-                int color = LEDvalues[i][j];
-                if(color == currentColor && currentColor != off){
+                int color = LEDvalues[c][l];
+                if(lastColor == off){
+                    lastColor = color;
+                    count = 1;
+                }
+                else if(lastColor == color){
                     count++;
+                    lastColor = color;
                 }
                 else{
                     count = 1;
-                    currentColor = color;
+                    lastColor = color;
                 }
+
                 if(count == 4){
-                    endAnimation();
                     return HIGH;
                 }
             }
         }
 
-        count = 0;
-        currentColor = off;
-        // Zeilen prüfen
-        for (size_t i = nLines; i >= 0; i--)
+        // diagonale oben prüfen
+        for (size_t xStart = 0, yStart = 3; xStart < 3; )
         {
-            for (size_t j = 0; j < nColumns && count + j < 4; j++)
+            int lastColor = off;
+            int count = 1;
+            for (size_t c = xStart, l = yStart; c < nColumns && l >= 0; c++, l--)
             {
-                int color = LEDvalues[i][j];
-                if(color == currentColor && currentColor != off){
+                int color = LEDvalues[c][l];
+                if(lastColor == off){
+                    lastColor = color;
+                    count = 1;
+                }
+                else if(lastColor == color){
                     count++;
+                    lastColor = color;
                 }
                 else{
                     count = 1;
-                    currentColor = color;
+                    lastColor = color;
                 }
-                if(count == 4){
-                    endAnimation();
-                    return HIGH;
-                }
-            }
-        }
 
-        count = 0;
-        currentColor = off;
-        // diagonale prüfen oben 
-        int i = 3;
-        int j = 0;
-        while(i <= 4 && j <= 2){
-            for(int x = j, y = i; x <= 5 && y >= 0; x++, y--){
-                int color = LEDvalues[i][j];
-                if(color == currentColor && currentColor != off){
-                    count++;
-                }
-                else{
-                    count = 1;
-                    currentColor = color;
-                }
                 if(count == 4){
-                    endAnimation();
                     return HIGH;
                 }
             }
-            if(i < 4){
-                i++;
+
+            if(yStart < 4){
+                yStart++;
             }
             else{
-                j++;
+                xStart++;
             }
         }
+        
 
-        count = 0;
-        currentColor = off;
-        // diagonale prüfen unten 
-        i = 1;
-        j = 0;
-        while(i >= 0 && j <= 2){
-            for(int x = j, y = i; x <= 5 && y <= 4; x++, y++){
-                int color = LEDvalues[i][j];
-                if(color == currentColor && currentColor != off){
+        // diagonale unten prüfen
+        for (size_t xStart = 0, yStart = 1; xStart < 3; )
+        {
+            int lastColor = off;
+            int count = 1;
+            for (size_t c = xStart, l = yStart; c < nColumns && l >= 0; c++, l++)
+            {
+                int color = LEDvalues[c][l];
+                if(lastColor == off){
+                    lastColor = color;
+                    count = 1;
+                }
+                else if(lastColor == color){
                     count++;
+                    lastColor = color;
                 }
                 else{
                     count = 1;
-                    currentColor = color;
+                    lastColor = color;
                 }
+
                 if(count == 4){
-                    endAnimation();
                     return HIGH;
                 }
             }
-            if(i > 0){
-                i--;
+
+            if(yStart > 0){
+                yStart--;
             }
             else{
-                j++;
+                xStart++;
             }
         }
         
         return LOW;
     }
-
-    // direction 0 = diagonal unten, 1 = rechts, 2 = diagonal oben, 3 = oben  
-    // bool winControl(std::pair<int, int> currentPos, std::pair<int, int> lastPos, int lastColor, int count, int direction){
-    //     if(count + currentPos.second >= 4 && count + currentPos.first < 4){
-    //         if(direction == 0 || direction == 2 ){}
-    //         int currentColor = LEDvalues[currentPos.first][currentPos.second];
-    //         if(currentColor == lastColor){
-    //             count++;
-    //         }
-    //     }
-    // }
 
     void LEDMatrix::endAnimation(){
     
