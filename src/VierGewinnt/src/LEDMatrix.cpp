@@ -12,19 +12,24 @@
         
         for(int i = 0, x = 0; i < 3; i++)
         {
+            std::vector<int> temp3;
             for (int j = 0; j < tmp; j++)
             {
-                pins[i][j] = p[x];
+                int tmp2 = p[x];
+                temp3.push_back(tmp2);
                 x++;
             }
+            pins.push_back(temp3);
         }
 
         for(int i = 0; i < initNColumns; i++)
         {
+            std::vector<int> tmp2;
             for (int j = 0; j < initNLines; j++)
             {
-                LEDvalues[i][j] = 1;
+                tmp2.push_back(1);
             }
+            LEDvalues.push_back(tmp2);
         }
 
         currentColumn = 0;
@@ -70,10 +75,10 @@
     }
 
     void LEDMatrix::setLEDs(){
-        for (byte l = 0; l < 6; l++)
+        for (byte l = 0; l < nLines; l++)
         {
-            digitalWrite(pins[1][l], LOW);
-            digitalWrite(pins[2][l], LOW);
+            digitalWrite(pins[red][l], LOW);
+            digitalWrite(pins[green][l], LOW);
         }
     
         for (byte c = 0; c < 6; c++)
