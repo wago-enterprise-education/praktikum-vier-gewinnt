@@ -12,30 +12,43 @@
         
         for(int i = 0, x = 0; i < 3; i++)
         {
+            std::vector<int> temp3;
             for (int j = 0; j < tmp; j++)
             {
-                pins[i][j] = p[x];
+                int tmp2 = p[x];
+                temp3.push_back(tmp2);
                 x++;
             }
+            pins.push_back(temp3);
         }
 
         for(int i = 0; i < initNColumns; i++)
         {
+            std::vector<int> tmp2;
             for (int j = 0; j < initNLines; j++)
             {
-                LEDvalues[i][j] = 1;
+                // if(j + i == 4){
+                //     tmp2.push_back(1);
+                // }
+                // else{
+                    tmp2.push_back(0);
+                // }
+                
             }
+            LEDvalues.push_back(tmp2);
         }
 
         currentColumn = 0;
     }
 
-    void LEDMatrix::setLightValue(int currentColumnumber, int color){
-        if (LEDMatrix::LEDvalues[currentColumnumber][0] == off){
+    void LEDMatrix::setLightValue(int currentColumnumber, int previousColumnumber,  int color){
+        
+        if (LEDvalues.at(currentColumnumber).at(0) == off){
+            LEDvalues[previousColumnumber][0] = off;
             if (color < 2){
-                for(int i = LEDMatrix::nLines-1; i >= 0; i--)
+                for(int i = nLines-1; i >= 0; i--)
                 {
-                    if(LEDvalues[currentColumnumber][i] == 0)
+                    if(LEDvalues.at(currentColumnumber).at(i) == 0)
                     {
                         LEDvalues[currentColumnumber][i] = color;
                     }
@@ -48,40 +61,41 @@
     }
 
     void LEDMatrix::reset(){
-        for(int i = 0; i < LEDMatrix::nColumns; i++)
+        for(int i = 0; i < nColumns; i++)
         {
-            for (int j = 0; j < LEDMatrix::nLines; j++)
+            for (int j = 0; j < nLines; j++)
             {
-                LEDMatrix::LEDvalues[i][j] = 0;
+                LEDvalues[i][j] = 0;
             }
         }
     }
 
     bool LEDMatrix::update(){
-        bool won = winControl();
-        if(won){
-            endAnimation();
-            delay(2000);
-        }
-        else{
-            setLEDs();
-        }
-        return won;
+        // bool won = winControl();
+        // if(won){
+        //     endAnimation();
+        //     delay(2000);
+        // }
+        // else{
+        //     setLEDs();
+        // }
+        setLEDs();
+        return LOW;//won;
     }
 
     void LEDMatrix::setLEDs(){
-        for (byte l = 0; l < 6; l++)
+        for (byte l = 0; l < nLines; l++)
         {
-            digitalWrite(pins[1][l], LOW);
-            digitalWrite(pins[2][l], LOW);
+            digitalWrite(pins[red][l], LOW);
+            digitalWrite(pins[green][l], LOW);
         }
     
-        for (byte c = 0; c < 6; c++)
+        for (byte c = 0; c < nColumns; c++)
         {
             digitalWrite(pins[0][c], c != currentColumn);
         }
       
-        for (int line = 0; line < 5; line++)
+        for (int line = 0; line < nLines; line++)
         {
             switch (LEDvalues[currentColumn][line])
             {
