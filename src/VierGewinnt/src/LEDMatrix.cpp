@@ -45,7 +45,7 @@
         
         LEDvalues[previousColumnnumber][0] = off;
         if (color < 3){
-            for(int i = nLines-1; i >= 0; i--)
+            for(int i = 0; i < nLines; i++)
             {
             if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                 {
@@ -87,6 +87,9 @@
 
     bool LEDMatrix::update(){
         bool won = winControl();
+        if (dropDown){
+
+        }
         if(won){
             endAnimation();
         }
@@ -265,5 +268,5 @@
     }
 
     void LEDMatrix::endAnimation(){
-    
+        
     }
