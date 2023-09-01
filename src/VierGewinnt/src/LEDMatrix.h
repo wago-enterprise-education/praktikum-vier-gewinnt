@@ -1,4 +1,5 @@
 #include <vector>
+#include <Arduino.h>
 #ifndef LEDMATRIX_H
 #define LEDMATRIX_H
 
