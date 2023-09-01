@@ -9,9 +9,9 @@ class LEDMatrix
     void setLightValue(int, int,  int);
     void reset();
     bool update();
-    int findPossibleDestination(int, int); 
+    int findPossibleDestination(int, int);
     bool dropDown;
-    
+
     
 
     private:
@@ -25,11 +25,16 @@ class LEDMatrix
     const int red = 1;
     const int green = 2;
     const int flahRed = 3;
-    const int flashGreen = 4;  
+    const int flashGreen = 4; 
 
     void setLEDs();
     bool winControl();
     void endAnimation();
     bool possibleDestination(int);  
+    bool flash(int);
+
+    ulong lastTime;
+    bool savedLastTime;
+    int step = 1;
 };
 #endif

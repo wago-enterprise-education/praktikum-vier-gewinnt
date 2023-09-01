@@ -88,7 +88,7 @@
     bool LEDMatrix::update(){
         bool won = winControl();
         if (dropDown){
-
+            
         }
         if(won){
             endAnimation();
@@ -269,4 +269,28 @@
 
     void LEDMatrix::endAnimation(){
         
+    }
+
+    bool LEDMatrix::flash(int periodDuration){
+        if (!savedLastTime && lastTime < millis() - periodDuration / 2){
+            lastTime = millis();
+            savedLastTime = true;
+        }
+        switch (step){
+        case 1:
+            return true;
+            if(savedLastTime){
+                step = 2;
+                savedLastTime = false;
+            }
+            break;
+        
+        case 2:
+            return false;
+            if (savedLastTime){
+                step = 1;
+                savedLastTime = false;
+            }
+            break;
+        }
     }
