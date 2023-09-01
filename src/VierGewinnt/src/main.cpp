@@ -79,7 +79,7 @@ void loop() {
   
   
   
-  if(lm.update()){
+  if(lm.update(currentColumn, currentColor)){
     //Serial.println("Gewonnen");
     reset();
   }

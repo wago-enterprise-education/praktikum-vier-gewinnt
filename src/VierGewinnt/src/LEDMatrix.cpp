@@ -45,12 +45,32 @@
         
         LEDvalues[previousColumnnumber][0] = off;
         if (color < 3){
-            for(int i = 0; i < nLines; i++)
+            for(int i = nLines-1; i >=0; i--)
             {
             if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                 {
                     LEDvalues[currentColumnnumber][i] = color;
                     break;
+                }
+            }
+        }
+        else {
+            LEDvalues[currentColumnnumber][0] = color;
+        }
+    }
+
+    void LEDMatrix::setLightValue(int currentColumnnumber, int color){
+        
+        if (color < 3){
+            for (int i=0; i<nLines; i++){
+                if(LEDvalues.at(currentColumnnumber).at(i) == 0)
+                {
+                    while (flash(500) == HIGH){
+                        LEDvalues[currentColumnnumber][i] = color;
+                    }
+                    
+                        LEDvalues[currentColumnnumber][i] = off;
+                    
                 }
             }
         }
@@ -85,10 +105,10 @@
         }
     }
 
-    bool LEDMatrix::update(){
+    bool LEDMatrix::update(int currentColumn, int currentColor){
         bool won = winControl();
         if (dropDown){
-            
+            setLightValue(currentColumn, currentColor);
         }
         if(won){
             endAnimation();

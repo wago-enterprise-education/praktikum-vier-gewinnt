@@ -7,8 +7,9 @@ class LEDMatrix
     public:
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
+    void setLightValue(int, int);
     void reset();
-    bool update();
+    bool update(int, int);
     int findPossibleDestination(int, int);
     bool dropDown;
 
