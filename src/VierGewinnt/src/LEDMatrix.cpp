@@ -278,19 +278,19 @@
         }
         switch (step){
         case 1:
-            return true;
             if(savedLastTime){
                 step = 2;
                 savedLastTime = false;
             }
+            return true;
             break;
         
         case 2:
-            return false;
             if (savedLastTime){
                 step = 1;
                 savedLastTime = false;
             }
+            return false;
             break;
         }
     }
