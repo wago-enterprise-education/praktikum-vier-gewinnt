@@ -60,7 +60,7 @@
     }
 
     void LEDMatrix::setLightValue(int currentColumnnumber, int color){
-        
+        LEDvalues[currentColumnnumber][0] = off;
         if (color < 3){
             for (int i=0; i<nLines; i++){
                 if(LEDvalues.at(currentColumnnumber).at(i) == 0)
@@ -107,9 +107,6 @@
 
     bool LEDMatrix::update(int currentColumn, int currentColor){
         bool won = winControl();
-        if (dropDown){
-            setLightValue(currentColumn, currentColor);
-        }
         if(won){
             endAnimation();
         }
@@ -312,5 +309,13 @@
             }
             return false;
             break;
+        }
+        return false;
+    }
+
+    void LEDMatrix::rollingStone(int currentColumnnumber, int color){
+        if (dropDown){
+            setLightValue(currentColumnnumber, color);
+            dropDown = false;
         }
     }

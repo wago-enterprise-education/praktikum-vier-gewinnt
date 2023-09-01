@@ -13,6 +13,7 @@ class LEDMatrix
     bool update(int, int);
     int findPossibleDestination(int, int);
     bool dropDown;
+    void rollingStone(int, int);
 
     
 
