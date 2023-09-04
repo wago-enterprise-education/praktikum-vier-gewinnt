@@ -42,20 +42,21 @@
     }
 
     void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,  int color){
-        
-        LEDvalues[previousColumnnumber][0] = off;
-        if (color < 3){
-            for(int i = nLines-1; i >= 0; i--)
-            {
-            if(LEDvalues.at(currentColumnnumber).at(i) == 0)
+        if(currentColumnnumber >= 0 && previousColumnnumber >= 0){
+            LEDvalues[previousColumnnumber][0] = off;
+            if (color < 3){
+                for(int i = nLines-1; i >= 0; i--)
                 {
-                    LEDvalues[currentColumnnumber][i] = color;
-                    break;
+                if(LEDvalues.at(currentColumnnumber).at(i) == 0)
+                    {
+                        LEDvalues[currentColumnnumber][i] = color;
+                        break;
+                    }
                 }
             }
-        }
-        else {
-            LEDvalues[currentColumnnumber][0] = color;
+            else {
+                LEDvalues[currentColumnnumber][0] = color;
+            }
         }
     }
 
@@ -65,13 +66,16 @@
 
     int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction){
         int tmp = -1;
-        for (size_t i = currentColumnnumber; i < nColumns && i >= 0; i = i + direction)
-        {
-            if(possibleDestination(i)){
-                return i;
+        if(currentColumn >= 0){
+            for (size_t i = currentColumnnumber; i < nColumns && i >= 0; i = i + direction)
+            {
+                if(possibleDestination(i)){
+                    return i;
+                }
             }
-        }
+        }   
         
+        draw = (currentColumnnumber == 0 || currentColumnnumber == -1);
         return tmp;
     }
 
@@ -83,12 +87,17 @@
                 LEDvalues[i][j] = 0;
             }
         }
+        draw = false;
     }
 
     bool LEDMatrix::update(){
         bool won = winControl();
         if(won){
             endAnimation();
+        }
+        else if (draw)
+        {
+            drawViso();
         }
         else{
             setLEDs();
@@ -289,5 +298,24 @@
             }
             return false;
             break;
+        }
+        return false;
+    }
+
+    void LEDMatrix::drawViso(){
+        if(flash(1000)){
+            setLEDs();
+        }
+        else {
+            for (byte c = 0; c < nColumns; c++)
+            {
+                digitalWrite(pins[0][c], HIGH);
+            }
+            
+            for (byte l = 0; l < nLines; l++)
+            {
+                digitalWrite(pins[red][l], LOW);
+                digitalWrite(pins[green][l], LOW);
+            }
         }
     }
