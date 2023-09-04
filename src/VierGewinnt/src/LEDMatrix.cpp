@@ -49,7 +49,8 @@
                 {
                     if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                         {
-                            LEDvalues[currentColumnnumber][i] = color;
+                            // LEDvalues[currentColumnnumber][i] = color;
+                            rollingStone(currentColumnnumber, i, color);
                             break;
                         }
                 } 
@@ -320,5 +321,22 @@
                 digitalWrite(pins[red][l], LOW);
                 digitalWrite(pins[green][l], LOW);
             }
+        }
+    }
+
+    void LEDMatrix::rollingStone(int currentColumnnumber, int currentLinenumber, int color){
+        bool flanke = false;
+        for (int i = 1; i <= currentLinenumber; ){
+            if(flash(200) && !flanke){
+                flanke = true;
+                LEDvalues[currentColumnnumber][i] = color;
+                LEDvalues[currentColumnnumber][i-1] = off;
+                i++;
+            }
+            else if(!flash(200) && flanke){
+                flanke = false;
+            }
+            setLEDs();
+            delay(1);
         }
     }
