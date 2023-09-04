@@ -66,10 +66,10 @@ void setup() {
   pinMode(line4green, OUTPUT);
   pinMode(line5green,OUTPUT);
 
-  pinMode(tasterL, INPUT);
-  pinMode(tasterR, INPUT);
-  pinMode(tasterU, INPUT);
-  pinMode(tasterRst, INPUT);
+  pinMode(tasterL, INPUT_PULLDOWN);
+  pinMode(tasterR, INPUT_PULLDOWN);
+  pinMode(tasterU, INPUT_PULLDOWN);
+  pinMode(tasterRst, INPUT_PULLDOWN);
 
   //Serial.begin(9600);
 }
