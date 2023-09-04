@@ -10,7 +10,7 @@ class LEDMatrix
     void setLightValue(int, int,  int);
     void setLightValue(int, int);
     void reset();
-    bool update(int, int);
+    bool update();
     int findPossibleDestination(int, int);
     bool dropDown;
     void rollingStone(int, int);
