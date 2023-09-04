@@ -93,11 +93,13 @@
                 LEDvalues[i][j] = 0;
             }
         }
+        won = false;
         draw = false;
     }
 
     bool LEDMatrix::update(){
-        bool won = winControl();
+        won = (won || winControl());
+
         if (dropDown){
             
         }
@@ -156,53 +158,98 @@
     }
 
     bool LEDMatrix::winControl(){
-        // Zeilen Prüfen
+        // Spalte Prüfen
+        winPath.clear();
         for (size_t c = 0; c < nColumns; c++)
         {
             int lastColor = off;
-            int count = 1;
+            int count = 0;
             for (size_t l = 0; l < nLines; l++)
             {
+                std::pair<int, int> coordinate;
+                coordinate.first = c;
+                coordinate.second = l;
                 int color = LEDvalues[c][l];
-                if(lastColor == off){
+
+                std::pair<int, int> winColor;
+                winColor.first = color;
+                winColor.second = color;
+
+                if(color == off){
+                    lastColor = color;
+                    count = 0;
+                    winPath.clear();
+                }
+                else if(lastColor == off){
                     lastColor = color;
                     count = 1;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
                 else if(lastColor == color){
                     count++;
                     lastColor = color;
+                    winPath.push_back(coordinate);
                 }
                 else{
                     count = 1;
                     lastColor = color;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
+
 
                 if(count == 4){
                     return HIGH;
                 }
             }
+            winPath.clear();
         }
 
-        // Spalten prüfen
+        // Zeile prüfen
+        winPath.clear();
         for (size_t l = 0; l < nLines; l++)
         {
             int lastColor = off;
-            int count = 1;
+            int count = 0;
             for (size_t c = 0; c < nColumns; c++)
             {
+                std::pair<int, int> coordinate;
+                coordinate.first = c;
+                coordinate.second = l;
                 int color = LEDvalues[c][l];
-                if(lastColor == off){
+
+                std::pair<int, int> winColor;
+                winColor.first = color;
+                winColor.second = color;
+
+                if(color == off){
+                    lastColor = color;
+                    count = 0;
+                    winPath.clear();
+                }
+                else if(lastColor == off){
                     lastColor = color;
                     count = 1;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
                 else if(lastColor == color){
                     count++;
                     lastColor = color;
+                    winPath.push_back(coordinate);
                 }
                 else{
                     count = 1;
                     lastColor = color;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
+
 
                 if(count == 4){
                     return HIGH;
@@ -211,31 +258,53 @@
         }
 
         // diagonale oben prüfen
+        winPath.clear();
         for (size_t xStart = 0, yStart = 3; xStart < 3; )
         {
             int lastColor = off;
             int count = 1;
             for (size_t c = xStart, l = yStart; c < nColumns && l >= 0; c++, l--)
             {
+                std::pair<int, int> coordinate;
+                coordinate.first = c;
+                coordinate.second = l;
                 int color = LEDvalues[c][l];
-                if(lastColor == off){
+
+                std::pair<int, int> winColor;
+                winColor.first = color;
+                winColor.second = color;
+
+                if(color == off){
+                    lastColor = color;
+                    count = 0;
+                    winPath.clear();
+                }
+                else if(lastColor == off){
                     lastColor = color;
                     count = 1;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
                 else if(lastColor == color){
                     count++;
                     lastColor = color;
+                    winPath.push_back(coordinate);
                 }
                 else{
                     count = 1;
                     lastColor = color;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
+
 
                 if(count == 4){
                     return HIGH;
                 }
             }
-
+            winPath.clear();
             if(yStart < 4){
                 yStart++;
             }
@@ -246,31 +315,53 @@
         
 
         // diagonale unten prüfen
+        winPath.clear();
         for (size_t xStart = 0, yStart = 1; xStart < 3; )
         {
             int lastColor = off;
             int count = 1;
             for (size_t c = xStart, l = yStart; c < nColumns && l >= 0; c++, l++)
             {
+                std::pair<int, int> coordinate;
+                coordinate.first = c;
+                coordinate.second = l;
                 int color = LEDvalues[c][l];
-                if(lastColor == off){
+
+                std::pair<int, int> winColor;
+                winColor.first = color;
+                winColor.second = color;
+
+                if(color == off){
+                    lastColor = color;
+                    count = 0;
+                    winPath.clear();
+                }
+                else if(lastColor == off){
                     lastColor = color;
                     count = 1;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
                 else if(lastColor == color){
                     count++;
                     lastColor = color;
+                    winPath.push_back(coordinate);
                 }
                 else{
                     count = 1;
                     lastColor = color;
+                    winPath.clear();
+                    winPath.push_back(winColor);
+                    winPath.push_back(coordinate);
                 }
+
 
                 if(count == 4){
                     return HIGH;
                 }
             }
-
+            winPath.clear();
             if(yStart > 0){
                 yStart--;
             }
@@ -283,7 +374,21 @@
     }
 
     void LEDMatrix::endAnimation(){
-        
+        if(flash(1000)){
+            
+            LEDvalues[winPath[1].first][winPath[1].second] = winPath[0].first;
+            LEDvalues[winPath[2].first][winPath[2].second] = winPath[0].first;
+            LEDvalues[winPath[3].first][winPath[3].second] = winPath[0].first;
+            LEDvalues[winPath[4].first][winPath[4].second] = winPath[0].first;
+        }
+        else{
+            
+            LEDvalues[winPath[1].first][winPath[1].second] = off;
+            LEDvalues[winPath[2].first][winPath[2].second] = off;
+            LEDvalues[winPath[3].first][winPath[3].second] = off; 
+            LEDvalues[winPath[4].first][winPath[4].second] = off;
+        }
+        setLEDs();
     }
 
     bool LEDMatrix::flash(int periodDuration){

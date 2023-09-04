@@ -23,6 +23,7 @@ class LEDMatrix
     int nColumns; 
     int nLines;
     int currentColumn;
+    std::vector< std::pair<int, int > > winPath;
 
     const int off = 0;
     const int red = 1;
@@ -41,5 +42,6 @@ class LEDMatrix
     bool savedLastTime;
     int step = 1;
     bool draw;
+    bool won = false;
 };
 #endif

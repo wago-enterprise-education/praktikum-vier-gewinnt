@@ -43,7 +43,7 @@ int LEDMatrixPins[nColumns*3] = {ground1, ground2, ground3, ground4, ground5, gr
                                 line1green, line2green, line3green, line4green, line5green, 0};
 LEDMatrix lm(LEDMatrixPins, nColumns, nLines);
 
-void readButtons();
+void readButtons(bool);
 void reset();
 
 void setup() {
@@ -75,18 +75,16 @@ void setup() {
 }
 
 void loop() {
-  readButtons();
+  readButtons(lm.update());
   //lm.rollingStone(currentColumn, currentColor);
-  if(lm.update()){
-    //Serial.println("Gewonnen");
-    reset();
-  }
+  
   delay(1);
 }
 
-void readButtons(){
+void readButtons(bool won){
+  
   if(digitalRead(tasterL)){
-    if(currentColumn != 0 && lastButton != tasterL && currentColumn != -1)
+    if(currentColumn != 0 && lastButton != tasterL && currentColumn != -1 && !won)
     {
       int pos = lm.findPossibleDestination(currentColumn-1, -1);
       if(pos >= 0){
@@ -103,7 +101,7 @@ void readButtons(){
   }
   else if(digitalRead(tasterR)){
     
-    if(currentColumn != nColumns-1 && lastButton != tasterR && currentColumn != -1)
+    if(currentColumn != nColumns-1 && lastButton != tasterR && currentColumn != -1 && !won)
     {
       int pos = lm.findPossibleDestination(currentColumn+1, 1);
       if(pos >= 0)
@@ -121,7 +119,7 @@ void readButtons(){
     
   }
   else if(digitalRead(tasterU)){
-    if(lastButton != tasterU && currentColumn != -1)
+    if(lastButton != tasterU && currentColumn != -1 && !won)
     {
       lastButton = tasterU;
       lm.dropDown = true;
@@ -134,13 +132,13 @@ void readButtons(){
         currentColor = green;
       }
       currentColumn = lm.findPossibleDestination(0, 1);
-      Serial.println((int)currentColumn);
+      //Serial.println((int)currentColumn);
     }
   }
   else if(digitalRead(tasterRst)){
     reset();
   }
-  else{
+  else if(!won){
     lastButton = 0;
     if(currentColor == red){
         lm.setLightValue(currentColumn, currentColumn, flashRed);
