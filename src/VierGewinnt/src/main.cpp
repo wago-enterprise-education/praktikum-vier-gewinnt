@@ -76,10 +76,8 @@ void setup() {
 
 void loop() {
   readButtons();
-  
-  
-  
-  if(lm.update()){
+  lm.rollingStone(currentColumn, currentColor);
+  if(lm.update(currentColumn, currentColor)){
     //Serial.println("Gewonnen");
     reset();
   }
