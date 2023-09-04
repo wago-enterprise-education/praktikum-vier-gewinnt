@@ -71,7 +71,7 @@ void setup() {
   pinMode(tasterU, INPUT_PULLDOWN);
   pinMode(tasterRst, INPUT_PULLDOWN);
 
-  //Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -88,7 +88,7 @@ void loop() {
 
 void readButtons(){
   if(digitalRead(tasterL)){
-    if(currentColumn != 0 && lastButton != tasterL)
+    if(currentColumn != 0 && lastButton != tasterL && currentColumn != -1)
     {
       int pos = lm.findPossibleDestination(currentColumn-1, -1);
       if(pos >= 0){
@@ -105,7 +105,7 @@ void readButtons(){
   }
   else if(digitalRead(tasterR)){
     
-    if(currentColumn != nColumns-1 && lastButton != tasterR)
+    if(currentColumn != nColumns-1 && lastButton != tasterR && currentColumn != -1)
     {
       int pos = lm.findPossibleDestination(currentColumn+1, 1);
       if(pos >= 0)
@@ -123,10 +123,11 @@ void readButtons(){
     
   }
   else if(digitalRead(tasterU)){
-    if(lastButton != tasterU)
+    if(lastButton != tasterU && currentColumn != -1)
     {
       lastButton = tasterU;
-      lm.setLightValue(currentColumn, currentColumn, currentColor);
+      lm.dropDown = true;
+      //lm.setLightValue(currentColumn, currentColumn, currentColor);
       player1 = !player1;
       if(player1){
         currentColor = startColor;
@@ -134,7 +135,8 @@ void readButtons(){
       else{
         currentColor = green;
       }
-      currentColumn = 0;
+      currentColumn = lm.findPossibleDestination(0, 1);
+      Serial.println((int)currentColumn);
     }
   }
   else if(digitalRead(tasterRst)){

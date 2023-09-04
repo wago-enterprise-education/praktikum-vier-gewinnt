@@ -11,6 +11,8 @@ class LEDMatrix
     void reset();
     bool update();
     int findPossibleDestination(int, int);
+    bool dropDown;
+
     
 
     private:
@@ -31,9 +33,11 @@ class LEDMatrix
     void endAnimation();
     bool possibleDestination(int);  
     bool flash(int);
+    void drawViso();
 
     ulong lastTime;
     bool savedLastTime;
     int step = 1;
+    bool draw;
 };
 #endif
