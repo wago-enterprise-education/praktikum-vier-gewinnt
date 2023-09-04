@@ -66,17 +66,17 @@ void setup() {
   pinMode(line4green, OUTPUT);
   pinMode(line5green,OUTPUT);
 
-  pinMode(tasterL, INPUT_PULLDOWN);
-  pinMode(tasterR, INPUT_PULLDOWN);
-  pinMode(tasterU, INPUT_PULLDOWN);
-  pinMode(tasterRst, INPUT_PULLDOWN);
+  pinMode(tasterL, INPUT);
+  pinMode(tasterR, INPUT);
+  pinMode(tasterU, INPUT);
+  pinMode(tasterRst, INPUT);
 
   Serial.begin(9600);
 }
 
 void loop() {
   readButtons();
-  lm.rollingStone(currentColumn, currentColor);
+  //lm.rollingStone(currentColumn, currentColor);
   if(lm.update()){
     //Serial.println("Gewonnen");
     reset();
@@ -125,7 +125,7 @@ void readButtons(){
     {
       lastButton = tasterU;
       lm.dropDown = true;
-      //lm.setLightValue(currentColumn, currentColumn, currentColor);
+      lm.setLightValue(currentColumn, currentColumn, currentColor);
       player1 = !player1;
       if(player1){
         currentColor = startColor;
