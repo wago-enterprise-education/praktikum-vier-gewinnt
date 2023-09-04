@@ -56,7 +56,12 @@
                 } 
             }
             else {
-                LEDvalues[currentColumnnumber][0] = color;
+                if(flash(1000)){
+                    LEDvalues[currentColumnnumber][0] = color;
+                }
+                else{
+                    LEDvalues[currentColumnnumber][0] = off;
+                }
             }  
         }
     }
@@ -326,11 +331,13 @@
 
     void LEDMatrix::rollingStone(int currentColumnnumber, int currentLinenumber, int color){
         bool flanke = false;
-        for (int i = 1; i <= currentLinenumber; ){
+        for (int i = 0; i <= currentLinenumber; ){
             if(flash(200) && !flanke){
                 flanke = true;
                 LEDvalues[currentColumnnumber][i] = color;
-                LEDvalues[currentColumnnumber][i-1] = off;
+                if(i > 0){
+                    LEDvalues[currentColumnnumber][i-1] = off;
+                }
                 i++;
             }
             else if(!flash(200) && flanke){
