@@ -98,8 +98,11 @@
         draw = false;
     }
 
-    bool LEDMatrix::update(int currentColumn, int currentColor){
+    bool LEDMatrix::update(){
         bool won = winControl();
+        if (dropDown){
+            
+        }
         if(won){
             endAnimation();
         }
@@ -306,5 +309,24 @@
             }
             return false;
             break;
+        }
+        return false;
+    }
+
+    void LEDMatrix::drawViso(){
+        if(flash(1000)){
+            setLEDs();
+        }
+        else {
+            for (byte c = 0; c < nColumns; c++)
+            {
+                digitalWrite(pins[0][c], HIGH);
+            }
+            
+            for (byte l = 0; l < nLines; l++)
+            {
+                digitalWrite(pins[red][l], LOW);
+                digitalWrite(pins[green][l], LOW);
+            }
         }
     }
