@@ -11,6 +11,8 @@ class LEDMatrix
     void reset();
     bool update();
     int findPossibleDestination(int, int);
+    bool dropDown;
+
     
 
     private:

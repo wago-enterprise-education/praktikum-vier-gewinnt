@@ -126,7 +126,8 @@ void readButtons(){
     if(lastButton != tasterU && currentColumn != -1)
     {
       lastButton = tasterU;
-      lm.setLightValue(currentColumn, currentColumn, currentColor);
+      lm.dropDown = true;
+      //lm.setLightValue(currentColumn, currentColumn, currentColor);
       player1 = !player1;
       if(player1){
         currentColor = startColor;

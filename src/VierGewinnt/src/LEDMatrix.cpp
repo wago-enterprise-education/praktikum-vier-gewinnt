@@ -46,6 +46,12 @@
             LEDvalues[previousColumnnumber][0] = off;
             if (color < 3){
                 for(int i = nLines-1; i >= 0; i--)
+        
+        LEDvalues[previousColumnnumber][0] = off;
+        if (color < 3){
+            for(int i = 0; i < nLines; i++)
+            {
+            if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                 {
                 if(LEDvalues.at(currentColumnnumber).at(i) == 0)
                     {
@@ -57,6 +63,8 @@
             else {
                 LEDvalues[currentColumnnumber][0] = color;
             }
+            }   
+        }
         }
     }
 
@@ -92,6 +100,9 @@
 
     bool LEDMatrix::update(){
         bool won = winControl();
+        if (dropDown){
+            
+        }
         if(won){
             endAnimation();
         }
@@ -274,7 +285,7 @@
     }
 
     void LEDMatrix::endAnimation(){
-    
+        
     }
 
     bool LEDMatrix::flash(int periodDuration){
