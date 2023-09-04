@@ -8,10 +8,12 @@ class LEDMatrix
     public:
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
+    void setLightValue(int, int);
     void reset();
     bool update();
     int findPossibleDestination(int, int);
     bool dropDown;
+    void rollingStone(int, int, int);
 
     
 
@@ -21,6 +23,7 @@ class LEDMatrix
     int nColumns; 
     int nLines;
     int currentColumn;
+    std::vector< std::pair<int, int > > winPath;
 
     const int off = 0;
     const int red = 1;
@@ -39,5 +42,6 @@ class LEDMatrix
     bool savedLastTime;
     int step = 1;
     bool draw;
+    bool won = false;
 };
 #endif
