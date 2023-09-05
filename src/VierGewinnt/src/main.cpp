@@ -120,7 +120,6 @@ void readButtons(bool won) {
     } else if (digitalRead(buttonD)) {
         if (lastButton != buttonD && currentColumn != -1 && !won) {
             lastButton = buttonD;
-            lm.dropDown = true;
             lm.setLightValue(currentColumn, currentColumn, currentColor);
             player1 = !player1;
             if (player1) {
