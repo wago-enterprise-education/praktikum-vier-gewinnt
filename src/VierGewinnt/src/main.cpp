@@ -21,10 +21,10 @@
 #define ground5 16
 #define ground6 4
 
-#define tasterL 34
-#define tasterR 33
-#define tasterRst 35
-#define tasterU 32
+#define buttonL 34
+#define buttonR 33
+#define buttonRst 35
+#define buttonD 32
 
 // Konstanten für die LED-Matrix
 const int nColumns = 6;
@@ -74,10 +74,10 @@ void setup() {
     pinMode(line4green, OUTPUT);
     pinMode(line5green, OUTPUT);
 
-    pinMode(tasterL, INPUT);
-    pinMode(tasterR, INPUT);
-    pinMode(tasterU, INPUT);
-    pinMode(tasterRst, INPUT);
+    pinMode(buttonL, INPUT);
+    pinMode(buttonR, INPUT);
+    pinMode(buttonD, INPUT);
+    pinMode(buttonRst, INPUT);
 
     // Serielle Kommunikation starten
     Serial.begin(9600);
@@ -91,11 +91,11 @@ void loop() {
 
 void readButtons(bool won) {
     // Tastenabfrage und Aktionen je nach gedrückter Taste
-    if (digitalRead(tasterL)) {
-        if (lastButton != tasterL && currentColumn != -1 && !won) {
+    if (digitalRead(buttonL)) {
+        if (lastButton != buttonL && currentColumn != -1 && !won) {
             int pos = lm.findPossibleDestination(currentColumn-1, -1);
             if (pos >= 0) {
-                lastButton = tasterL;
+                lastButton = buttonL;
                 if (currentColor == red) {
                     lm.setLightValue(pos, currentColumn, flashRed);
                 } else {
@@ -104,11 +104,11 @@ void readButtons(bool won) {
                 currentColumn = pos;
             }
         }
-    } else if (digitalRead(tasterR)) {
-        if (lastButton != tasterR && currentColumn != -1 && !won) {
+    } else if (digitalRead(buttonR)) {
+        if (lastButton != buttonR && currentColumn != -1 && !won) {
             int pos = lm.findPossibleDestination(currentColumn+1, 1);
             if (pos >= 0) {
-                lastButton = tasterR;
+                lastButton = buttonR;
                 if (currentColor == red) {
                     lm.setLightValue(pos, currentColumn, flashRed);
                 } else {
@@ -117,9 +117,9 @@ void readButtons(bool won) {
                 currentColumn = pos;
             }
         }
-    } else if (digitalRead(tasterU)) {
-        if (lastButton != tasterU && currentColumn != -1 && !won) {
-            lastButton = tasterU;
+    } else if (digitalRead(buttonD)) {
+        if (lastButton != buttonD && currentColumn != -1 && !won) {
+            lastButton = buttonD;
             lm.dropDown = true;
             lm.setLightValue(currentColumn, currentColumn, currentColor);
             player1 = !player1;
@@ -130,9 +130,9 @@ void readButtons(bool won) {
             }
             currentColumn = lm.findPossibleDestination(0, 1);
         }
-    } else if (digitalRead(tasterRst)) {
-        if(lastButton != tasterRst){
-            lastButton = tasterRst;
+    } else if (digitalRead(buttonRst)) {
+        if(lastButton != buttonRst){
+            lastButton = buttonRst;
             reset();
         }
     } else if (!won) {

@@ -33,11 +33,16 @@ class LEDMatrix
 
     void setLEDs();
     bool winControl();
+    bool winControlRow();
+    bool winControlColumn();
+    bool winControlDiagonalUpwards();
+    bool winControlDiagonalDownwards();
     void endAnimation();
     bool possibleDestination(int);  
     bool flash(int);
     void drawViso();
     bool drawControl();
+    void resetAnimation();
 
     ulong lastTime;
     bool savedLastTime;
