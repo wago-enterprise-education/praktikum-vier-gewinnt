@@ -37,6 +37,7 @@ class LEDMatrix
     bool possibleDestination(int);  
     bool flash(int);
     void drawViso();
+    bool drawControl();
 
     ulong lastTime;
     bool savedLastTime;

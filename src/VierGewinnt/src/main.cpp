@@ -92,8 +92,8 @@ void loop() {
 void readButtons(bool won) {
     // Tastenabfrage und Aktionen je nach gedrückter Taste
     if (digitalRead(tasterL)) {
-        if (currentColumn != 0 && lastButton != tasterL && currentColumn != -1 && !won) {
-            int pos = lm.findPossibleDestination(currentColumn - 1, -1);
+        if (lastButton != tasterL && currentColumn != -1 && !won) {
+            int pos = lm.findPossibleDestination(currentColumn-1, -1);
             if (pos >= 0) {
                 lastButton = tasterL;
                 if (currentColor == red) {
@@ -105,8 +105,8 @@ void readButtons(bool won) {
             }
         }
     } else if (digitalRead(tasterR)) {
-        if (currentColumn != nColumns - 1 && lastButton != tasterR && currentColumn != -1 && !won) {
-            int pos = lm.findPossibleDestination(currentColumn + 1, 1);
+        if (lastButton != tasterR && currentColumn != -1 && !won) {
+            int pos = lm.findPossibleDestination(currentColumn+1, 1);
             if (pos >= 0) {
                 lastButton = tasterR;
                 if (currentColor == red) {

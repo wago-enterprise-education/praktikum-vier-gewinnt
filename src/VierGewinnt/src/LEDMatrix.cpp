@@ -65,14 +65,15 @@ bool LEDMatrix::possibleDestination(int currentColumnnumber) {
 int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
     int tmp = -1;
     if (currentColumn >= 0) {
-        for (size_t i = currentColumnnumber; i < nColumns && i >= 0; i = i + direction) {
+        for (size_t i = (currentColumnnumber + nColumns) % nColumns, j = 0; 
+        j < nColumns; i = ((i + direction) + nColumns) % nColumns, j++) {
+            Serial.println((int)i);
             if (possibleDestination(i)) {
                 return i;
             }
         }
     }
-
-    draw = (currentColumnnumber == 0 || currentColumnnumber == -1);
+    
     return tmp;
 }
 
@@ -134,13 +135,24 @@ void LEDMatrix::reset() {
     draw = false;
 }
 
+bool LEDMatrix::drawControl(){
+    for (size_t l = 0; l < nLines; l++) {
+        for (size_t c = 0; c < nColumns; c++) {
+            if(LEDvalues[c][l] == off){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 // Methode zur Aktualisierung des Spiels
 bool LEDMatrix::update() {
     won = (won || winControl());
 
     if (won) {
         endAnimation();
-    } else if (draw) {
+    } else if (drawControl()) {
         drawViso();
     } else {
         setLEDs();
