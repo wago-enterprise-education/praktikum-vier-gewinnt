@@ -78,6 +78,53 @@ int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
 
 // Methode zum Zurücksetzen des Spiels
 void LEDMatrix::reset() {
+    
+        std::vector<std::vector<int> > LEDValuesClone;
+        for(int c = 0; c < nColumns; c++){
+            std::vector<int> tmp;
+            for(int l = 0; l < nLines; l++){
+                tmp.push_back(LEDvalues[c][l]);
+            }
+            LEDValuesClone.push_back(tmp);
+        }
+
+        bool flanke = false;
+        for (int i = 1; i <= nLines;)
+        {
+            bool test = flash(200);
+            if(test && !flanke){
+                flanke = true;
+                for (int l = 0; l < nLines; l++)
+                {
+                    for (int c = 0; c < nColumns; c++)
+                    {
+                        if(l - i >= 0){
+                             
+                            LEDvalues[c][l] = LEDValuesClone[c][l-i];
+                        }
+                        else {
+                            LEDvalues[c][l] = off;
+                        }
+                        setLEDs();
+                        delay(1);
+                    }
+                        
+                }
+                setLEDs();
+                delay(1);
+                i++;
+            }
+            else if(!test && flanke){
+                flanke = false;
+            }
+           
+            setLEDs();
+            delay(1);
+            
+        }
+        Serial.println("zweite For");
+    
+
     for (int i = 0; i < nColumns; i++) {
         for (int j = 0; j < nLines; j++) {
             LEDvalues[i][j] = 0;
@@ -91,9 +138,6 @@ void LEDMatrix::reset() {
 bool LEDMatrix::update() {
     won = (won || winControl());
 
-    if (dropDown) {
-
-    }
     if (won) {
         endAnimation();
     } else if (draw) {
@@ -139,7 +183,7 @@ void LEDMatrix::setLEDs() {
                 break;
         }
     }
-    currentColumn = (currentColumn + 1) % 6;
+    currentColumn = (currentColumn + 1) % nColumns;
 }
 
 // Methode zur Überprüfung des Gewinns

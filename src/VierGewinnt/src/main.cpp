@@ -131,7 +131,10 @@ void readButtons(bool won) {
             currentColumn = lm.findPossibleDestination(0, 1);
         }
     } else if (digitalRead(tasterRst)) {
-        reset();
+        if(lastButton != tasterRst){
+            lastButton = tasterRst;
+            reset();
+        }
     } else if (!won) {
         lastButton = 0;
         if (currentColor == red) {
