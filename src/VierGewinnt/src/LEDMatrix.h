@@ -18,7 +18,7 @@ class LEDMatrix
     std::vector< std::pair<int, int > > winPath;
     ulong lastTime;
     int nColumns; 
-    int nLines;
+    int nRows;
     int currentColumn;
     int step = 1;
     bool draw;

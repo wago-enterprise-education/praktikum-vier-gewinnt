@@ -28,7 +28,7 @@
 
 // Konstanten für die LED-Matrix
 const int nColumns = 6;
-const int nLines = 5;
+const int nRows = 5;
 const int off = 0;
 const int red = 1;
 const int green = 2;
@@ -46,11 +46,11 @@ int currentColumn = 0;
 int LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, ground6,
                                     line1red, line2red, line3red, line4red, line5red, 0,
                                     line1green, line2green, line3green, line4green, line5green, 0};
-LEDMatrix lm(LEDMatrixPins, nColumns, nLines);
+LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
 
-// Funktion zum Auslesen der Tasten
+// Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
-// Funktion zum Zurücksetzen des Spiels
+// Methode zum Zurücksetzen des Spiels
 void reset();
 
 void setup() {
@@ -89,6 +89,7 @@ void loop() {
     delay(1);
 }
 
+// Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool won) {
     // Tastenabfrage und Aktionen je nach gedrückter Taste
     if (digitalRead(buttonL)) {
@@ -144,6 +145,7 @@ void readButtons(bool won) {
     }
 }
 
+// Methode zum Zurücksetzen des Spiels
 void reset() {
     // Spiel zurücksetzen
     lm.reset();
