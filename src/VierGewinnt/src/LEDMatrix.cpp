@@ -43,12 +43,8 @@ void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,
     if (currentColumnnumber >= 0 && previousColumnnumber >= 0) {
         LEDvalues[previousColumnnumber][0] = off;
         if (color < 3) { 
-            for (int i = nRows - 1; i >= 0; i--) {
-                if (LEDvalues.at(currentColumnnumber).at(i) == 0) {
-                    rollingStone(currentColumnnumber, i, color);
-                    break;
-                }
-            }
+            std::pair<int, int> tmp = findPossibleDestination(currentColumnnumber);
+            rollingStone(currentColumnnumber, tmp.second, color);
         } else {
             if (flash(1000)) {
                 LEDvalues[currentColumnnumber][0] = color;
@@ -57,6 +53,12 @@ void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,
             }
         }
     }
+}
+
+// Methode zum Setzen des Lichtwerts einer LED
+void LEDMatrix::setLightValue(int column, int row, int previousColumnnumber, int color) {
+    LEDvalues[previousColumnnumber][0] = off;
+    LEDvalues[column][row] = color;
 }
 
 // Methode zur Aktualisierung des Spiels
@@ -83,6 +85,34 @@ int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
             if (possibleDestination(i)) {
                 return i;
             }
+        }
+    }
+    
+    return tmp;
+}
+
+std::pair<int, int> LEDMatrix::findPossibleDestination(int currentColumnnumber) {
+    std::pair<int, int> tmp;
+    for (int c = currentColumnnumber; c < nColumns; c++) {
+        tmp.first = c;
+        for (int r = nRows-1; r >= 0; r--)
+        {
+            if(LEDvalues[c][r] == off){
+                tmp.second = r;
+                return tmp;
+            }
+        }
+    }
+    tmp.first = -1;
+    tmp.second = -1;
+    return tmp;
+}
+
+std::vector<int> LEDMatrix::findPossibleColumns(int currentColumnnumber) {
+    std::vector<int> tmp;
+    for (int c = currentColumnnumber; c < nColumns; c++) {
+        if(LEDvalues[c][0] == off){
+            tmp.push_back(c);
         }
     }
     

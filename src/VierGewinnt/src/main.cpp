@@ -53,6 +53,8 @@ void readButtons(bool);
 // Methode zum Zurücksetzen des Spiels
 void reset();
 
+void AImove();
+
 void setup() {
     // Konfiguration der Pins
     pinMode(ground1, OUTPUT);
@@ -85,7 +87,13 @@ void setup() {
 
 void loop() {
     // Tasten auslesen und Spielstatus aktualisieren
-    readButtons(lm.update());
+    if(player1){
+        readButtons(lm.update());
+    }
+
+    if(!player1){
+        AImove();
+    }
     delay(1);
 }
 
@@ -152,4 +160,25 @@ void reset() {
     player1 = HIGH;
     currentColor = startColor;
     currentColumn = 0;
+}
+
+void AImove(){
+    std::vector<int> columns = lm.findPossibleColumns(currentColumn);
+    int length = columns.size();
+    if(length >= 1){
+        srand(millis());
+        int rdm = rand() % length;
+
+        std::pair<int, int> pos = lm.findPossibleDestination(columns.at(rdm));
+        if(pos.first >= 0){
+            lm.setLightValue(pos.first, currentColumn, currentColor);
+            player1 = !player1;
+            if (player1) {
+                currentColor = startColor;
+            } else {
+                currentColor = green;
+            }
+            currentColumn = lm.findPossibleDestination(0, 1);
+        }
+    }
 }

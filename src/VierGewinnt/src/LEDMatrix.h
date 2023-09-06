@@ -8,9 +8,12 @@ class LEDMatrix
     public:
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
+    void setLightValue(int, int, int, int);
     void reset();
     bool update();
     int findPossibleDestination(int, int);
+    std::pair<int, int> findPossibleDestination(int);
+    std::vector<int> findPossibleColumns(int);
 
     private:
     std::vector< std::vector<int> > pins;
