@@ -14,6 +14,7 @@ class LEDMatrix
     int findPossibleDestination(int, int);
     std::pair<int, int> findPossibleDestination(int);
     std::vector<int> findPossibleColumns(int);
+    std::vector< std::pair<int, int > > getBestPath();
 
     private:
     std::vector< std::vector<int> > pins;
@@ -39,10 +40,10 @@ class LEDMatrix
     void drawViso();
     void resetAnimation();
     void rollingStone(int, int, int);
-    bool winControlRow();
-    bool winControlColumn();
-    bool winControlDiagonalUpwards();
-    bool winControlDiagonalDownwards();
+    std::vector<std::pair<int, int>> winControlRow();
+    std::vector<std::pair<int, int>> winControlColumn();
+    std::vector<std::pair<int, int>> winControlDiagonalUpwards();
+    std::vector<std::pair<int, int>> winControlDiagonalDownwards();
     bool winControl();
     bool possibleDestination(int);  
     bool flash(int);
