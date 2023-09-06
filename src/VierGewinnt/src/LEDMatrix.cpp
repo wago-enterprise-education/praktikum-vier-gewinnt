@@ -81,7 +81,7 @@ int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
     if (currentColumn >= 0) {
         for (size_t i = (currentColumnnumber + nColumns) % nColumns, j = 0; 
         j < nColumns; i = ((i + direction) + nColumns) % nColumns, j++) {
-            Serial.println((int)i);
+            //Serial.println((int)i);
             if (possibleDestination(i)) {
                 return i;
             }
@@ -228,9 +228,6 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlRow() {
             } else if (lastColor == off) {
                 lastColor = color;
                 count = 1;
-                if(winPath.size() > bestPath.size()){
-                    bestPath = winPath;
-                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
@@ -252,6 +249,9 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlRow() {
             if (count == 4) {
                 return winPath;
             }
+        }
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
         }
     }
     return bestPath;
@@ -310,6 +310,9 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlColumn() {
                 return winPath;
             }
         }
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
+        }
     }
     return bestPath;
 }
@@ -366,11 +369,14 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
                 return winPath;
             }
         }
-        winPath.clear();
         if (yStart > 0) {
             yStart--;
         } else {
             xStart++;
+        }
+
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
         }
     }
     return bestPath;
@@ -428,11 +434,14 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
                 return winPath;
             }
         }
-        winPath.clear();
         if (yStart < 4) {
             yStart++;
         } else {
             xStart++;
+        }
+
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
         }
     }
     return bestPath;
@@ -441,16 +450,59 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
 std::vector< std::pair<int, int> > LEDMatrix::getBestPath(){
     std::vector<std::pair<int, int>> bestPath;
     std::vector<std::pair<int, int>> path;
-    bestPath = winControlRow();
-    path = winControlColumn();
-    if(path.size() > bestPath.size()){
-        bestPath = path;
-    }
+    bestPath = winControlColumn();
+    // Serial.println("Spalte:");
+    // for (int i = 0; i < bestPath.size(); i++){
+
+    //     Serial.println((int)bestPath[i].first);
+
+    //     Serial.println((int)bestPath[i].second);
+
+    //     Serial.println("----------------");
+
+    // }
+    
+
     path = winControlDiagonalUpwards();
+    // Serial.println("Diagonale oben:");
+    // for (int i = 0; i < path.size(); i++){
+
+    //     Serial.println((int)path[i].first);
+
+    //     Serial.println((int)path[i].second);
+
+    //     Serial.println("----------------");
+
+    // }
+
     if(path.size() > bestPath.size()){
         bestPath = path;
     }
     path = winControlDiagonalDownwards();
+    // Serial.println("Diagonale unten:");
+    // for (int i = 0; i < path.size(); i++){
+
+    //     Serial.println((int)path[i].first);
+
+    //     Serial.println((int)path[i].second);
+
+    //     Serial.println("----------------");
+
+    // }
+    if(path.size() > bestPath.size()){
+        bestPath = path;
+    }
+    path = winControlRow();
+    // Serial.println("Reihe:");
+    // for (int i = 0; i < path.size(); i++){
+
+    //     Serial.println((int)path[i].first);
+
+    //     Serial.println((int)path[i].second);
+
+    //     Serial.println("----------------");
+
+    // }
     if(path.size() > bestPath.size()){
         bestPath = path;
     }

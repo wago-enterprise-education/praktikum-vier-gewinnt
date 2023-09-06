@@ -87,11 +87,12 @@ void setup() {
 
 void loop() {
     // Tasten auslesen und Spielstatus aktualisieren
+    bool won = lm.update();
     if(player1){
-        readButtons(lm.update());
+        readButtons(won);
     }
 
-    if(!player1){
+    if(!player1 && !won){
         AImove();
     }
     delay(1);
@@ -163,6 +164,139 @@ void reset() {
 }
 
 void AImove(){
+    std::vector<std::pair<int, int>> bestPath = lm.getBestPath();
+    // Serial.println("Best Path:");
+    // for (int i = 0; i < bestPath.size(); i++){
+
+    //     Serial.println((int)bestPath[i].first);
+
+    //     Serial.println((int)bestPath[i].second);
+
+    //     Serial.println("----");
+
+    // }
+    // Serial.println("-------------------");
+
+    if(bestPath.size() >= 3){
+        if(bestPath[1].first < bestPath[2].first){
+            //Serial.println("Diagonale oben:");
+            if(bestPath[1].second > bestPath[2].second){
+                if(bestPath[1].first > 0 && bestPath[1].second < nRows-1){
+                    //Serial.println("Diagonale oben links:");
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
+                    if(pos.first == bestPath[1].first-1 && pos.second == bestPath[1].second+1){
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+                if(bestPath[1].first < nColumns-1 && bestPath[1].second > 0){
+                    //Serial.println("Diagonale oben rechts:");
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
+                    if(pos.first == bestPath[bestPath.size()-1].first+1 && pos.second == bestPath[bestPath.size()-1].second-1){
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+            }
+            else if(bestPath[1].second < bestPath[2].second){
+                //Serial.println("Diagonale unten:");
+                if(bestPath[1].first > 0 && bestPath[1].second > 0){
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
+                    if(pos.first == bestPath[1].first-1 && pos.second == bestPath[1].second-1){
+                        //Serial.println("Diagonale unten links:");
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+                if(bestPath[1].first < nColumns-1 && bestPath[1].second < nRows-1){
+                    //Serial.println("Diagonale unten Rechts:");
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
+                    if(pos.first == bestPath[bestPath.size()-1].first+1 && pos.second == bestPath[bestPath.size()-1].second+1){
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+            }
+            else{
+                //Serial.println("Reihe:");
+                if(bestPath[1].first > 0){
+                    //Serial.println("Reihe links:");
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
+                    if(pos.second == bestPath[1].second){
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+                if(bestPath[1].first < nColumns-1){
+                    //Serial.println("Reihe rechts:");
+                    std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
+                    if(pos.second == bestPath[1].second){
+                        lm.setLightValue(pos.first, pos.second, currentColor);
+                        player1 = !player1;
+                        if (player1) {
+                            currentColor = startColor;
+                        } else {
+                            currentColor = green;
+                        }
+                        currentColumn = lm.findPossibleDestination(0, 1);
+                        return;
+                    }
+                }
+            }
+        }
+        else{
+            //Serial.println("Spalte:");
+            std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first);
+            if(pos.first != -1 && pos.second == bestPath[1].second-1){
+                //Serial.println("Spalte2");
+                lm.setLightValue(pos.first, pos.second, currentColor);
+                player1 = !player1;
+                if (player1) {
+                    currentColor = startColor;
+                } else {
+                    currentColor = green;
+                }
+                currentColumn = lm.findPossibleDestination(0, 1);
+                return;
+            }
+        }
+    }
+
     std::vector<int> columns = lm.findPossibleColumns(currentColumn);
     int length = columns.size();
     if(length >= 1){
