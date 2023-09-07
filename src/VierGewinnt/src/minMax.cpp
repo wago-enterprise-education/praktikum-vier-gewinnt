@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <minMax.h>
 #include <vector>
+#include <LEDMatrix.h>
 
 void minMax::init(std::vector<std::vector<int>> givenPlayground)
 {
@@ -62,6 +63,20 @@ bool minMax::columnEmpty(std::vector<std::vector<int>> playground, int column) {
 
 //Gibt den Wert der Zeile zürück, in der der Stein landet, wenn er fallengelassen wird
 int minMax::findPossibleDestination(std::vector<std::vector<int>> playground, int currentColumnNumber) {
+    std::vector<std::vector<int>> playgroundtmp = playground;
+    int tmp;
+    for(int i=playground.size()-1; i>0;){
+        if (playground[currentColumnNumber][i] != 0){
+            i--;
+            tmp = i-1;
+        }
+        else{
+            tmp = i;
+            return tmp;
+            break;
+        }
+    }
+    return tmp;
 }
 
 
