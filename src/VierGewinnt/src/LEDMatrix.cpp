@@ -62,16 +62,22 @@ void LEDMatrix::setLightValue(int column, int row, int previousColumnnumber, int
 }
 
 // Methode zur Aktualisierung des Spiels
-bool LEDMatrix::update() {
-    won = (won || winControl());
-
-    if (won) {
-        endAnimation();
-    } else if (drawControl()) {
-        drawViso();
-    } else {
+bool LEDMatrix::update(bool menu) {
+    if(menu){
         setLEDs();
     }
+    else{
+        won = (won || winControl());
+
+        if (won) {
+            endAnimation();
+        } else if (drawControl()) {
+            drawViso();
+        } else {
+            setLEDs();
+        }
+    }
+    
     return won;
 }
 
@@ -474,12 +480,6 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
 
     // }
 
-    // if(path2.size() > path1.size()){
-    //     pathtmp = path1;
-    //     path1 = path2;
-    //     path2 = pathtmp;
-    // }
-
     path3 = winControlDiagonalDownwards();
 
     // Serial.println("Diagonale unten:");
@@ -491,21 +491,6 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
 
     //     Serial.println("----------------");
 
-    // }
-
-    // if(path3.size() > path1.size()){
-    //     pathtmp = path2;
-    //     path2 = path3;
-    //     path3 = pathtmp;
-
-    //     pathtmp = path1;
-    //     path1 = path2;
-    //     path2 = pathtmp;
-    // }
-    // else if(path3.size() > path2.size()){
-    //     pathtmp = path2;
-    //     path2 = path3;
-    //     path3 = pathtmp;
     // }
 
     path4 = winControlRow();
@@ -521,34 +506,7 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
 
     // }
 
-    // if(path4.size() > path1.size()){
-    //     pathtmp = path3;
-    //     path3 = path4;
-    //     path3 = pathtmp;
-
-    //     pathtmp = path2;
-    //     path2 = path3;
-    //     path3 = pathtmp;
-
-    //     pathtmp = path1;
-    //     path1 = path2;
-    //     path2 = pathtmp;
-    // }
-    // else if(path3.size() > path2.size()){
-    //     pathtmp = path3;
-    //     path3 = path4;
-    //     path3 = pathtmp;
-
-    //     pathtmp = path2;
-    //     path2 = path3;
-    //     path3 = pathtmp;
-    // }
-    // else if(path3.size() > path2.size()){
-    //     pathtmp = path3;
-    //     path3 = path4;
-    //     path3 = pathtmp;
-    // }
-
+    
     bestPaths.push_back(path1);
     bestPaths.push_back(path2);
     bestPaths.push_back(path3);
@@ -572,10 +530,6 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
     }while(getauscht);
 
     return bestPaths;
-}
-
-bool LEDMatrix::comparePaths(std::vector<std::pair<int, int> > path1, std::vector<std::pair<int, int> > path2){
-    return (path1.size() > path2.size());
 }
 
 // Methode zur Überprüfung von unentschieden 
@@ -709,4 +663,23 @@ bool LEDMatrix::flash(int periodDuration) {
             break;
     }
     return false;
+}
+
+void LEDMatrix::printNumber(int number){
+    for (int i = 0; i < nColumns; i++) {
+        for (int j = 0; j < nRows; j++) {
+            LEDvalues[i][j] = 0;
+        }
+    }
+
+    switch (number)
+    {
+    case 1:
+        LEDvalues = { {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 2, 0, 0, 0}, {2, 2, 2, 2, 2}, {0, 0, 0, 0, 0}, {0, 0, 1, 0, 0} };
+        break;
+    
+    case 2:
+        LEDvalues = { {0, 0, 1, 0, 0}, {0, 0, 0, 0, 0}, {2, 0, 2, 2, 2}, {2, 2, 2, 0, 2}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0} };
+        break;
+    }
 }

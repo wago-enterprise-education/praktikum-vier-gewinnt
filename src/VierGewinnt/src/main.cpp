@@ -39,6 +39,9 @@ const int startColor = red;
 // Variablen für den Spielstatus
 int lastButton = 0;
 bool player1 = HIGH;
+bool menu = HIGH;
+int currentNumber = 1;
+bool multiplayer = false;
 int currentColor = startColor;
 int currentColumn = 0;
 
@@ -50,6 +53,8 @@ LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
+
+void readButtons();
 // Methode zum Zurücksetzen des Spiels
 void reset();
 
@@ -86,21 +91,34 @@ void setup() {
 }
 
 void loop() {
-    // Tasten auslesen und Spielstatus aktualisieren
-    bool won = lm.update();
-    if(player1){
-        readButtons(won);
+    if(menu){
+        lm.update(menu);
+        lm.printNumber(currentNumber);
+        readButtons();
     }
+    else{
+        if(multiplayer){
+            bool won = lm.update(menu);
+            readButtons(won);
+        }
+        else{
+            // Tasten auslesen und Spielstatus aktualisieren
+            bool won = lm.update(menu);
+            if(!player1 && !won){
+                AImove();
+            }
 
-    if(!player1 && !won){
-        AImove();
+            if(player1 || won){
+                readButtons(won);
+            }
+        }
     }
+    
     delay(1);
 }
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool won) {
-    // Tastenabfrage und Aktionen je nach gedrückter Taste
     if (digitalRead(buttonL)) {
         if (lastButton != buttonL && currentColumn != -1 && !won) {
             int pos = lm.findPossibleDestination(currentColumn-1, -1);
@@ -154,6 +172,22 @@ void readButtons(bool won) {
     }
 }
 
+void readButtons(){
+    // Tastenabfrage und Aktionen je nach gedrückter Taste
+    if (digitalRead(buttonL)) {
+        currentNumber = 1;
+        multiplayer = false;
+    } else if (digitalRead(buttonR)) {
+        currentNumber = 2;
+        multiplayer = true;
+    } else if (digitalRead(buttonD)) {
+        menu = false;
+        lm.reset();
+    } else if (digitalRead(buttonRst)) {
+        
+    } 
+}
+
 // Methode zum Zurücksetzen des Spiels
 void reset() {
     // Spiel zurücksetzen
@@ -161,6 +195,7 @@ void reset() {
     player1 = HIGH;
     currentColor = startColor;
     currentColumn = 0;
+    menu = HIGH;
 }
 
 void AImove(){

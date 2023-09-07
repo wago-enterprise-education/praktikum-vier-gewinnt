@@ -10,8 +10,9 @@ class LEDMatrix
     void setLightValue(int, int,  int);
     void setLightValue(int, int, int, int);
     void reset();
-    bool update();
+    bool update(bool);
     int findPossibleDestination(int, int);
+    void printNumber(int);
     std::pair<int, int> findPossibleDestination(int);
     std::vector<int> findPossibleColumns(int);
     std::vector<std::vector< std::pair<int, int > >> getBestPath();
@@ -48,6 +49,5 @@ class LEDMatrix
     bool possibleDestination(int);  
     bool flash(int);
     bool drawControl();
-    bool comparePaths(std::vector<std::pair<int, int> > , std::vector<std::pair<int, int> > );
 };
 #endif
