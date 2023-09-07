@@ -63,9 +63,8 @@ bool minMax::columnEmpty(std::vector<std::vector<int>> playground, int column) {
 
 //Gibt den Wert der Zeile zürück, in der der Stein landet, wenn er fallengelassen wird
 int minMax::findPossibleDestination(std::vector<std::vector<int>> playground, int currentColumnNumber) {
-    std::vector<std::vector<int>> playgroundtmp = playground;
-    int tmp;
-    for(int i=playground.size()-1; i>0;){
+    int tmp = -1;
+    for(int i=playground[0].size()-1; i>=0;){
         if (playground[currentColumnNumber][i] != 0){
             i--;
             tmp = i-1;
@@ -87,6 +86,18 @@ bool minMax::winControl(std::vector<std::vector<int>> playground){
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel unentschieden ist
 bool minMax::drawControl(std::vector<std::vector<int>> playground){
+    bool tmp;
+    for(int i = playground.size()-1; i>=0;){
+        if (findPossibleDestination(playground, i) > -1){
+            tmp = false;
+            return tmp;
+            break;
+        }
+        else{
+            tmp = true;
+            return tmp;
+        }
+    }
 }
 
 
