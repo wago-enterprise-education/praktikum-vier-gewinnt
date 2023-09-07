@@ -2,61 +2,99 @@
 #include <minMax.h>
 #include <vector>
 
-void minMax::init(std::vector<std::vector<int>> givenPlayground)
+std::vector<int> minMax::run(std::vector<std::vector<int>> givenPlayground)
 {
-    minMax::playground = givenPlayground;
-    finish = nothingFound;
-    turnNPC = true;
+    std::vector<int> scores;
+    scores.reserve(givenPlayground.size());
+
+    for(int counter = 0; counter < givenPlayground.size(); counter++)
+    {
+        scores[counter] = Algorithm(givenPlayground, false);
+    }
+
+    return scores;
 }
 
 
-int minMax::Algorithm(std::vector<std::vector<int>> playground)
+int minMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
 {
-    std::vector<std::vector<int>> predictedPlayground = playground;
+    std::vector<std::vector<int>> predictedPlayground;
+    predictedPlayground.reserve(playground.size());
+    predictedPlayground[0].reserve(playground[0].size());   //Funktioniert das so?
+    bool maxPlayer = !max;
+    int score = nothingFound;
 
-    for(int column = 0; column <= nColumns; column++)
-    {   
-        predictedPlayground = playground;
+    if(maxPlayer)
+    {
+        for(int columnMax = 0; columnMax <= playground.size(); columnMax++)
+        {   
+            //predictedPlayground[columnMax].reserve(playground[0].size());     //Alternative!
+            predictedPlayground = playground;
 
-        if(columnEmpty(playground, column))
-        {
-            if(turnNPC)
+            if(columnEmpty(playground, columnMax))
             {
-                predictedPlayground[column][findPossibleDestination(playground, column)] = green;
-            }
-            else
-            {
-                predictedPlayground[column][findPossibleDestination(playground, column)] = red;
-            }
+                predictedPlayground[columnMax][findPossibleDestination(playground, columnMax)];
 
-
-            if(winControl(predictedPlayground) < win)
-            {
-                finish = win;
-            }
-            else if(drawControl(predictedPlayground) && finish < draw)
-            {
-                finish = draw;
-            }
-            else if(lostControl(predictedPlayground) && finish < lose)
-            {
-                finish = lose;
+                if(winControl(predictedPlayground) && score < win)
+                {
+                    score = win;
+                }
+                else if(drawControl(predictedPlayground) && score < draw)
+                {
+                    score = draw;
+                }
+                else if(lostControl(predictedPlayground) && score < lose)
+                {
+                    score = lose;
+                }
+                else
+                {
+                    score = Algorithm(predictedPlayground, maxPlayer);
+                }
             }
         }
     }
-
-    if(finish != nothingFound)
+    else
     {
-        return finish;
-    }
+        for(int columnMin = 0; columnMin <= playground.size(); columnMin++)
+        {   
+            //predictedPlayground[columnMax].reserve(playground[0].size());     //Alternative
+            predictedPlayground = playground;
 
-    turnNPC = !turnNPC;
-    return minMax::Algorithm(predictedPlayground);
+            if(columnEmpty(playground, columnMin))
+            {
+                predictedPlayground[columnMin][findPossibleDestination(playground, columnMin)];
+
+                if(winControl(predictedPlayground) && score == nothingFound)
+                {
+                    score = win;
+                }
+                else if(drawControl(predictedPlayground) && score > draw)
+                {
+                    score = draw;
+                }
+                else if(lostControl(predictedPlayground) && score < lose)
+                {
+                    score = lose;
+                }
+                else
+                {
+                    score = Algorithm(predictedPlayground, maxPlayer);
+                }
+            }
+        }
+    }
+    return score;
 }
 
 
 //Gibt den Wert ,,TRUE" zurück, wenn die Spalte noch spielbar ist
 bool minMax::columnEmpty(std::vector<std::vector<int>> playground, int column) {
+    if(playground[column][0] == 0){
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -67,6 +105,13 @@ int minMax::findPossibleDestination(std::vector<std::vector<int>> playground, in
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel gewonnen ist
 bool minMax::winControl(std::vector<std::vector<int>> playground){
+    bool win = false;
+    int winCounter = 0;
+
+    for(int c = 0; c <= nColumns; c++)
+    {
+
+    }
 }
 
 
