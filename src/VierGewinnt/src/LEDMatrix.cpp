@@ -344,9 +344,6 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
             } else if (lastColor == off) {
                 lastColor = color;
                 count = 1;
-                if(winPath.size() > bestPath.size()){
-                    bestPath = winPath;
-                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
@@ -409,9 +406,6 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
             } else if (lastColor == off) {
                 lastColor = color;
                 count = 1;
-                if(winPath.size() > bestPath.size()){
-                    bestPath = winPath;
-                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
@@ -447,66 +441,141 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
     return bestPath;
 }
 
-std::vector< std::pair<int, int> > LEDMatrix::getBestPath(){
-    std::vector<std::pair<int, int>> bestPath;
-    std::vector<std::pair<int, int>> path;
-    bestPath = winControlColumn();
-    // Serial.println("Spalte:");
-    // for (int i = 0; i < bestPath.size(); i++){
-
-    //     Serial.println((int)bestPath[i].first);
-
-    //     Serial.println((int)bestPath[i].second);
-
-    //     Serial.println("----------------");
-
-    // }
+std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
+    std::vector< std::vector< std::pair<int, int>>> bestPaths;
+    std::vector<std::pair<int, int> > path1;
+    std::vector<std::pair<int, int> > path2;
+    std::vector<std::pair<int, int> > path3;
+    std::vector<std::pair<int, int> > path4;
+    // std::vector<std::pair<int, int> > pathtmp;
+    path1 = winControlColumn();
     
+    // Serial.println("Spalte:");
+    // for (int i = 0; i < path1.size(); i++){
 
-    path = winControlDiagonalUpwards();
+    //     Serial.println((int)path1[i].first);
+
+    //     Serial.println((int)path1[i].second);
+
+    //     Serial.println("----------------");
+
+    // }
+
+    path2 = winControlDiagonalUpwards();
+
     // Serial.println("Diagonale oben:");
-    // for (int i = 0; i < path.size(); i++){
+    // for (int i = 0; i < path2.size(); i++){
 
-    //     Serial.println((int)path[i].first);
+    //     Serial.println((int)path2[i].first);
 
-    //     Serial.println((int)path[i].second);
+    //     Serial.println((int)path2[i].second);
 
     //     Serial.println("----------------");
 
     // }
 
-    if(path.size() > bestPath.size()){
-        bestPath = path;
-    }
-    path = winControlDiagonalDownwards();
+    // if(path2.size() > path1.size()){
+    //     pathtmp = path1;
+    //     path1 = path2;
+    //     path2 = pathtmp;
+    // }
+
+    path3 = winControlDiagonalDownwards();
+
     // Serial.println("Diagonale unten:");
-    // for (int i = 0; i < path.size(); i++){
+    // for (int i = 0; i < path3.size(); i++){
 
-    //     Serial.println((int)path[i].first);
+    //     Serial.println((int)path3[i].first);
 
-    //     Serial.println((int)path[i].second);
+    //     Serial.println((int)path3[i].second);
 
     //     Serial.println("----------------");
 
     // }
-    if(path.size() > bestPath.size()){
-        bestPath = path;
-    }
-    path = winControlRow();
+
+    // if(path3.size() > path1.size()){
+    //     pathtmp = path2;
+    //     path2 = path3;
+    //     path3 = pathtmp;
+
+    //     pathtmp = path1;
+    //     path1 = path2;
+    //     path2 = pathtmp;
+    // }
+    // else if(path3.size() > path2.size()){
+    //     pathtmp = path2;
+    //     path2 = path3;
+    //     path3 = pathtmp;
+    // }
+
+    path4 = winControlRow();
+
     // Serial.println("Reihe:");
-    // for (int i = 0; i < path.size(); i++){
+    // for (int i = 0; i < path4.size(); i++){
 
-    //     Serial.println((int)path[i].first);
+    //     Serial.println((int)path4[i].first);
 
-    //     Serial.println((int)path[i].second);
+    //     Serial.println((int)path4[i].second);
 
     //     Serial.println("----------------");
 
     // }
-    if(path.size() > bestPath.size()){
-        bestPath = path;
-    }
-    return bestPath;
+
+    // if(path4.size() > path1.size()){
+    //     pathtmp = path3;
+    //     path3 = path4;
+    //     path3 = pathtmp;
+
+    //     pathtmp = path2;
+    //     path2 = path3;
+    //     path3 = pathtmp;
+
+    //     pathtmp = path1;
+    //     path1 = path2;
+    //     path2 = pathtmp;
+    // }
+    // else if(path3.size() > path2.size()){
+    //     pathtmp = path3;
+    //     path3 = path4;
+    //     path3 = pathtmp;
+
+    //     pathtmp = path2;
+    //     path2 = path3;
+    //     path3 = pathtmp;
+    // }
+    // else if(path3.size() > path2.size()){
+    //     pathtmp = path3;
+    //     path3 = path4;
+    //     path3 = pathtmp;
+    // }
+
+    bestPaths.push_back(path1);
+    bestPaths.push_back(path2);
+    bestPaths.push_back(path3);
+    bestPaths.push_back(path4);
+    
+    int limit = bestPaths.size();
+    bool getauscht = false;
+    do{
+        getauscht = false;
+        for(int i = 0; i < limit-1; i++){
+            std::vector<std::pair<int, int> > path11 = bestPaths[i];
+            std::vector<std::pair<int, int> > path22 = bestPaths[i+1];
+            if(path11.size() < path22.size()){
+                std::vector<std::pair<int, int> > tmp = path11;
+                bestPaths[i] = bestPaths[i+1];
+                bestPaths[i+1] = tmp;
+                getauscht = true;
+            }
+        }
+        limit--;
+    }while(getauscht);
+
+    return bestPaths;
+}
+
+bool LEDMatrix::comparePaths(std::vector<std::pair<int, int> > path1, std::vector<std::pair<int, int> > path2){
+    return (path1.size() > path2.size());
 }
 
 // Methode zur Überprüfung von unentschieden 
