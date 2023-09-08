@@ -6,6 +6,8 @@
 class LEDMatrix
 {
     public:
+    std::vector< std::vector<int> > LEDvalues;
+
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
     void setLightValue(int, int, int, int);
@@ -19,7 +21,6 @@ class LEDMatrix
 
     private:
     std::vector< std::vector<int> > pins;
-    std::vector< std::vector<int> > LEDvalues;
     std::vector< std::pair<int, int > > winPath;
     ulong lastTime;
     int nColumns; 

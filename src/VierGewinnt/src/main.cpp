@@ -52,7 +52,7 @@ int LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, 
                                     line1red, line2red, line3red, line4red, line5red, 0,
                                     line1green, line2green, line3green, line4green, line5green, 0};
 LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
-miniMax mm();
+miniMax mm;
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
@@ -208,6 +208,25 @@ void reset() {
 
 // Methode zum Setzen eines Steins durch die AI
 void AImove(){
+    if(countPlays >= 10){
+        std::pair<int, int> bestPlay = mm.run(lm.LEDvalues, 6);
+        Serial.print(bestPlay.first);
+        Serial.print(" ");
+        Serial.print(bestPlay.second);
+        Serial.println("------");
+        if(bestPlay.first >= 0){
+            lm.setLightValue(bestPlay.second, currentColumn, currentColor);
+            player1 = !player1;
+            if (player1) {
+                currentColor = startColor;
+            } else {
+                currentColor = green;
+            }
+            currentColumn = lm.findPossibleDestination(0, 1);
+            countPlays++;
+            return;
+        }
+    }
     std::vector<std::vector<std::pair<int, int>>> bestPaths = lm.getBestPath();
 
     for (int i = 0; i < bestPaths.size(); i++){

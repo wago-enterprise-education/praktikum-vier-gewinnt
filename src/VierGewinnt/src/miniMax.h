@@ -7,8 +7,8 @@
 class miniMax
 {
     public:
-        std::pair<int, int> run(std::vector <std::vector<int>>);
-        int Algorithm(std::vector<std::vector<int>>, bool);
+        std::pair<int, int> run(std::vector <std::vector<int>>, int);
+        int Algorithm(std::vector<std::vector<int>>, bool, int);
 
     private:
         int nColumns = 6;     //Muss noch variabel gehalten werden

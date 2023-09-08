@@ -2,7 +2,7 @@
 #include <miniMax.h>
 #include <vector>
 
-std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
+std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground, int depth)
 {
     std::vector<int> scores {-10, -10, -10, -10, -10, -10};
     std::vector<std::vector<int>> predictedPlayground;
@@ -29,7 +29,7 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
             }
             else
             {
-                scores[counter] = Algorithm(predictedPlayground, true);
+                scores[counter] = Algorithm(predictedPlayground, true, depth-1);
             }
         }
     }
@@ -49,13 +49,17 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
 }
 
 
-int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
+int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max, int depth)
 {
     std::vector<std::vector<int>> predictedPlayground;
     bool maxPlayer = !max;
     int score;
     int scoreAlg;
     score = nothingFound;
+
+    if(depth <= 0){
+        return -9;
+    }
 
     if(maxPlayer)
     {
@@ -88,7 +92,7 @@ int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
                 }
                 else
                 {
-                    scoreAlg = Algorithm(predictedPlayground, maxPlayer);
+                    scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1);
                     if(scoreAlg > score)
                     {
                         score = scoreAlg;
@@ -132,7 +136,7 @@ int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
                 }
                 else
                 {
-                    scoreAlg = Algorithm(predictedPlayground, maxPlayer);
+                    scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1);
                     if (scoreAlg < score || score == nothingFound)
                     {
                         score = scoreAlg;
