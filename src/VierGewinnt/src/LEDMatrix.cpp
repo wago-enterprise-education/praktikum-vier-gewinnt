@@ -43,12 +43,8 @@ void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,
     if (currentColumnnumber >= 0 && previousColumnnumber >= 0) {
         LEDvalues[previousColumnnumber][0] = off;
         if (color < 3) { 
-            for (int i = nRows - 1; i >= 0; i--) {
-                if (LEDvalues.at(currentColumnnumber).at(i) == 0) {
-                    rollingStone(currentColumnnumber, i, color);
-                    break;
-                }
-            }
+            std::pair<int, int> tmp = findPossibleDestination(currentColumnnumber);
+            rollingStone(currentColumnnumber, tmp.second, color);
         } else {
             if (flash(1000)) {
                 LEDvalues[currentColumnnumber][0] = color;
@@ -59,17 +55,29 @@ void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,
     }
 }
 
-// Methode zur Aktualisierung des Spiels
-bool LEDMatrix::update() {
-    won = (won || winControl());
+// Methode zum Setzen des Lichtwerts einer LED
+void LEDMatrix::setLightValue(int column, int row, int previousColumnnumber, int color) {
+    LEDvalues[previousColumnnumber][0] = off;
+    LEDvalues[column][row] = color;
+}
 
-    if (won) {
-        endAnimation();
-    } else if (drawControl()) {
-        drawViso();
-    } else {
+// Methode zur Aktualisierung des Spiels
+bool LEDMatrix::update(bool menu) {
+    if(menu){
         setLEDs();
     }
+    else{
+        won = (won || winControl());
+
+        if (won) {
+            endAnimation();
+        } else if (drawControl()) {
+            drawViso();
+        } else {
+            setLEDs();
+        }
+    }
+    
     return won;
 }
 
@@ -79,10 +87,38 @@ int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
     if (currentColumn >= 0) {
         for (size_t i = (currentColumnnumber + nColumns) % nColumns, j = 0; 
         j < nColumns; i = ((i + direction) + nColumns) % nColumns, j++) {
-            Serial.println((int)i);
+            //Serial.println((int)i);
             if (possibleDestination(i)) {
                 return i;
             }
+        }
+    }
+    
+    return tmp;
+}
+
+std::pair<int, int> LEDMatrix::findPossibleDestination(int currentColumnnumber) {
+    std::pair<int, int> tmp;
+    for (int c = currentColumnnumber; c < nColumns; c++) {
+        tmp.first = c;
+        for (int r = nRows-1; r >= 0; r--)
+        {
+            if(LEDvalues[c][r] == off){
+                tmp.second = r;
+                return tmp;
+            }
+        }
+    }
+    tmp.first = -1;
+    tmp.second = -1;
+    return tmp;
+}
+
+std::vector<int> LEDMatrix::findPossibleColumns(int currentColumnnumber) {
+    std::vector<int> tmp;
+    for (int c = currentColumnnumber; c < nColumns; c++) {
+        if(LEDvalues[c][0] == off){
+            tmp.push_back(c);
         }
     }
     
@@ -147,22 +183,22 @@ void LEDMatrix::setLEDs() {
 // Methode zur Überprüfung des Gewinns
 bool LEDMatrix::winControl() {
     // Spalten überprüfen
-    if(winControlColumn()){
+    if(winControlColumn().size() == 5){
         return HIGH;
     }
 
     // Zeilen überprüfen
-    if(winControlRow()){
+    if(winControlRow().size() == 5){
         return HIGH;
     }
 
     // Diagonalen oben überprüfen
-    if(winControlDiagonalUpwards()){
+    if(winControlDiagonalUpwards().size() == 5){
         return HIGH;
     }
 
     // Diagonalen unten überprüfen
-    if(winControlDiagonalDownwards()){
+    if(winControlDiagonalDownwards().size() == 5){
         return HIGH;
     }
 
@@ -170,9 +206,12 @@ bool LEDMatrix::winControl() {
 }
 
 // Methode zur Überprüfung des Gewinns in den Reihen
-bool LEDMatrix::winControlRow() {
+std::vector<std::pair<int, int>> LEDMatrix::winControlRow() {
+    
+    std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t r = 0; r < nRows; r++) {
+        winPath.clear();
         int lastColor = off;
         int count = 0;
         for (size_t c = 0; c < nColumns; c++) {
@@ -188,6 +227,9 @@ bool LEDMatrix::winControlRow() {
             if (color == off) {
                 lastColor = color;
                 count = 0;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
             } else if (lastColor == off) {
                 lastColor = color;
@@ -202,23 +244,31 @@ bool LEDMatrix::winControlRow() {
             } else {
                 count = 1;
                 lastColor = color;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
             }
 
             if (count == 4) {
-                return HIGH;
+                return winPath;
             }
         }
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
+        }
     }
-    return LOW;
+    return bestPath;
 }
 
 // Methode zur Überprüfung des Gewinns in den Spalten
-bool LEDMatrix::winControlColumn() {
+std::vector<std::pair<int, int>> LEDMatrix::winControlColumn() {
+    std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t c = 0; c < nColumns; c++) {
+        winPath.clear();
         int lastColor = off;
         int count = 0;
         for (size_t r = 0; r < nRows; r++) {
@@ -234,10 +284,16 @@ bool LEDMatrix::winControlColumn() {
             if (color == off) {
                 lastColor = color;
                 count = 0;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
             } else if (lastColor == off) {
                 lastColor = color;
                 count = 1;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
@@ -248,27 +304,33 @@ bool LEDMatrix::winControlColumn() {
             } else {
                 count = 1;
                 lastColor = color;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
             }
 
             if (count == 4) {
-                return HIGH;
+                return winPath;
             }
         }
-        winPath.clear();
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
+        }
     }
-    return LOW;
+    return bestPath;
 }
 
 // Methode zur Überprüfung des Gewinns in den Diagonalen nach oben
-bool LEDMatrix::winControlDiagonalDownwards() {
+std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
+    std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t xStart = 0, yStart = 1; xStart < 3;) {
         int lastColor = off;
         int count = 1;
-        for (size_t c = xStart, r = yStart; c < nColumns && r >= 0; c++, r++) {
+        for (size_t c = xStart, r = yStart; c < nColumns && r < nRows; c++, r++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
@@ -281,6 +343,9 @@ bool LEDMatrix::winControlDiagonalDownwards() {
             if (color == off) {
                 lastColor = color;
                 count = 0;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
             } else if (lastColor == off) {
                 lastColor = color;
@@ -295,28 +360,35 @@ bool LEDMatrix::winControlDiagonalDownwards() {
             } else {
                 count = 1;
                 lastColor = color;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
             }
 
             if (count == 4) {
-                return HIGH;
+                return winPath;
             }
         }
-        winPath.clear();
         if (yStart > 0) {
             yStart--;
         } else {
             xStart++;
         }
+
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
+        }
     }
-    return LOW;
+    return bestPath;
 }
 
 // Methode zur Überprüfung des Gewinns in den Diagonalen nach unten
-bool LEDMatrix::winControlDiagonalUpwards() {
-    winPath.clear();
+std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
+    
+    std::vector<std::pair<int, int>> bestPath;winPath.clear();
     for (size_t xStart = 0, yStart = 3; xStart < 3;) {
         int lastColor = off;
         int count = 1;
@@ -333,6 +405,9 @@ bool LEDMatrix::winControlDiagonalUpwards() {
             if (color == off) {
                 lastColor = color;
                 count = 0;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
             } else if (lastColor == off) {
                 lastColor = color;
@@ -347,23 +422,70 @@ bool LEDMatrix::winControlDiagonalUpwards() {
             } else {
                 count = 1;
                 lastColor = color;
+                if(winPath.size() > bestPath.size()){
+                    bestPath = winPath;
+                }
                 winPath.clear();
                 winPath.push_back(winColor);
                 winPath.push_back(coordinate);
             }
 
             if (count == 4) {
-                return HIGH;
+                return winPath;
             }
         }
-        winPath.clear();
         if (yStart < 4) {
             yStart++;
         } else {
             xStart++;
         }
+
+        if(winPath.size() > bestPath.size()){
+            bestPath = winPath;
+        }
     }
-    return LOW;
+    return bestPath;
+}
+
+std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
+    std::vector< std::vector< std::pair<int, int>>> bestPaths;
+    std::vector<std::pair<int, int> > path1;
+    std::vector<std::pair<int, int> > path2;
+    std::vector<std::pair<int, int> > path3;
+    std::vector<std::pair<int, int> > path4;
+    
+    path1 = winControlColumn();
+    
+
+    path2 = winControlDiagonalUpwards();
+
+    path3 = winControlDiagonalDownwards();
+
+    path4 = winControlRow();
+    
+    bestPaths.push_back(path1);
+    bestPaths.push_back(path2);
+    bestPaths.push_back(path3);
+    bestPaths.push_back(path4);
+    
+    int limit = bestPaths.size();
+    bool getauscht = false;
+    do{
+        getauscht = false;
+        for(int i = 0; i < limit-1; i++){
+            std::vector<std::pair<int, int> > path11 = bestPaths[i];
+            std::vector<std::pair<int, int> > path22 = bestPaths[i+1];
+            if(path11.size() < path22.size()){
+                std::vector<std::pair<int, int> > tmp = path11;
+                bestPaths[i] = bestPaths[i+1];
+                bestPaths[i+1] = tmp;
+                getauscht = true;
+            }
+        }
+        limit--;
+    }while(getauscht);
+
+    return bestPaths;
 }
 
 // Methode zur Überprüfung von unentschieden 
@@ -497,4 +619,23 @@ bool LEDMatrix::flash(int periodDuration) {
             break;
     }
     return false;
+}
+
+void LEDMatrix::printNumber(int number){
+    for (int i = 0; i < nColumns; i++) {
+        for (int j = 0; j < nRows; j++) {
+            LEDvalues[i][j] = 0;
+        }
+    }
+
+    switch (number)
+    {
+    case 1:
+        LEDvalues = { {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 2, 0, 0, 0}, {2, 2, 2, 2, 2}, {0, 0, 0, 0, 0}, {0, 0, 1, 0, 0} };
+        break;
+    
+    case 2:
+        LEDvalues = { {0, 0, 1, 0, 0}, {0, 0, 0, 0, 0}, {2, 0, 2, 2, 2}, {2, 2, 2, 0, 2}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0} };
+        break;
+    }
 }
