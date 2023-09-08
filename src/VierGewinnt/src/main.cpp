@@ -54,10 +54,13 @@ LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
 
+// Methode zum Auslesen und Verarbeiten der Tastereingaben im Menu
 void readButtons();
+
 // Methode zum Zurücksetzen des Spiels
 void reset();
 
+// Methode zum Setzen eines Steins durch die AI
 void AImove();
 
 void setup() {
@@ -172,6 +175,7 @@ void readButtons(bool won) {
     }
 }
 
+// Methode zum Auslesen und Verarbeiten der Tastereingaben im Menu
 void readButtons(){
     // Tastenabfrage und Aktionen je nach gedrückter Taste
     if (digitalRead(buttonL)) {
@@ -198,22 +202,9 @@ void reset() {
     menu = HIGH;
 }
 
+// Methode zum Setzen eines Steins durch die AI
 void AImove(){
     std::vector<std::vector<std::pair<int, int>>> bestPaths = lm.getBestPath();
-    Serial.println("Best Paths:");
-    
-    for (int i = 0; i < bestPaths.size(); i++){
-        Serial.print("Path");
-        std::vector<std::pair<int, int>> path = bestPaths.at(i);
-        for(int j = 0; j < path.size(); j++){
-            Serial.println((int)path[j].first);
-
-            Serial.println((int)path[j].second);
-
-            Serial.println("----");
-        }
-        Serial.println("-------------------");
-    }
 
     for (int i = 0; i < bestPaths.size(); i++){
         std::vector<std::pair<int, int>> bestPath = bestPaths.at(i);

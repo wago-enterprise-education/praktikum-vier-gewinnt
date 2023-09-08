@@ -330,7 +330,7 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
     for (size_t xStart = 0, yStart = 1; xStart < 3;) {
         int lastColor = off;
         int count = 1;
-        for (size_t c = xStart, r = yStart; c < nColumns && r >= 0; c++, r++) {
+        for (size_t c = xStart, r = yStart; c < nColumns && r < nRows; c++, r++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
@@ -453,59 +453,15 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
     std::vector<std::pair<int, int> > path2;
     std::vector<std::pair<int, int> > path3;
     std::vector<std::pair<int, int> > path4;
-    // std::vector<std::pair<int, int> > pathtmp;
+    
     path1 = winControlColumn();
     
-    // Serial.println("Spalte:");
-    // for (int i = 0; i < path1.size(); i++){
-
-    //     Serial.println((int)path1[i].first);
-
-    //     Serial.println((int)path1[i].second);
-
-    //     Serial.println("----------------");
-
-    // }
 
     path2 = winControlDiagonalUpwards();
 
-    // Serial.println("Diagonale oben:");
-    // for (int i = 0; i < path2.size(); i++){
-
-    //     Serial.println((int)path2[i].first);
-
-    //     Serial.println((int)path2[i].second);
-
-    //     Serial.println("----------------");
-
-    // }
-
     path3 = winControlDiagonalDownwards();
 
-    // Serial.println("Diagonale unten:");
-    // for (int i = 0; i < path3.size(); i++){
-
-    //     Serial.println((int)path3[i].first);
-
-    //     Serial.println((int)path3[i].second);
-
-    //     Serial.println("----------------");
-
-    // }
-
     path4 = winControlRow();
-
-    // Serial.println("Reihe:");
-    // for (int i = 0; i < path4.size(); i++){
-
-    //     Serial.println((int)path4[i].first);
-
-    //     Serial.println((int)path4[i].second);
-
-    //     Serial.println("----------------");
-
-    // }
-
     
     bestPaths.push_back(path1);
     bestPaths.push_back(path2);
