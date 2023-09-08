@@ -80,7 +80,11 @@ int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
                     if(scoreAlg > score)
                     {
                         score = scoreAlg;
+                        if(score == win){
+                            return score;
+                        }
                     }
+                    
                 }
             }
         }
@@ -120,7 +124,11 @@ int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max)
                     if (scoreAlg < score || score == nothingFound)
                     {
                         score = scoreAlg;
+                        if(score == lose){
+                            return score;
+                        }
                     }
+                    
                 }
            }
         }
