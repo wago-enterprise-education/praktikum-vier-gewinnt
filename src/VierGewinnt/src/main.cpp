@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <LEDMatrix.h>
+#include <miniMax.h>
 
 // Pin-Definitionen für die LEDs und Tasten
 #define line1red 21
@@ -44,12 +45,14 @@ int currentNumber = 1;
 bool multiplayer = false;
 int currentColor = startColor;
 int currentColumn = 0;
+int countPlays = 0;
 
 // Array für die Pin-Belegung der LED-Matrix
 int LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, ground6,
                                     line1red, line2red, line3red, line4red, line5red, 0,
                                     line1green, line2green, line3green, line4green, line5green, 0};
 LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
+miniMax mm();
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
@@ -159,6 +162,7 @@ void readButtons(bool won) {
                 currentColor = green;
             }
             currentColumn = lm.findPossibleDestination(0, 1);
+            countPlays++;
         }
     } else if (digitalRead(buttonRst)) {
         if(lastButton != buttonRst){
@@ -224,6 +228,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -239,6 +244,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -257,6 +263,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -272,6 +279,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -290,6 +298,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -305,6 +314,7 @@ void AImove(){
                                 currentColor = green;
                             }
                             currentColumn = lm.findPossibleDestination(0, 1);
+                            countPlays++;
                             return;
                         }
                     }
@@ -323,6 +333,7 @@ void AImove(){
                         currentColor = green;
                     }
                     currentColumn = lm.findPossibleDestination(0, 1);
+                    countPlays++;
                     return;
                 }
             }
@@ -345,6 +356,7 @@ void AImove(){
                 currentColor = green;
             }
             currentColumn = lm.findPossibleDestination(0, 1);
+            countPlays++;
         }
     }
 }

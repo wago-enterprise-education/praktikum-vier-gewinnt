@@ -2,7 +2,7 @@
 #include <miniMax.h>
 #include <vector>
 
-std::vector<int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
+std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
 {
     std::vector<int> scores {-10, -10, -10, -10, -10, -10};
     std::vector<std::vector<int>> predictedPlayground;
@@ -33,7 +33,19 @@ std::vector<int> miniMax::run(std::vector<std::vector<int>> givenPlayground)
             }
         }
     }
-    return scores;
+
+    std::pair<int, int> bestPlay = {-10, -10};
+
+    for (int i = 0; i < scores.size(); i++)
+    {
+        if(scores[i] > bestPlay.first){
+            bestPlay.first = scores[i];
+            bestPlay.second = i;
+        }
+    }
+    
+
+    return bestPlay;
 }
 
 

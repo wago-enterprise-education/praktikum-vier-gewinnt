@@ -7,7 +7,7 @@
 class miniMax
 {
     public:
-        std::vector<int> run(std::vector <std::vector<int>>);
+        std::pair<int, int> run(std::vector <std::vector<int>>);
         int Algorithm(std::vector<std::vector<int>>, bool);
 
     private:
