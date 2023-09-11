@@ -38,11 +38,14 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground, 
 
     for (int i = 0; i < scores.size(); i++)
     {
+        Serial.print(scores[i]);
+        Serial.print(" ");
         if(scores[i] > bestPlay.first){
             bestPlay.first = scores[i];
             bestPlay.second = i;
         }
     }
+    Serial.println("fertig");
     
 
     return bestPlay;

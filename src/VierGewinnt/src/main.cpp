@@ -204,12 +204,18 @@ void reset() {
     currentColor = startColor;
     currentColumn = 0;
     menu = HIGH;
+    countPlays = 0;
 }
 
 // Methode zum Setzen eines Steins durch die AI
 void AImove(){
+    int depth = 8;
     if(countPlays >= 10){
-        std::pair<int, int> bestPlay = mm.run(lm.LEDvalues, 6);
+        if(countPlays >= 15){
+            depth = 30 - countPlays;
+        }
+
+        std::pair<int, int> bestPlay = mm.run(lm.LEDvalues, depth);
         Serial.print(bestPlay.first);
         Serial.print(" ");
         Serial.print(bestPlay.second);
