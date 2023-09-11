@@ -28,7 +28,7 @@ LEDMatrix::LEDMatrix(int *p, int initNColumns, int initNRows) {
 
     // Initialisierung der LED-Werte auf off
     for (int i = 0; i < initNColumns; i++) {
-        std::vector<int> tmp2;
+        std::vector<signed char> tmp2;
         for (int j = 0; j < initNRows; j++) {
             tmp2.push_back(off);
         }
@@ -64,7 +64,7 @@ void LEDMatrix::setLightValue(int column, int row, int previousColumnnumber, int
 // Methode zur Aktualisierung des Spiels
 bool LEDMatrix::update(bool menu) {
     if(menu){
-        setLEDs();
+        //setLEDs();
     }
     else{
         won = (won || winControl());
@@ -74,7 +74,7 @@ bool LEDMatrix::update(bool menu) {
         } else if (drawControl()) {
             drawViso();
         } else {
-            setLEDs();
+            //setLEDs();
         }
     }
     
@@ -144,12 +144,12 @@ void LEDMatrix::reset() {
 
 // Methode zum Setzen der LEDs
 void LEDMatrix::setLEDs() {
-    for (byte r = 0; r < nRows; r++) {
+    for (int r = 0; r < nRows; r++) {
         digitalWrite(pins[red][r], LOW);
         digitalWrite(pins[green][r], LOW);
     }
 
-    for (byte c = 0; c < nColumns; c++) {
+    for (int c = 0; c < nColumns; c++) {
         digitalWrite(pins[0][c], c != currentColumn);
     }
 
@@ -513,19 +513,19 @@ void LEDMatrix::endAnimation() {
         LEDvalues[winPath[3].first][winPath[3].second] = off;
         LEDvalues[winPath[4].first][winPath[4].second] = off;
     }
-    setLEDs();
+    //setLEDs();
 }
 
 // Methode für die Animation bei Unentschieden
 void LEDMatrix::drawViso() {
     if (flash(1000)) {
-        setLEDs();
+        //setLEDs();
     } else {
-        for (byte c = 0; c < nColumns; c++) {
+        for (int c = 0; c < nColumns; c++) {
             digitalWrite(pins[0][c], HIGH);
         }
 
-        for (byte r = 0; r < nRows; r++) {
+        for (int r = 0; r < nRows; r++) {
             digitalWrite(pins[red][r], LOW);
             digitalWrite(pins[green][r], LOW);
         }
@@ -560,19 +560,19 @@ void LEDMatrix::resetAnimation(){
                     else {
                         LEDvalues[c][r] = off;
                     }
-                    setLEDs();
-                    delay(1);
+                    //setLEDs();
+                    //delay(1);
                 }    
             }
-            setLEDs();
-            delay(1);
+            //setLEDs();
+            //delay(1);
             i++;
         }
         else if(!test && flanke){
             flanke = false;
         }
-        setLEDs();
-        delay(1);
+        //setLEDs();
+        //delay(1);
     }
 }
 
@@ -590,8 +590,8 @@ void LEDMatrix::rollingStone(int currentColumnnumber, int currentrownumber, int 
         } else if (!flash(200) && flanke) {
             flanke = false;
         }
-        setLEDs();
-        delay(1);
+        //setLEDs();
+        //delay(1);
     }
 }
 

@@ -4,8 +4,8 @@
 
 // Pin-Definitionen für die LEDs und Tasten
 #define line1red 21
-#define line2red 15  //3
-#define line3red 2   //1
+#define line2red 15  
+#define line3red 2   
 #define line4red 22
 #define line5red 23
 
@@ -39,20 +39,33 @@ const int startColor = red;
 
 // Variablen für den Spielstatus
 int lastButton = 0;
-bool player1 = HIGH;
-bool menu = HIGH;
-int currentNumber = 1;
-bool multiplayer = false;
 int currentColor = startColor;
 int currentColumn = 0;
 int countPlays = 0;
+int currentMenuNumber = 1;
+bool multiplayer = false;
+bool player1 = HIGH;
+bool menu = HIGH;
+bool won = false;
+
+
 
 // Array für die Pin-Belegung der LED-Matrix
 int LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, ground6,
                                     line1red, line2red, line3red, line4red, line5red, 0,
                                     line1green, line2green, line3green, line4green, line5green, 0};
+
+// Objekt der LED Matrix
 LEDMatrix lm(LEDMatrixPins, nColumns, nRows);
-miniMax mm;
+
+// Objekt des MiniMax Algorithmus
+miniMax minMax;
+
+// Task für die Verlagerung auf einen zweiten Prozessor Kern
+TaskHandle_t Task1;
+
+// Methode zum updaten der Anzeige
+void updateLEDMatrix(void * parameteter);
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool);
@@ -92,35 +105,77 @@ void setup() {
     pinMode(buttonD, INPUT);
     pinMode(buttonRst, INPUT);
 
-    // Serielle Kommunikation starten
+    // Erstellen der Task
+    xTaskCreatePinnedToCore(
+        updateLEDMatrix,    // Methode die verlagert wird
+        "Task1",            // Name der Task
+        1000,               // Speicher größe
+        NULL,
+        1,                  // Priorität
+        &Task1,             // Task
+        0                   // Prozessor Kern
+    );
+
+    // Serielle KominMaxunikation starten
     Serial.begin(9600);
 }
 
+
 void loop() {
     if(menu){
-        lm.update(menu);
-        lm.printNumber(currentNumber);
+        won = lm.update(menu);
+        lm.printNumber(currentMenuNumber);
         readButtons();
     }
     else{
         if(multiplayer){
-            bool won = lm.update(menu);
+            won = lm.update(menu);
             readButtons(won);
         }
         else{
             // Tasten auslesen und Spielstatus aktualisieren
-            bool won = lm.update(menu);
+            won = lm.update(menu);
             if(!player1 && !won){
                 AImove();
             }
-
             if(player1 || won){
                 readButtons(won);
             }
         }
     }
-    
     delay(1);
+}
+
+
+void updateLEDMatrix(void * parameter){
+    pinMode(ground1, OUTPUT);
+    pinMode(ground2, OUTPUT);
+    pinMode(ground3, OUTPUT);
+    pinMode(ground4, OUTPUT);
+    pinMode(ground5, OUTPUT);
+    pinMode(ground6, OUTPUT);
+
+    pinMode(line1red, OUTPUT);
+    pinMode(line2red, OUTPUT);
+    pinMode(line3red, OUTPUT);
+    pinMode(line4red, OUTPUT);
+    pinMode(line5red, OUTPUT);
+
+    pinMode(line1green, OUTPUT);
+    pinMode(line2green, OUTPUT);
+    pinMode(line3green, OUTPUT);
+    pinMode(line4green, OUTPUT);
+    pinMode(line5green, OUTPUT);
+
+    pinMode(buttonL, INPUT);
+    pinMode(buttonR, INPUT);
+    pinMode(buttonD, INPUT);
+    pinMode(buttonRst, INPUT);
+    (void)parameter;
+    for(;;){
+        lm.setLEDs();
+        delay(1);
+    }
 }
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
@@ -183,14 +238,18 @@ void readButtons(bool won) {
 void readButtons(){
     // Tastenabfrage und Aktionen je nach gedrückter Taste
     if (digitalRead(buttonL)) {
-        currentNumber = 1;
+        currentMenuNumber = 1;
         multiplayer = false;
     } else if (digitalRead(buttonR)) {
-        currentNumber = 2;
+        currentMenuNumber = 2;
         multiplayer = true;
     } else if (digitalRead(buttonD)) {
         menu = false;
         lm.reset();
+        player1 = HIGH;
+        currentColor = startColor;
+        currentColumn = 0;
+        countPlays = 0;
     } else if (digitalRead(buttonRst)) {
         
     } 
@@ -209,17 +268,17 @@ void reset() {
 
 // Methode zum Setzen eines Steins durch die AI
 void AImove(){
-    int depth = 8;
+    int depth = 3;
     if(countPlays >= 10){
-        if(countPlays >= 15){
+        if(countPlays >= 20){
             depth = 30 - countPlays;
         }
 
-        std::pair<int, int> bestPlay = mm.run(lm.LEDvalues, depth);
-        Serial.print(bestPlay.first);
-        Serial.print(" ");
-        Serial.print(bestPlay.second);
-        Serial.println("------");
+        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth);
+        // Serial.print(bestPlay.first);
+        // Serial.print(" ");
+        // Serial.print(bestPlay.second);
+        // Serial.println("------");
         if(bestPlay.first >= 0){
             lm.setLightValue(bestPlay.second, currentColumn, currentColor);
             player1 = !player1;
@@ -235,16 +294,35 @@ void AImove(){
     }
     std::vector<std::vector<std::pair<int, int>>> bestPaths = lm.getBestPath();
 
+    Serial.println("");
+    for (int i = 0; i < bestPaths.size(); i++)
+    {
+        std::vector<std::pair<int, int>> p = bestPaths.at(i);
+        for (int j = 0; j < p.size(); j++)
+        {
+            std::pair<int, int> pa = p.at(j);
+
+            Serial.print(pa.first);
+            Serial.print(" ");
+            Serial.println(pa.second);
+            
+        }
+        Serial.println("-----------");
+
+    }
+    
+
     for (int i = 0; i < bestPaths.size(); i++){
         std::vector<std::pair<int, int>> bestPath = bestPaths.at(i);
         if(bestPath.size() >= 3){
             if(bestPath[1].first < bestPath[2].first){
-                //Serial.println("Diagonale oben:");
                 if(bestPath[1].second > bestPath[2].second){
+                    Serial.println("Diagonale oben:");
                     if(bestPath[1].first > 0 && bestPath[1].second < nRows-1){
-                        //Serial.println("Diagonale oben links:");
+                        Serial.println("Diagonale oben links:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
                         if(pos.first == bestPath[1].first-1 && pos.second == bestPath[1].second+1){
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -258,9 +336,10 @@ void AImove(){
                         }
                     }
                     if(bestPath[1].first < nColumns-1 && bestPath[1].second > 0){
-                        //Serial.println("Diagonale oben rechts:");
+                        Serial.println("Diagonale oben rechts:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
                         if(pos.first == bestPath[bestPath.size()-1].first+1 && pos.second == bestPath[bestPath.size()-1].second-1){
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -275,11 +354,12 @@ void AImove(){
                     }
                 }
                 else if(bestPath[1].second < bestPath[2].second){
-                    //Serial.println("Diagonale unten:");
+                    Serial.println("Diagonale unten:");
                     if(bestPath[1].first > 0 && bestPath[1].second > 0){
+                        Serial.println("Diagonale unten links:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
                         if(pos.first == bestPath[1].first-1 && pos.second == bestPath[1].second-1){
-                            //Serial.println("Diagonale unten links:");
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -293,9 +373,10 @@ void AImove(){
                         }
                     }
                     if(bestPath[1].first < nColumns-1 && bestPath[1].second < nRows-1){
-                        //Serial.println("Diagonale unten Rechts:");
+                        Serial.println("Diagonale unten Rechts:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
                         if(pos.first == bestPath[bestPath.size()-1].first+1 && pos.second == bestPath[bestPath.size()-1].second+1){
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -310,11 +391,12 @@ void AImove(){
                     }
                 }
                 else{
-                    //Serial.println("Reihe:");
+                    Serial.println("Reihe:");
                     if(bestPath[1].first > 0){
-                        //Serial.println("Reihe links:");
+                        Serial.println("Reihe links:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first-1);
                         if(pos.second == bestPath[1].second){
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -328,9 +410,10 @@ void AImove(){
                         }
                     }
                     if(bestPath[1].first < nColumns-1){
-                        //Serial.println("Reihe rechts:");
+                        Serial.println("Reihe rechts:");
                         std::pair<int, int> pos = lm.findPossibleDestination(bestPath[bestPath.size()-1].first+1);
                         if(pos.second == bestPath[1].second){
+                            Serial.println("gesetzt:");
                             lm.setLightValue(pos.first, pos.second, currentColor);
                             player1 = !player1;
                             if (player1) {
@@ -346,10 +429,10 @@ void AImove(){
                 }
             }
             else{
-                //Serial.println("Spalte:");
+                Serial.println("Spalte:");
                 std::pair<int, int> pos = lm.findPossibleDestination(bestPath[1].first);
                 if(pos.first != -1 && pos.second == bestPath[1].second-1){
-                    //Serial.println("Spalte2");
+                    Serial.println("Spalte2");
                     lm.setLightValue(pos.first, pos.second, currentColor);
                     player1 = !player1;
                     if (player1) {

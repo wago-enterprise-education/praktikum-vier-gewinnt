@@ -6,7 +6,7 @@
 class LEDMatrix
 {
     public:
-    std::vector< std::vector<int> > LEDvalues;
+    std::vector< std::vector<signed char> > LEDvalues;
 
     LEDMatrix(int *, int, int);
     void setLightValue(int, int,  int);
@@ -18,6 +18,7 @@ class LEDMatrix
     std::pair<int, int> findPossibleDestination(int);
     std::vector<int> findPossibleColumns(int);
     std::vector<std::vector< std::pair<int, int > >> getBestPath();
+    void setLEDs();
 
     private:
     std::vector< std::vector<int> > pins;
@@ -37,7 +38,6 @@ class LEDMatrix
     const int flahRed = 3;
     const int flashGreen = 4; 
 
-    void setLEDs();
     void endAnimation();
     void drawViso();
     void resetAnimation();

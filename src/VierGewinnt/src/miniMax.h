@@ -7,8 +7,8 @@
 class miniMax
 {
     public:
-        std::pair<int, int> run(std::vector <std::vector<int>>, int);
-        int Algorithm(std::vector<std::vector<int>>, bool, int);
+        std::pair<int, int> run(std::vector <std::vector<signed char>>, int);
+        int Algorithm(std::vector<std::vector<signed char>>, bool, int);
 
     private:
         int nColumns = 6;     //Muss noch variabel gehalten werden
@@ -20,12 +20,12 @@ class miniMax
         const int red = 1;
         const int green = 2;
 
-        bool columnEmpty(std::vector<std::vector<int>>, int);
-        int findPossibleDestination(std::vector<std::vector<int>>, int);
-        bool winControl(std::vector<std::vector<int>>);
-        bool drawControl(std::vector<std::vector<int>>);
-        bool lostControl(std::vector<std::vector<int>>);
-        int gameOver(std::vector<std::vector<int>>);
+        bool columnEmpty(std::vector<std::vector<signed char>>, int);
+        int findPossibleDestination(std::vector<std::vector<signed char>>, int);
+        bool winControl(std::vector<std::vector<signed char>>);
+        bool drawControl(std::vector<std::vector<signed char>>);
+        bool lostControl(std::vector<std::vector<signed char>>);
+        int gameOver(std::vector<std::vector<signed char>>);
 };
 
 #endif

@@ -2,10 +2,10 @@
 #include <miniMax.h>
 #include <vector>
 
-std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground, int depth)
+std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlayground, int depth)
 {
     std::vector<int> scores {-10, -10, -10, -10, -10, -10};
-    std::vector<std::vector<int>> predictedPlayground;
+    std::vector<std::vector<signed char>> predictedPlayground;
 
     for(int counter = 0; counter < givenPlayground.size(); counter++)
     {
@@ -38,23 +38,24 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<int>> givenPlayground, 
 
     for (int i = 0; i < scores.size(); i++)
     {
-        Serial.print(scores[i]);
-        Serial.print(" ");
+        // Serial.prbyte(scores[i]);
+        // Serial.prbyte(" ");
         if(scores[i] > bestPlay.first){
             bestPlay.first = scores[i];
             bestPlay.second = i;
         }
     }
-    Serial.println("fertig");
+    // Serial.prbyteln("fertig");
     
 
     return bestPlay;
 }
 
 
-int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max, int depth)
+int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool max, int depth)
 {
-    std::vector<std::vector<int>> predictedPlayground;
+
+    std::vector<std::vector<signed char>> predictedPlayground;
     bool maxPlayer = !max;
     int score;
     int scoreAlg;
@@ -157,7 +158,7 @@ int miniMax::Algorithm(std::vector<std::vector<int>> playground, bool max, int d
 
 
 //Gibt den Wert ,,TRUE" zurück, wenn die Spalte noch spielbar ist
-bool miniMax::columnEmpty(std::vector<std::vector<int>> playground, int column) {
+bool miniMax::columnEmpty(std::vector<std::vector<signed char>> playground, int column) {
     if(playground[column][0] == 0){
         return true;
     }
@@ -167,7 +168,7 @@ bool miniMax::columnEmpty(std::vector<std::vector<int>> playground, int column) 
 
 
 //Gibt den Wert der Zeile zürück, in der der Stein landet, wenn er fallengelassen wird
-int miniMax::findPossibleDestination(std::vector<std::vector<int>> playground, int currentColumnNumber) {
+int miniMax::findPossibleDestination(std::vector<std::vector<signed char>> playground, int currentColumnNumber) {
     
     int tmp = -1;
     for(int i=playground[0].size()-1; i>=0;){
@@ -186,7 +187,7 @@ int miniMax::findPossibleDestination(std::vector<std::vector<int>> playground, i
 
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel gewonnen ist
-bool miniMax::winControl(std::vector<std::vector<int>> playground){
+bool miniMax::winControl(std::vector<std::vector<signed char>> playground){
     if(gameOver(playground) == 1)
     {
         return true;
@@ -199,7 +200,7 @@ bool miniMax::winControl(std::vector<std::vector<int>> playground){
 
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel unentschieden ist
-bool miniMax::drawControl(std::vector<std::vector<int>> playground){
+bool miniMax::drawControl(std::vector<std::vector<signed char>> playground){
     for (size_t r = 0; r < nRows; r++) {
         for (size_t c = 0; c < nColumns; c++) {
             if(playground[c][r] == 0){
@@ -212,7 +213,7 @@ bool miniMax::drawControl(std::vector<std::vector<int>> playground){
 
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel verloren ist
-bool miniMax::lostControl(std::vector<std::vector<int>> playground){
+bool miniMax::lostControl(std::vector<std::vector<signed char>> playground){
     if(gameOver(playground) == -1)
     {
         return true;
@@ -225,7 +226,7 @@ bool miniMax::lostControl(std::vector<std::vector<int>> playground){
 
 
 
-int miniMax::gameOver(std::vector<std::vector<int>> playground)
+int miniMax::gameOver(std::vector<std::vector<signed char>> playground)
 {
     for (size_t xStart = 0, yStart = 3; xStart < 3;) {
         int lastColor = 0;
