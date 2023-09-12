@@ -23,14 +23,17 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlay
             }
         }
     }
-
-    std::pair<int, int> bestPlay = {-10, -10};
+    Serial.println("All moves");
+    std::pair<int, int> bestPlay = {defaultValue, defaultValue};
     for (byte i = 0; i < scores.size(); i++){
+        Serial.print(scores[i]);
+        Serial.print(" ");
         if(scores[i] > bestPlay.first){
             bestPlay.first = scores[i];
             bestPlay.second = i;
         }
     }
+    Serial.println("");
     return bestPlay;
 }
 
@@ -38,12 +41,11 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlay
 int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool max, int depth){
     std::vector<std::vector<signed char>> predictedPlayground;
     bool maxPlayer = !max;
-    int score;
+    int score = defaultValue;
     int scoreAlg;
-    score = nothingFound;
 
     if(depth <= 0){
-        return -9;
+        return nothingFound;
     }
 
     if(maxPlayer){
@@ -57,11 +59,11 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
                     score = win;
                     return score;
                 } else if(lostControl(predictedPlayground)){
-                    if (score == nothingFound){
+                    if (score == defaultValue){
                         score = lose;
                     }
                 } else if(drawControl(predictedPlayground)){
-                    if((score == nothingFound || score == lose)){
+                    if((score == defaultValue || score == lose)){
                         score = draw;
                     }
                 } else{
@@ -83,19 +85,19 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
                 predictedPlayground[columnMin][findPossibleDestination(playground, columnMin)] = red;
 
                 if(winControl(predictedPlayground)){
-                    if(score == nothingFound){
+                    if(score == defaultValue){
                         score = win;
                     }
                 } else if(lostControl(predictedPlayground)){
                     score = lose;
                     return score;
                 } else if(drawControl(predictedPlayground)){
-                    if(score == win || score == nothingFound){
+                    if(score == win || score == defaultValue){
                         score = draw;
                     }                    
                 } else{
                     scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1);
-                    if (scoreAlg < score || score == nothingFound){
+                    if (scoreAlg < score || score == defaultValue){
                         score = scoreAlg;
                         if(score == lose){
                             return score;

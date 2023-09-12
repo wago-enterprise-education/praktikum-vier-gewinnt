@@ -10,10 +10,11 @@ class miniMax{
         int Algorithm(std::vector<std::vector<signed char>>, bool, int);
 
     private:
-        const int nothingFound = -10;
+        const int defaultValue = -10;
         const int win = 1;
         const int draw = 0;
-        const int lose = -1;
+        const int lose = -5;
+        const int nothingFound = -1;
         const byte red = 1;
         const byte green = 2;
 

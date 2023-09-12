@@ -213,6 +213,7 @@ void readButtons(bool won) {
         if(lastButton == buttonRst && millis() - lastTime >= 1000){
             reset();
         }
+        lastButton = 0;
     }
 }
 
@@ -357,16 +358,25 @@ void randomMove(){
 
 // Berechnet einen Zug mit dem Minimax und setzt diesen
 bool miniMaxMove(){
-    byte depth = 3;
+    ulong time = millis();
+    byte depth = 6;
     if(countPlays >= 10){
         if(countPlays >= 20){
             depth = 30 - countPlays;
         }
         std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth);
-        if(bestPlay.first >= 0){
+        Serial.println("Best move");
+        Serial.print(bestPlay.first);
+        Serial.println(" ");
+        Serial.println(bestPlay.second);
+        if(bestPlay.first >= -1){
             placeStone(bestPlay.second);
+            float u = (millis()-time) / 1000;
+            //Serial.println(u);
             return true;
         }
     }
+    float u = (millis()-time) / 1000;
+    //Serial.println(u);
     return false; // Es wurde kein Zug gefunden
 }
