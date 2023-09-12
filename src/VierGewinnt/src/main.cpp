@@ -47,6 +47,7 @@ bool multiplayer = false;
 bool player1 = HIGH;
 bool menu = HIGH;
 bool won = false;
+ulong lastTime;
 
 
 
@@ -176,7 +177,7 @@ void readButtons(bool won) {
     if (digitalRead(buttonRst)) {
         if(lastButton != buttonRst){
             lastButton = buttonRst;
-            reset();
+            lastTime = millis();
         }
     } else if (currentColumn != -1 && !won){
         int pos = currentColumn;
@@ -197,12 +198,20 @@ void readButtons(bool won) {
                 pos = lm.findPossibleDestination(currentColumn+1, 1);
             }
         } else{
+            if(lastButton == buttonRst && millis() - lastTime >= 1000){
+                reset();
+            }
+            lastTime = 0;
             lastButton = 0;
         }
         
         if (pos >= 0) {
             lm.setLightValue(pos, currentColumn, currentColor+2);
             currentColumn = pos;
+        }
+    } else{
+        if(lastButton == buttonRst && millis() - lastTime >= 1000){
+            reset();
         }
     }
 }
@@ -235,6 +244,7 @@ void reset() {
     currentColumn = 0;
     menu = HIGH;
     countPlays = 0;
+    lastTime = 0;
 }
 
 // Methode zum Setzen eines Steins durch die AI
