@@ -2,59 +2,40 @@
 #include <miniMax.h>
 #include <vector>
 
-std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlayground, int depth)
-{
+// Ist die Hauptmethode. Sie durchläuft alle Wege und gibt den besten zurück
+std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlayground, int depth){
     std::vector<int> scores {-10, -10, -10, -10, -10, -10};
     std::vector<std::vector<signed char>> predictedPlayground;
 
-    for(int counter = 0; counter < givenPlayground.size(); counter++)
-    {
+    for(byte counter = 0; counter < givenPlayground.size(); counter++){
         predictedPlayground = givenPlayground;
-
-        if(columnEmpty(predictedPlayground, counter))
-        {
+        if(columnEmpty(predictedPlayground, counter)){
             predictedPlayground[counter][findPossibleDestination(givenPlayground, counter)] = green;
-            
-            if(winControl(predictedPlayground))
-            {
+            if(winControl(predictedPlayground)){
                 scores[counter] = win;
-            }
-            else if(lostControl(predictedPlayground))
-            {
+                break;
+            } else if(lostControl(predictedPlayground)){
                 scores[counter] = lose;
-            }
-            else if(drawControl(predictedPlayground))
-            {
+            } else if(drawControl(predictedPlayground)){
                 scores[counter] = draw;
-            }
-            else
-            {
+            } else{
                 scores[counter] = Algorithm(predictedPlayground, true, depth-1);
             }
         }
     }
 
     std::pair<int, int> bestPlay = {-10, -10};
-
-    for (int i = 0; i < scores.size(); i++)
-    {
-        // Serial.prbyte(scores[i]);
-        // Serial.prbyte(" ");
+    for (byte i = 0; i < scores.size(); i++){
         if(scores[i] > bestPlay.first){
             bestPlay.first = scores[i];
             bestPlay.second = i;
         }
     }
-    // Serial.prbyteln("fertig");
-    
-
     return bestPlay;
 }
 
-
-int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool max, int depth)
-{
-
+// durchläuft einen Weg und gibt seinen wert zurück
+int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool max, int depth){
     std::vector<std::vector<signed char>> predictedPlayground;
     bool maxPlayer = !max;
     int score;
@@ -65,90 +46,61 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
         return -9;
     }
 
-    if(maxPlayer)
-    {
-        for(int columnMax = 0; columnMax < playground.size(); columnMax++)
-        {   
+    if(maxPlayer){
+        for(int columnMax = 0; columnMax < playground.size(); columnMax++){   
             predictedPlayground = playground;
 
-            if(columnEmpty(playground, columnMax))
-            {
+            if(columnEmpty(playground, columnMax)){
                 predictedPlayground[columnMax][findPossibleDestination(playground, columnMax)] = green;
 
-                if(winControl(predictedPlayground))
-                {
+                if(winControl(predictedPlayground)){
                     score = win;
                     return score;
-                }
-                else if(lostControl(predictedPlayground))
-                {
-                    if (score == nothingFound)
-                    {
+                } else if(lostControl(predictedPlayground)){
+                    if (score == nothingFound){
                         score = lose;
                     }
-                }
-                else if(drawControl(predictedPlayground))
-                {
-                    if((score == nothingFound || score == lose))
-                    {
+                } else if(drawControl(predictedPlayground)){
+                    if((score == nothingFound || score == lose)){
                         score = draw;
                     }
-                }
-                else
-                {
+                } else{
                     scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1);
-                    if(scoreAlg > score)
-                    {
+                    if(scoreAlg > score){
                         score = scoreAlg;
                         if(score == win){
                             return score;
                         }
                     }
-                    
                 }
             }
         }
-    }
-    else
-    {
-        for(int columnMin = 0; columnMin < playground.size(); columnMin++)
-        {   
+    } else{
+        for(int columnMin = 0; columnMin < playground.size(); columnMin++){   
             predictedPlayground = playground;
 
-            if(columnEmpty(playground, columnMin))
-            {
+            if(columnEmpty(playground, columnMin)){
                 predictedPlayground[columnMin][findPossibleDestination(playground, columnMin)] = red;
 
-                if(winControl(predictedPlayground))
-                {
-                    if(score == nothingFound)
-                    {
+                if(winControl(predictedPlayground)){
+                    if(score == nothingFound){
                         score = win;
                     }
-                }
-                else if(lostControl(predictedPlayground))
-                {
+                } else if(lostControl(predictedPlayground)){
                     score = lose;
                     return score;
-                }
-                else if(drawControl(predictedPlayground))
-                {
-                    if(score == win || score == nothingFound)
-                    {
+                } else if(drawControl(predictedPlayground)){
+                    if(score == win || score == nothingFound){
                         score = draw;
                     }                    
-                }
-                else
-                {
+                } else{
                     scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1);
-                    if (scoreAlg < score || score == nothingFound)
-                    {
+                    if (scoreAlg < score || score == nothingFound){
                         score = scoreAlg;
                         if(score == lose){
                             return score;
                         }
-                    }
-                    
+                    } 
                 }
            }
         }
@@ -156,20 +108,13 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
     return score;
 }
 
-
 //Gibt den Wert ,,TRUE" zurück, wenn die Spalte noch spielbar ist
 bool miniMax::columnEmpty(std::vector<std::vector<signed char>> playground, int column) {
-    if(playground[column][0] == 0){
-        return true;
-    }
-    
-    return false;
+    return (playground[column][0] == 0);
 }
-
 
 //Gibt den Wert der Zeile zürück, in der der Stein landet, wenn er fallengelassen wird
 int miniMax::findPossibleDestination(std::vector<std::vector<signed char>> playground, int currentColumnNumber) {
-    
     int tmp = -1;
     for(int i=playground[0].size()-1; i>=0;){
         if (playground[currentColumnNumber][i] != 0){
@@ -179,30 +124,20 @@ int miniMax::findPossibleDestination(std::vector<std::vector<signed char>> playg
         else{
             tmp = i;
             return tmp;
-            break;
         }
     }
     return tmp;
 }
 
-
 //Gibt den Wert ,,True" zurück, wenn das Spiel gewonnen ist
 bool miniMax::winControl(std::vector<std::vector<signed char>> playground){
-    if(gameOver(playground) == 1)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (gameOver(playground) == 1);
 }
-
 
 //Gibt den Wert ,,True" zurück, wenn das Spiel unentschieden ist
 bool miniMax::drawControl(std::vector<std::vector<signed char>> playground){
-    for (size_t r = 0; r < nRows; r++) {
-        for (size_t c = 0; c < nColumns; c++) {
+    for (byte r = 0; r < nRows; r++) {
+        for (byte c = 0; c < nColumns; c++) {
             if(playground[c][r] == 0){
                 return false;
             }
@@ -211,23 +146,14 @@ bool miniMax::drawControl(std::vector<std::vector<signed char>> playground){
     return true;
 }
 
-
 //Gibt den Wert ,,True" zurück, wenn das Spiel verloren ist
 bool miniMax::lostControl(std::vector<std::vector<signed char>> playground){
-    if(gameOver(playground) == -1)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (gameOver(playground) == -1);
 }
 
-
-
-int miniMax::gameOver(std::vector<std::vector<signed char>> playground)
-{
+// Gibt den Wert "True" zurück, wenn das Spiel vorbei ist, also wenn ein Spieler gewonnen hat
+int miniMax::gameOver(std::vector<std::vector<signed char>> playground){
+    // Diagonale oben
     for (size_t xStart = 0, yStart = 3; xStart < 3;) {
         int lastColor = 0;
         int count = 1;
@@ -265,8 +191,7 @@ int miniMax::gameOver(std::vector<std::vector<signed char>> playground)
             xStart++;
         }
     }
-
-
+    // Diagonale unten
     for (size_t xStart = 0, yStart = 1; xStart < 3;) {
         int lastColor = 0;
         int count = 1;
@@ -304,14 +229,12 @@ int miniMax::gameOver(std::vector<std::vector<signed char>> playground)
             xStart++;
         }
     }
-
-
+    // Spalte
     for (size_t c = 0; c < nColumns; c++) {
         int lastColor = 0;
         int count = 0;
         for (size_t r = 0; r < nRows; r++) {
             int color = playground[c][r];
-
 
             if (color == 0) {
                 lastColor = color;
@@ -339,8 +262,7 @@ int miniMax::gameOver(std::vector<std::vector<signed char>> playground)
             }
         }
     }
-
-
+    // Zeile
     for (size_t r = 0; r < nRows; r++) {
         int lastColor = 0;
         int count = 0;

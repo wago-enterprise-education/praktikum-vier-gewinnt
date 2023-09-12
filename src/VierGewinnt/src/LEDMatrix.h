@@ -8,40 +8,41 @@ class LEDMatrix
     public:
     std::vector< std::vector<signed char> > LEDvalues;
 
-    LEDMatrix(int *, int, int);
-    void setLightValue(int, int,  int);
-    void setLightValue(int, int, int, int);
+    LEDMatrix(byte *, byte, byte);
+    void setLightValue(int, int,  byte);
     void reset();
-    bool update(bool);
-    int findPossibleDestination(int, int);
-    void printNumber(int);
-    std::pair<int, int> findPossibleDestination(int);
-    std::vector<int> findPossibleColumns(int);
-    std::vector<std::vector< std::pair<int, int > >> getBestPath();
     void setLEDs();
+    void printNumber(byte);
+    std::pair<int, int> findPossibleDestination(int);
+    int findPossibleDestination(int, int);
+    std::vector<byte> findPossibleColumns(int);
+    std::vector<std::vector< std::pair<int, int > >> getBestPath();
+    bool update(bool);
+    bool isDraw();
 
     private:
-    std::vector< std::vector<int> > pins;
+    const byte off = 0;
+    const byte red = 1;
+    const byte green = 2;
+    const byte flahRed = 3;
+    const byte flashGreen = 4;
+
+    std::vector< std::vector<byte> > pins;
     std::vector< std::pair<int, int > > winPath;
     ulong lastTime;
-    int nColumns; 
-    int nRows;
-    int currentColumn;
-    int step = 1;
-    bool draw;
+    byte nColumns; 
+    byte nRows;
+    byte currentColumn;
+    byte step = 1;
+    bool draw = false;
     bool won = false;
-    bool savedLastTime;
-
-    const int off = 0;
-    const int red = 1;
-    const int green = 2;
-    const int flahRed = 3;
-    const int flashGreen = 4; 
+    bool savedLastTime; 
 
     void endAnimation();
-    void drawViso();
+    void drawAnimation();
     void resetAnimation();
-    void rollingStone(int, int, int);
+    void rollingStone(int, int, byte);
+
     std::vector<std::pair<int, int>> winControlRow();
     std::vector<std::pair<int, int>> winControlColumn();
     std::vector<std::pair<int, int>> winControlDiagonalUpwards();
