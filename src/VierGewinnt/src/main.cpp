@@ -251,12 +251,15 @@ void reset() {
 // Methode zum Setzen eines Steins durch die AI
 void AImove(){
     if(miniMaxMove()){
+        Serial.println("MiniMax");
         return;
     }
     if(rulebasedMove()){
+        Serial.println("RuleBased");
         return;
     }
     randomMove();
+    Serial.println("RandomMove");
 }
 
 // Platziert einen Stein und wechselt den Spieler
@@ -360,11 +363,29 @@ void randomMove(){
 bool miniMaxMove(){
     ulong time = millis();
     byte depth = 6;
-    if(countPlays >= 10){
-        if(countPlays >= 20){
+    if(countPlays >= 8){
+        if(countPlays >= 18){
             depth = 30 - countPlays;
         }
-        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth);
+        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth, 4);
+        Serial.println("Best move");
+        Serial.print(bestPlay.first);
+        Serial.println(" ");
+        Serial.println(bestPlay.second);
+        if(bestPlay.first >= -1 && bestPlay.first != 6 && bestPlay.second != 6){
+            placeStone(bestPlay.second);
+            float u = (millis()-time) / 1000;
+            //Serial.println(u);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, 4, 3);
         Serial.println("Best move");
         Serial.print(bestPlay.first);
         Serial.println(" ");

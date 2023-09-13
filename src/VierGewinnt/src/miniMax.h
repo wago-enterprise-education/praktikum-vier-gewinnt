@@ -6,8 +6,8 @@
 
 class miniMax{
     public:
-        std::pair<int, int> run(std::vector <std::vector<signed char>>, int);
-        int Algorithm(std::vector<std::vector<signed char>>, bool, int);
+        std::pair<int, int> run(std::vector <std::vector<signed char>>, int, int);
+        int Algorithm(std::vector<std::vector<signed char>>, bool, int, int);
 
     private:
         const int defaultValue = -10;
@@ -22,10 +22,10 @@ class miniMax{
         byte nRows = 5;        
 
         bool columnEmpty(std::vector<std::vector<signed char>>, int);
-        bool winControl(std::vector<std::vector<signed char>>);
+        bool winControl(std::vector<std::vector<signed char>>, int);
         bool drawControl(std::vector<std::vector<signed char>>);
-        bool lostControl(std::vector<std::vector<signed char>>);
-        int gameOver(std::vector<std::vector<signed char>>);
+        bool lostControl(std::vector<std::vector<signed char>>, int);
+        int gameOver(std::vector<std::vector<signed char>>, int);
         int findPossibleDestination(std::vector<std::vector<signed char>>, int);
 };
 
