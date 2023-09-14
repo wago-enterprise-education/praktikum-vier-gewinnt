@@ -1,6 +1,6 @@
 # Praktikantenprojekt "Vier-Gewinnt"
 
-## kurzer Überblick
+## Kurzer Überblick
 
 Bei diesem Projekt handelt es sich um ein Tagesprojekt für einen Praktikanten. Basis des Projekts ist der ESP32. Ziel ist dabei ist, dass der Praktikant die Grundlagen der Microcontrollerprogrammierung und der Elektronik sowie des Lötens erlernt.
 
@@ -12,7 +12,7 @@ Bei diesem Projekt handelt es sich um ein Tagesprojekt für einen Praktikanten. 
 
 ## Informationen zur Programmierung des Moduls
 
-Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Bord "DOIT ESP32 DEVKIT V1".
+Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1".
 
 ## Ansprechpartner
 
