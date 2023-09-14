@@ -7,13 +7,13 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlay
     std::vector<int> scores {-10, -10, -10, -10, -10, -10};
     std::vector<std::vector<signed char>> predictedPlayground;
     std::pair<int, int> bestPlay = {defaultValue, defaultValue};
-    byte draw = 0;
+    byte toDeepToDig = 0;
 
     for(byte counter = 0; counter < givenPlayground.size(); counter++){
         predictedPlayground = givenPlayground;
         if(columnEmpty(predictedPlayground, counter)){
             predictedPlayground[counter][findPossibleDestination(givenPlayground, counter)] = green;
-            if(winControl(predictedPlayground, 4)){
+            if(winControl(predictedPlayground, winRow) && winRow == 4){
                 scores[counter] = win;
                 break;
             }else if(lostControl(predictedPlayground, winRow)){
@@ -26,16 +26,16 @@ std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlay
         }
     }
 
-    draw = 0;
+    toDeepToDig = 0;
     for(byte c = 0; c < scores.size(); c++)
     {
         if(scores[c] == -1)
         {
-            draw += 1;
+            toDeepToDig += 1;
         }
     }
 
-    if(draw == 6)
+    if(toDeepToDig == 6)
     {
         bestPlay.first = 6;
         bestPlay.second = 6;
@@ -73,7 +73,7 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
             if(columnEmpty(playground, columnMax)){
                 predictedPlayground[columnMax][findPossibleDestination(playground, columnMax)] = green;
 
-                if(winControl(predictedPlayground, 4)){
+                if(winControl(predictedPlayground, winRow) && winRow == 4){
                     score = win;
                     return score;
                 } else if(lostControl(predictedPlayground, winRow)){
@@ -86,7 +86,7 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
                     }
                 } else{
                     scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1, winRow);
-                    if(scoreAlg > score){
+                    if(score < scoreAlg){
                         score = scoreAlg;
                         if(score == win){
                             return score;
@@ -102,7 +102,7 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
             if(columnEmpty(playground, columnMin)){
                 predictedPlayground[columnMin][findPossibleDestination(playground, columnMin)] = red;
 
-                if(winControl(predictedPlayground, 4)){
+                if(winControl(predictedPlayground, winRow) && winRow == 4){
                     if(score == defaultValue){
                         score = win;
                     }
@@ -115,7 +115,7 @@ int miniMax::Algorithm(std::vector<std::vector<signed char>> playground, bool ma
                     }                    
                 } else{
                     scoreAlg = Algorithm(predictedPlayground, maxPlayer, depth-1, winRow);
-                    if (scoreAlg < score || score == defaultValue){
+                    if (score > scoreAlg || score == defaultValue){
                         score = scoreAlg;
                         if(score == lose){
                             return score;
