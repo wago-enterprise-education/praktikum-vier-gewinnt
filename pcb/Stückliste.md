@@ -5,8 +5,7 @@
 - 2 5er 221-WAGO-Klemmen
 - 9V Batterie
 - [Batterieclip 0,25€/Stk.](https://www.reichelt.de/batterieclip-fuer-9-volt-block-vertikal-clip-9v-p6665.html?&nbc=1&trstct=lsbght_sldr::282488)
-- [Duo-LEDs 0,19€/Stk.](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
-- [1. 4 Taster 1,66€/Stk.](https://www.mouser.de/ProductDetail/E-Switch/320E11BLK?qs=3Jlm%2Fl9ddLx6rOdduAcsXA%3D%3D)
+- [30 Duo-LEDs 0,19€/Stk.](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
 - [2. 4 Taster 0,31€/Stk.](https://www.conrad.de/de/p/omron-b3f-1020-drucktaster-24-v-dc-0-05-a-tastend-1-st-bag-2591184.html?hk=SEM&WT.mc_id=google_pla&gclid=EAIaIQobChMI5ar7k-CQgQMVt4loCR2xlwwqEAYYAiABEgJauPD_BwE#productDownloads)
 - [Schiebeschalter 1,29€/Stk.](https://www.conrad.de/de/p/tru-components-1386942-css-1201-schiebeschalter-50-v-dc-0-3-a-1-x-aus-ein-1-st-1570488.html)
 - [Spannungsregler 0,44€/Stk.](https://www.conrad.de/de/p/stmicroelectronics-l7805abv-spannungsregler-linear-to-220ab-positiv-fest-1-5-a-1185130.html)
