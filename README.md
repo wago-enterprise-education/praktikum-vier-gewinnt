@@ -6,9 +6,8 @@ Bei diesem Projekt handelt es sich um ein Projekt für einen Praktikanten welche
 
 ## Ablauf des Praktikums
 
-1. [Aufbau und Programmierung einfacher Schaltungen auf dem Steckbrett]() `Verlinkung folgt`
-2. [Aufbau und Programmierung einer kleinen LED-Matrix auf dem Steckbrett]() `Verlinkung folgt`
-3. [Löten der Bauteile auf die Platine]() `Verlinkung folgt`
+1. [Aufbau und Programmierung einfacher Schaltungen auf dem Steckbrett](https://svgithub01001.wago.local/education/praktikum-4Gewinnt/blob/main/doc/Aufgabenstellung.docx)
+3. [Löten der Bauteile auf die Platine](https://svgithub01001.wago.local/education/praktikum-4Gewinnt/blob/main/doc/LoetAnleitung.docx)
 
 ## Informationen zur Programmierung des Moduls
 
