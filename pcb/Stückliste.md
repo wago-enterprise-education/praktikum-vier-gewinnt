@@ -1,8 +1,8 @@
 # Stückliste
 
-- gedruckte PCB
-- ESP32
-- 2 5er 221-WAGO-Klemmen
+- gedruckte PCB (Vier-Gewinnt V1.0
+- ESP32 (DOIT DEVKIT V1)
+- 2 5er 221-WAGO-Klemmen (Geeignet für 6mm²)
 - 9V Batterie
 - [Batterieclip 0,25€/Stk.](https://www.reichelt.de/batterieclip-fuer-9-volt-block-vertikal-clip-9v-p6665.html?&nbc=1&trstct=lsbght_sldr::282488)
 - [30 Duo-LEDs 0,19€/Stk.](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
