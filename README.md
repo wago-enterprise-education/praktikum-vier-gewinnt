@@ -13,6 +13,10 @@ Bei diesem Projekt handelt es sich um ein Projekt für einen Praktikanten welche
 
 Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1".
 
+## Hinweise
+
+Bei der Platinenversion 1.0 liegt ein Fehler vor. Beim Löten muss die Baterie falschherum angelötet werden (das schwarze Kabel in "VCC" und das rote in "GND")
+
 ## Ansprechpartner
 
 <max.steidle@wago.com>
