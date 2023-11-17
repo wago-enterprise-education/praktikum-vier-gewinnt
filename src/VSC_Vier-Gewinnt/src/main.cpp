@@ -174,11 +174,9 @@ void updateLEDMatrix(void * parameter){
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool won) {
-    if (digitalRead(buttonRst)) {
-        if(lastButton != buttonRst){
-            lastButton = buttonRst;
-            lastTime = millis();
-        }
+    if (digitalRead(buttonRst) && lastButton != buttonRst) {
+        lastButton = buttonRst;
+        lastTime = millis();
     } else if (currentColumn != -1 && !won){
         int pos = currentColumn;
         if (digitalRead(buttonD)) {
@@ -201,8 +199,9 @@ void readButtons(bool won) {
             if(lastButton == buttonRst && millis() - lastTime >= 1000){
                 reset();
             }
-            lastTime = 0;
-            lastButton = 0;
+            if(lastButton != buttonRst || !digitalRead(buttonRst)){
+                lastButton = 0;
+            }
         }
         
         if (pos >= 0) {
@@ -213,7 +212,9 @@ void readButtons(bool won) {
         if(lastButton == buttonRst && millis() - lastTime >= 1000){
             reset();
         }
-        lastButton = 0;
+        if(lastButton != buttonRst || !digitalRead(buttonRst)){
+                lastButton = 0;
+        }
     }
 }
 
@@ -246,6 +247,7 @@ void reset() {
     menu = HIGH;
     countPlays = 0;
     lastTime = 0;
+    lastButton = 0;
 }
 
 // Methode zum Setzen eines Steins durch die AI
