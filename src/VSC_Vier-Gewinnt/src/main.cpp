@@ -2,6 +2,7 @@
 #include <LEDMatrix.h>
 #include <miniMax.h>
 
+
 // Pin-Definitionen für die LEDs und Tasten
 #define line1red 21
 #define line2red 15  
@@ -30,26 +31,25 @@
 // Konstanten für die LED-Matrix
 const byte nColumns = 6;
 const byte nRows = 5;
+// TODO: Umsetzung mit Enums ist besser 
 const byte off = 0;
 const byte red = 1;
 const byte green = 2;
 const byte flashRed = 3;
 const byte flashGreen = 4;
-const byte startColor = red;
 
 // Variablen für den Spielstatus
+byte startColor = red;
 int currentColumn = 0;
 byte lastButton = 0;
 byte currentColor = startColor;
 byte countPlays = 0;
 byte currentMenuNumber = 1;
-bool multiplayer = false;
+bool multiplayer = LOW;
 bool player1 = HIGH;
 bool menu = HIGH;
-bool won = false;
+bool won = LOW;
 ulong lastTime;
-
-
 
 // Array für die Pin-Belegung der LED-Matrix
 byte LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, ground6,
@@ -174,12 +174,16 @@ void updateLEDMatrix(void * parameter){
 
 // Methode zum Auslesen und Verarbeiten der Tastereingaben 
 void readButtons(bool won) {
-    if (digitalRead(buttonRst) && lastButton != buttonRst) {
-        lastButton = buttonRst;
-        lastTime = millis();
-    } else if (currentColumn != -1 && !won){
+    if(digitalRead(buttonRst)){
+        if(lastButton == buttonRst && millis() - lastTime >= 1000){
+            reset();
+        } else if(lastButton != buttonRst){
+            lastButton = buttonRst;
+            lastTime = millis();
+        }
+    } else if(!won && currentColumn != -1){
         int pos = currentColumn;
-        if (digitalRead(buttonD)) {
+        if(digitalRead(buttonD)){
             if(lastButton != buttonD){
                 lastButton = buttonD;
                 placeStone(currentColumn);
@@ -196,25 +200,15 @@ void readButtons(bool won) {
                 pos = lm.findPossibleDestination(currentColumn+1, 1);
             }
         } else{
-            if(lastButton == buttonRst && millis() - lastTime >= 1000){
-                reset();
-            }
-            if(lastButton != buttonRst || !digitalRead(buttonRst)){
-                lastButton = 0;
-            }
+            lastButton = 0;
         }
-        
         if (pos >= 0) {
+            // 
             lm.setLightValue(pos, currentColumn, currentColor+2);
             currentColumn = pos;
         }
     } else{
-        if(lastButton == buttonRst && millis() - lastTime >= 1000){
-            reset();
-        }
-        if(lastButton != buttonRst || !digitalRead(buttonRst)){
-                lastButton = 0;
-        }
+        lastButton = 0;
     }
 }
 

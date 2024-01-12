@@ -1,7 +1,6 @@
-#include <LEDMatrix.h>
 #include <Arduino.h>
+#include <LEDMatrix.h>
 #include <vector>
-
 // Konstruktor für die LEDMatrix-Klasse
 LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
     nColumns = initNColumns;
@@ -44,7 +43,7 @@ LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
 void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber, byte color) {
     if (currentColumnnumber >= 0 && previousColumnnumber >= 0) {
         LEDvalues[previousColumnnumber][0] = off;
-        if (color < 3) { // Lampe soll leuchten und nicht blinken
+        if (color < flashRed) { // Lampe soll leuchten und nicht blinken
             std::pair<int, int> tmp = findPossibleDestination(currentColumnnumber);
             rollingStone(currentColumnnumber, tmp.second, color);
         } else { // Lampe soll blinken
@@ -74,6 +73,7 @@ bool LEDMatrix::update(bool menu) {
 
 // Methode zum Finden einer freien Spalte
 int LEDMatrix::findPossibleDestination(int currentColumnnumber, int direction) {
+    
     int tmp = -1;
     if (currentColumn >= 0) {
         // Schleife, die in einem Kreislauf alle Spalten durchläuft
@@ -130,7 +130,7 @@ void LEDMatrix::reset() {
     // Schaltet alle LEDs aus
     for (byte i = 0; i < nColumns; i++) {
         for (byte j = 0; j < nRows; j++) {
-            LEDvalues[i][j] = 0;
+            LEDvalues[i][j] = off;
         }
     }
     won = false;
@@ -220,7 +220,7 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
 void LEDMatrix::printNumber(byte number){
     for (byte i = 0; i < nColumns; i++) {
         for (byte j = 0; j < nRows; j++) {
-            LEDvalues[i][j] = 0;
+            LEDvalues[i][j] = off;
         }
     }
 
@@ -273,19 +273,93 @@ bool LEDMatrix::winControl() {
     return LOW; // Keinen Sieg gefunden
 }
 
+// Methode zur Überprüfung des Gewinns
+// direction: Oben = 0, Rechts Unten = 1, Rechts = 2, Rechts Oben = 3
+// bool LEDMatrix::winControl(byte x, byte y, byte direction, byte count, byte color) {
+//     bool tmp = false;
+//     byte currentColor = LEDvalues[x][y];
+//     if(currentColor != off){
+//         byte currentCount = 1;
+//         if(currentColor == color){
+//             count++;
+//             if(count == 4){
+//                 return true;
+//             }
+//         } else{
+//             count = 1;
+//         }
+//         byte xNew = 0;
+//         byte yNew = 0;
+//         for (byte currentDirection = 0; currentDirection < 4; currentDirection++)
+//         {
+//             if(direction == direction){
+//                 currentCount = count;
+//             } else{
+//                 currentCount = 1;
+//             }
+//             switch (currentDirection)
+//             {
+//                 case 0: // Oben
+//                     if(y > 0 && (nRows - abs(y-nRows)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 1: // Unten Rechts
+//                     if(y < nRows-1 && x < nColumns-1 && (nRows - (y+1)) + currentCount >= 4 && (nColumns - (x+1)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 2: // Rechts
+//                     if(x < nColumns-1 && (nColumns - (x+1)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 3: // Oben Rechts
+//                     if(x < nColumns-1 && y > 0 && (nColumns - (x+1)) + currentCount >= 4 && (nRows - abs(y-nRows)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//             }
+
+//             if(yNew > 0 && xNew > 0){
+//                 if(winControl(xNew, yNew, currentDirection, currentCount, currentColor)){
+//                     tmp = true;
+//                 }
+//             }
+//         }
+//     }
+//     return tmp;
+// }
+
 // Methode zur Überprüfung des Gewinns in den Reihen
 std::vector<std::pair<int, int>> LEDMatrix::winControlRow() {
     std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t r = 0; r < nRows; r++) {
         winPath.clear();
-        int lastColor = off;
+        byte lastColor = off;
         int count = 0;
         for (size_t c = 0; c < nColumns; c++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
-            int color = LEDvalues[c][r];
+            byte color = LEDvalues[c][r];
 
             std::pair<int, int> winColor;
             winColor.first = color;
@@ -511,9 +585,10 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
 
 // Methode zur Überprüfung von unentschieden 
 bool LEDMatrix::drawControl(){
+    // Oberste Reihe kontrollieren 
     for (byte r = 0; r < nRows; r++) {
         for (byte c = 0; c < nColumns; c++) {
-            if(LEDvalues[c][r] == off || LEDvalues[c][r] > 2){
+            if(LEDvalues[c][r] == off || LEDvalues[c][r] >= flashRed){
                 return false;
             }
         }
@@ -554,9 +629,9 @@ void LEDMatrix::drawAnimation() {
 // Methode für die Animatiom beim Reseten 
 void LEDMatrix::resetAnimation(){
     // Kopiert die LEDValues 
-    std::vector<std::vector<int> > LEDValuesClone;
+    std::vector<std::vector<byte> > LEDValuesClone;
     for(byte c = 0; c < nColumns; c++){
-        std::vector<int> tmp;
+        std::vector<byte> tmp;
         for(byte r = 0; r < nRows; r++){
             tmp.push_back(LEDvalues[c][r]);
         }
@@ -634,7 +709,6 @@ bool LEDMatrix::flash(int periodDuration) {
     return false;
 }
 
-// Methode, die zurückgibt, ob es unentschieden ist
 bool LEDMatrix::isDraw(){
     return draw;
 }

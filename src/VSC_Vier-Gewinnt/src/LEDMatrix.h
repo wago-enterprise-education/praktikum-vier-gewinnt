@@ -1,12 +1,12 @@
-#include <vector>
 #include <Arduino.h>
+#include <vector>
 #ifndef LEDMATRIX_H
 #define LEDMATRIX_H
 
 class LEDMatrix
 {
     public:
-    std::vector< std::vector<signed char> > LEDvalues;
+    std::vector< std::vector<signed char>> LEDvalues;
 
     LEDMatrix(byte *, byte, byte);
     void setLightValue(int, int,  byte);
@@ -24,7 +24,7 @@ class LEDMatrix
     const byte off = 0;
     const byte red = 1;
     const byte green = 2;
-    const byte flahRed = 3;
+    const byte flashRed = 3;
     const byte flashGreen = 4;
 
     std::vector< std::vector<byte> > pins;
@@ -48,6 +48,7 @@ class LEDMatrix
     std::vector<std::pair<int, int>> winControlDiagonalUpwards();
     std::vector<std::pair<int, int>> winControlDiagonalDownwards();
     bool winControl();
+    bool winControl(byte x, byte y, byte direction, byte count, byte color);
     bool possibleDestination(int);  
     bool flash(int);
     bool drawControl();
