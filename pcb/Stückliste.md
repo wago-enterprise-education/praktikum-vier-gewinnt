@@ -1,6 +1,6 @@
 # Stückliste
 
-- gedruckte PCB (Vier-Gewinnt V1.0
+- gedruckte PCB (Vier-Gewinnt V1.0)
 - ESP32 (DOIT DEVKIT V1)
 - 2 5er 221-WAGO-Klemmen (Geeignet für 6mm²)
 - 9V Batterie
