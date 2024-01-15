@@ -4,6 +4,7 @@
 - ESP32 (DOIT DEVKIT V1)
 - 2 5er 221-WAGO-Klemmen (Geeignet für 6mm²)
 - 9V Batterie
+- 4 10 kΩ Widerstände
 - [Batterieclip 0,25€/Stk.](https://www.reichelt.de/batterieclip-fuer-9-volt-block-vertikal-clip-9v-p6665.html?&nbc=1&trstct=lsbght_sldr::282488)
 - [30 Duo-LEDs 0,19€/Stk.](https://www.reichelt.de/led-5-mm-bedrahtet-3-pin-rot-gruen-100-mcd-30--evl-339-1sursygw-p231037.html?PROVID=2788&gclid=EAIaIQobChMIt5fhj_P0gAMVpVFBAh3vUw-WEAQYByABEgLDi_D_BwE)
 - [2. 4 Taster 0,31€/Stk.](https://www.conrad.de/de/p/omron-b3f-1020-drucktaster-24-v-dc-0-05-a-tastend-1-st-bag-2591184.html?hk=SEM&WT.mc_id=google_pla&gclid=EAIaIQobChMI5ar7k-CQgQMVt4loCR2xlwwqEAYYAiABEgJauPD_BwE#productDownloads)
