@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LEDMatrix.h>
 #include <miniMax.h>
+#include <Color.h>
 
 
 // Pin-Definitionen für die LEDs und Tasten
@@ -31,18 +32,12 @@
 // Konstanten für die LED-Matrix
 const byte nColumns = 6;
 const byte nRows = 5;
-// TODO: Umsetzung mit Enums ist besser 
-const byte off = 0;
-const byte red = 1;
-const byte green = 2;
-const byte flashRed = 3;
-const byte flashGreen = 4;
 
 // Variablen für den Spielstatus
-byte startColor = red;
+Color startColor = Color::RED;
 int currentColumn = 0;
 byte lastButton = 0;
-byte currentColor = startColor;
+Color currentColor = startColor;
 byte countPlays = 0;
 byte currentMenuNumber = 1;
 bool multiplayer = LOW;
@@ -204,7 +199,7 @@ void readButtons(bool won) {
         }
         if (pos >= 0) {
             // 
-            lm.setLightValue(pos, currentColumn, currentColor+2);
+            lm.setLightValue(pos, currentColumn, (Color)((int)(currentColor)+2));
             currentColumn = pos;
         }
     } else{
@@ -246,10 +241,10 @@ void reset() {
 
 // Methode zum Setzen eines Steins durch die AI
 void AImove(){
-    if(miniMaxMove()){
-        Serial.println("MiniMax");
-        return;
-    }
+    // if(miniMaxMove()){
+    //     Serial.println("MiniMax");
+    //     return;
+    // }
     if(rulebasedMove()){
         Serial.println("RuleBased");
         return;
@@ -265,7 +260,7 @@ void placeStone(byte column){
     if (player1) {
         currentColor = startColor;
     } else {
-        currentColor = green;
+        currentColor = Color::GREEN;
     }
     currentColumn = lm.findPossibleDestination(0, 1);
     countPlays++;
@@ -277,7 +272,7 @@ bool rulebasedMove(){
     std::vector<std::vector<std::pair<int, int>>> bestPaths = lm.getBestPath();
     for (byte i = 0; i < bestPaths.size(); i++){
         std::vector<std::pair<int, int>> bestPath = bestPaths.at(i);
-        if(bestPath.size() >= 3){ // Ist es mindestens eine 2er Reihe?
+        if(bestPath.size() >= 2){ // Ist es mindestens eine 2er Reihe?
             if(bestPath[1].first < bestPath[2].first){ 
                 if(bestPath[1].second > bestPath[2].second){ // Die Reihe liegt in einer Diagonalen nach oben
                     if(bestPath[1].first > 0 && bestPath[1].second < nRows-1){ // Kontermöglichkeit links von der Reihe
@@ -356,68 +351,68 @@ void randomMove(){
 }
 
 // Berechnet einen Zug mit dem Minimax und setzt diesen
-bool miniMaxMove(){
-    ulong time = millis();
-    byte startDepth = 4;
-    byte startRowToLose = 3;
-    byte standardRowToLose = 4;
-    byte depth = 6;
-    byte toDeepToCalculate = 6;
-    int nothingFound = -1;
+// bool miniMaxMove(){
+//     ulong time = millis();
+//     byte startDepth = 4;
+//     byte startRowToLose = 3;
+//     byte standardRowToLose = 4;
+//     byte depth = 6;
+//     byte toDeepToCalculate = 6;
+//     int nothingFound = -1;
 
-    if(countPlays >= 6){        //Ab 6 Spielzüge soll der Minimax bis eine Spieltiefe von 6 berechnen
-        if(countPlays >= 20){   //Ab 20 Spielzüge soll der Minimax das ganze Spiel vorberechnen
-            depth = 30 - countPlays;
-        }
-        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth, standardRowToLose);
-        Serial.println("Best move");
-        Serial.print(bestPlay.first);
-        Serial.println(" ");
-        Serial.println(bestPlay.second);
-        if(bestPlay.first >= nothingFound && bestPlay.first != toDeepToCalculate){
-            placeStone(bestPlay.second);
-            float u = (millis()-time) / 1000;
-            Serial.print("Die Berechnung dauerte: ");
-            Serial.print(u);
-            Serial.println(" Sekunden");
-            return true;
-        }
-        else
-        {
-            float u = (millis()-time) / 1000;
-            Serial.print("Die Berechnung dauerte: ");
-            Serial.print(u);
-            Serial.println(" Sekunden");
-            return false;
-        }
-    }
-    else
-    {
-        std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, startDepth, startRowToLose);
-        Serial.println("Best move");
-        Serial.print(bestPlay.first);
-        Serial.println(" ");
-        Serial.println(bestPlay.second);
-        if(bestPlay.first >= -1 && bestPlay.first != toDeepToCalculate){
-            placeStone(bestPlay.second);
-            float u = (millis()-time) / 1000;
-            Serial.print("Die Berechnung dauerte: ");
-            Serial.print(u);
-            Serial.println(" Sekunden");
-            return true;
-        }
-        else
-        {            
-            float u = (millis()-time) / 1000;
-            Serial.print("Die Berechnung dauerte: ");
-            Serial.print(u);
-            Serial.println(" Sekunden");
-            return false;
-        }
-    }
-    float u = (millis()-time) / 1000;
-    Serial.print("Die Berechnung dauerte: ");
-    Serial.print(u);
-    Serial.println(" Sekunden");
-    return false; // Es wurde kein Zug gefunden
-}
+//     if(countPlays >= 6){        //Ab 6 Spielzüge soll der Minimax bis eine Spieltiefe von 6 berechnen
+//         if(countPlays >= 20){   //Ab 20 Spielzüge soll der Minimax das ganze Spiel vorberechnen
+//             depth = 30 - countPlays;
+//         }
+//         std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, depth, standardRowToLose);
+//         Serial.println("Best move");
+//         Serial.print(bestPlay.first);
+//         Serial.println(" ");
+//         Serial.println(bestPlay.second);
+//         if(bestPlay.first >= nothingFound && bestPlay.first != toDeepToCalculate){
+//             placeStone(bestPlay.second);
+//             float u = (millis()-time) / 1000;
+//             Serial.print("Die Berechnung dauerte: ");
+//             Serial.print(u);
+//             Serial.println(" Sekunden");
+//             return true;
+//         }
+//         else
+//         {
+//             float u = (millis()-time) / 1000;
+//             Serial.print("Die Berechnung dauerte: ");
+//             Serial.print(u);
+//             Serial.println(" Sekunden");
+//             return false;
+//         }
+//     }
+//     else
+//     {
+//         std::pair<int, int> bestPlay = minMax.run(lm.LEDvalues, startDepth, startRowToLose);
+//         Serial.println("Best move");
+//         Serial.print(bestPlay.first);
+//         Serial.println(" ");
+//         Serial.println(bestPlay.second);
+//         if(bestPlay.first >= -1 && bestPlay.first != toDeepToCalculate){
+//             placeStone(bestPlay.second);
+//             float u = (millis()-time) / 1000;
+//             Serial.print("Die Berechnung dauerte: ");
+//             Serial.print(u);
+//             Serial.println(" Sekunden");
+//             return true;
+//         }
+//         else
+//         {            
+//             float u = (millis()-time) / 1000;
+//             Serial.print("Die Berechnung dauerte: ");
+//             Serial.print(u);
+//             Serial.println(" Sekunden");
+//             return false;
+//         }
+//     }
+//     float u = (millis()-time) / 1000;
+//     Serial.print("Die Berechnung dauerte: ");
+//     Serial.print(u);
+//     Serial.println(" Sekunden");
+//     return false; // Es wurde kein Zug gefunden
+// }

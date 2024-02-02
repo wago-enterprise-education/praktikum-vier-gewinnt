@@ -1,15 +1,17 @@
 #include <Arduino.h>
 #include <vector>
+#include <Color.h>
 #ifndef LEDMATRIX_H
 #define LEDMATRIX_H
 
 class LEDMatrix
 {
     public:
-    std::vector< std::vector<signed char>> LEDvalues;
+
+    std::vector< std::vector<Color>> LEDvalues;
 
     LEDMatrix(byte *, byte, byte);
-    void setLightValue(int, int,  byte);
+    void setLightValue(int, int,  Color);
     void reset();
     void setLEDs();
     void printNumber(byte);
@@ -21,14 +23,9 @@ class LEDMatrix
     bool isDraw();
 
     private:
-    const byte off = 0;
-    const byte red = 1;
-    const byte green = 2;
-    const byte flashRed = 3;
-    const byte flashGreen = 4;
-
     std::vector< std::vector<byte> > pins;
     std::vector< std::pair<int, int > > winPath;
+    Color winColor;
     ulong lastTime;
     byte nColumns; 
     byte nRows;
@@ -41,14 +38,14 @@ class LEDMatrix
     void endAnimation();
     void drawAnimation();
     void resetAnimation();
-    void rollingStone(int, int, byte);
+    void rollingStone(int, int, Color);
 
     std::vector<std::pair<int, int>> winControlRow();
     std::vector<std::pair<int, int>> winControlColumn();
     std::vector<std::pair<int, int>> winControlDiagonalUpwards();
     std::vector<std::pair<int, int>> winControlDiagonalDownwards();
     bool winControl();
-    bool winControl(byte x, byte y, byte direction, byte count, byte color);
+    bool winControl(byte x, byte y, byte direction, byte count, Color color);
     bool possibleDestination(int);  
     bool flash(int);
     bool drawControl();
