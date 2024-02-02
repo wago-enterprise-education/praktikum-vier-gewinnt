@@ -123,8 +123,14 @@ bool LEDMatrix::possibleDestination(int currentColumnnumber) {
 }
 
 // Methode zum Zurücksetzen des Spiels
-void LEDMatrix::reset() {
+void LEDMatrix::reset(byte column) {
     draw = false;
+    LEDvalues[column][0] = Color::OFF;
+    if(won){
+        for(byte i = 1; i < 5; i++){ // Die 5 steht für die 4 Steine des Gewinns + die Farbe
+            LEDvalues[winPath[i].first][winPath[i].second] = (Color)winPath[0].first;
+        }
+    }
     resetAnimation();
     // Schaltet alle LEDs aus
     for (byte i = 0; i < nColumns; i++) {
@@ -637,10 +643,10 @@ void LEDMatrix::resetAnimation(){
         LEDValuesClone.push_back(tmp);
     }
 
-    bool flanke = false;
+    bool flanke = true;
     for (byte i = 1; i <= nRows;)
     {
-        bool test = flash(200);
+        bool test = flash(300);
         if(test && !flanke){
             flanke = true;
             for (byte r = 0; r < nRows; r++)

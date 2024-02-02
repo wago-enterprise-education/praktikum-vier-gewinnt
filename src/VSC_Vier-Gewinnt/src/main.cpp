@@ -218,7 +218,7 @@ void readButtons(){
         multiplayer = true;
     } else if (digitalRead(buttonD)) {
         menu = false;
-        lm.reset();
+        lm.reset(currentColumn);
         player1 = HIGH;
         currentColor = startColor;
         currentColumn = 0;
@@ -229,7 +229,7 @@ void readButtons(){
 // Methode zum Zurücksetzen des Spiels
 void reset() {
     // Spiel zurücksetzen
-    lm.reset();
+    lm.reset(currentColumn);
     player1 = HIGH;
     currentColor = startColor;
     currentColumn = 0;

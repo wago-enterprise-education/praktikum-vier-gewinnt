@@ -12,7 +12,7 @@ class LEDMatrix
 
     LEDMatrix(byte *, byte, byte);
     void setLightValue(int, int,  Color);
-    void reset();
+    void reset(byte);
     void setLEDs();
     void printNumber(byte);
     std::pair<int, int> findPossibleDestination(int);
