@@ -2,7 +2,6 @@
 
 - gedruckte PCB (Vier-Gewinnt V2.1)
 - ESP32 (DOIT DEVKIT V1)
-- 2 5er 221-WAGO-Klemmen (Geeignet für 6mm²)
 - 9V Batterie
 - 4 10 kΩ Widerstände
 - 2 Buchsenleisten (jeweils 15 Pin)
