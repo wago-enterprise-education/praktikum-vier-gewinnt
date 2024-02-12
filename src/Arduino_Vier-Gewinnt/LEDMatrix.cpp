@@ -1,8 +1,6 @@
 #include <Arduino.h>
-#include <vector>
 #include "LEDMatrix.h"
-
-
+#include <vector>
 // Konstruktor für die LEDMatrix-Klasse
 LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
     nColumns = initNColumns;
@@ -29,9 +27,9 @@ LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
 
     // Initialisierung der LED-Werte auf off
     for (byte i = 0; i < initNColumns; i++) {
-        std::vector<signed char> tmp2;
+        std::vector<Color> tmp2;
         for (byte j = 0; j < initNRows; j++) {
-            tmp2.push_back(off);
+            tmp2.push_back(Color::OFF);
         }
         LEDvalues.push_back(tmp2);
     }
@@ -42,17 +40,17 @@ LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
 // Public Methoden:
 
 // Methode zum Setzen des Lichtwerts einer LED
-void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber, byte color) {
+void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber, Color color) {
     if (currentColumnnumber >= 0 && previousColumnnumber >= 0) {
-        LEDvalues[previousColumnnumber][0] = off;
-        if (color < 3) { // Lampe soll leuchten und nicht blinken
+        LEDvalues[previousColumnnumber][0] = Color::OFF;
+        if ((int)(color) < (int)(Color::FLASH_RED)) { // Lampe soll leuchten und nicht blinken
             std::pair<int, int> tmp = findPossibleDestination(currentColumnnumber);
             rollingStone(currentColumnnumber, tmp.second, color);
         } else { // Lampe soll blinken
             if (flash(1000)) {
                 LEDvalues[currentColumnnumber][0] = color;
             } else {
-                LEDvalues[currentColumnnumber][0] = off;
+                LEDvalues[currentColumnnumber][0] = Color::OFF;
             }
         }
     }
@@ -96,7 +94,7 @@ std::pair<int, int> LEDMatrix::findPossibleDestination(int currentColumnnumber) 
         tmp.first = c;
         for (int r = nRows-1; r >= 0; r--)
         {
-            if(LEDvalues[c][r] == off){
+            if(LEDvalues[c][r] == Color::OFF){
                 tmp.second = r;
                 return tmp;
             }
@@ -111,7 +109,7 @@ std::pair<int, int> LEDMatrix::findPossibleDestination(int currentColumnnumber) 
 std::vector<byte> LEDMatrix::findPossibleColumns(int currentColumnnumber) {
     std::vector<byte> tmp;
     for (byte c = currentColumnnumber; c < nColumns; c++) {
-        if(LEDvalues[c][0] == off){
+        if(LEDvalues[c][0] == Color::OFF){
             tmp.push_back(c);
         }
     }
@@ -121,17 +119,23 @@ std::vector<byte> LEDMatrix::findPossibleColumns(int currentColumnnumber) {
 
 // Methode zum Überprüfen, ob ein Ziel möglich ist
 bool LEDMatrix::possibleDestination(int currentColumnnumber) {
-    return (LEDvalues.at(currentColumnnumber).at(0) == off);
+    return (LEDvalues.at(currentColumnnumber).at(0) == Color::OFF);
 }
 
 // Methode zum Zurücksetzen des Spiels
-void LEDMatrix::reset() {
+void LEDMatrix::reset(byte column) {
     draw = false;
+    LEDvalues[column][0] = Color::OFF;
+    if(won){
+        for(byte i = 1; i < 5; i++){ // Die 5 steht für die 4 Steine des Gewinns + die Farbe
+            LEDvalues[winPath[i].first][winPath[i].second] = (Color)winPath[0].first;
+        }
+    }
     resetAnimation();
     // Schaltet alle LEDs aus
     for (byte i = 0; i < nColumns; i++) {
         for (byte j = 0; j < nRows; j++) {
-            LEDvalues[i][j] = 0;
+            LEDvalues[i][j] = Color::OFF;
         }
     }
     won = false;
@@ -141,8 +145,8 @@ void LEDMatrix::reset() {
 void LEDMatrix::setLEDs() {
     // Schaltet alle LEDs aus
     for (byte r = 0; r < nRows; r++) {
-        digitalWrite(pins[red][r], LOW);
-        digitalWrite(pins[green][r], LOW);
+        digitalWrite(pins[(int)Color::RED][r], LOW);
+        digitalWrite(pins[(int)Color::GREEN][r], LOW);
     }
 
     // Schaltet Masse auf der aktuellen Spalte
@@ -153,25 +157,25 @@ void LEDMatrix::setLEDs() {
     // Schaltet die LEDs in der Zeile ein
     for (byte row = 0; row < nRows; row++) {
         switch (LEDvalues[currentColumn][row]) {
-            case 0: // aus
-                digitalWrite(pins[red][row], LOW);
-                digitalWrite(pins[green][row], LOW);
+            case Color::OFF: // aus
+                digitalWrite(pins[(int)Color::RED][row], LOW);
+                digitalWrite(pins[(int)Color::GREEN][row], LOW);
                 break;
 
-            case 1: // rot
-                digitalWrite(pins[red][row], HIGH);
+            case Color::RED: // rot
+                digitalWrite(pins[(int)Color::RED][row], HIGH);
                 break;
 
-            case 2: // grün
-                digitalWrite(pins[green][row], HIGH);
+            case Color::GREEN: // grün
+                digitalWrite(pins[(int)Color::GREEN][row], HIGH);
                 break;
 
-            case 3: // blinkend rot
-                digitalWrite(pins[red][0], HIGH);
+            case Color::FLASH_RED: // blinkend rot
+                digitalWrite(pins[(int)Color::RED][0], HIGH);
                 break;
 
-            case 4: // blinkend grün
-                digitalWrite(pins[green][0], HIGH);
+            case Color::FLASH_GREEN: // blinkend grün
+                digitalWrite(pins[(int)Color::GREEN][0], HIGH);
                 break;
         }
     }
@@ -221,28 +225,28 @@ std::vector<std::vector<std::pair<int, int> > > LEDMatrix::getBestPath(){
 void LEDMatrix::printNumber(byte number){
     for (byte i = 0; i < nColumns; i++) {
         for (byte j = 0; j < nRows; j++) {
-            LEDvalues[i][j] = 0;
+            LEDvalues[i][j] = Color::OFF;
         }
     }
 
     switch (number)
     {
     case 1:
-        LEDvalues = {   {0, 0, 0, 0, 0}, 
-                        {0, 0, 0, 0, 0}, 
-                        {0, 2, 0, 0, 0}, 
-                        {2, 2, 2, 2, 2}, 
-                        {0, 0, 0, 0, 0}, 
-                        {0, 0, 1, 0, 0} };
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::GREEN, Color::OFF, Color::OFF, Color::OFF},
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN},  
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::RED, Color::OFF, Color::OFF} };
         break;
     
     case 2:
-        LEDvalues = {   {0, 0, 1, 0, 0}, 
-                        {0, 0, 0, 0, 0}, 
-                        {2, 0, 2, 2, 2}, 
-                        {2, 2, 2, 0, 2}, 
-                        {0, 0, 0, 0, 0}, 
-                        {0, 0, 0, 0, 0} };
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::RED, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::GREEN, Color::OFF, Color::GREEN, Color::GREEN, Color::GREEN}, 
+                        {Color::GREEN, Color::OFF, Color::GREEN, Color::OFF, Color::GREEN}, 
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::OFF, Color::GREEN}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
         break;
     }
 }
@@ -274,32 +278,105 @@ bool LEDMatrix::winControl() {
     return LOW; // Keinen Sieg gefunden
 }
 
+// Methode zur Überprüfung des Gewinns
+// direction: Oben = 0, Rechts Unten = 1, Rechts = 2, Rechts Oben = 3
+// bool LEDMatrix::winControl(byte x, byte y, byte direction, byte count, Color color) {
+//     bool tmp = false;
+//     Color currentColor = LEDvalues[x][y];
+//     if(currentColor != Color::OFF){
+//         byte currentCount = 1;
+//         if(currentColor == color){
+//             count++;
+//             if(count == 4){
+//                 return true;
+//             }
+//         } else{
+//             count = 1;
+//         }
+//         byte xNew = 0;
+//         byte yNew = 0;
+//         for (byte currentDirection = 0; currentDirection < 4; currentDirection++)
+//         {
+//             if(direction == direction){
+//                 currentCount = count;
+//             } else{
+//                 currentCount = 1;
+//             }
+//             switch (currentDirection)
+//             {
+//                 case 0: // Oben
+//                     if(y > 0 && (nRows - abs(y-nRows)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 1: // Unten Rechts
+//                     if(y < nRows-1 && x < nColumns-1 && (nRows - (y+1)) + currentCount >= 4 && (nColumns - (x+1)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 2: // Rechts
+//                     if(x < nColumns-1 && (nColumns - (x+1)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//                 case 3: // Oben Rechts
+//                     if(x < nColumns-1 && y > 0 && (nColumns - (x+1)) + currentCount >= 4 && (nRows - abs(y-nRows)) + currentCount >= 4){
+//                         xNew = x;
+//                         yNew = y+1;
+//                     } else{
+//                         xNew = -1;
+//                         yNew = -1;
+//                     }
+//                     break;
+//             }
+//             if(yNew > 0 && xNew > 0){
+//                 if(winControl(xNew, yNew, currentDirection, currentCount, currentColor)){
+//                     tmp = true;
+//                 }
+//             }
+//         }
+//     }
+//     return tmp;
+// }
+
 // Methode zur Überprüfung des Gewinns in den Reihen
 std::vector<std::pair<int, int>> LEDMatrix::winControlRow() {
     std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t r = 0; r < nRows; r++) {
         winPath.clear();
-        int lastColor = off;
+        Color lastColor = Color::OFF;
         int count = 0;
         for (size_t c = 0; c < nColumns; c++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
-            int color = LEDvalues[c][r];
+            Color color = LEDvalues[c][r];
 
             std::pair<int, int> winColor;
-            winColor.first = color;
-            winColor.second = color;
+            winColor.first = (int)color;
+            winColor.second = (int)color;
 
-            if (color == off) {
+            if (color == Color::OFF) {
                 lastColor = color;
                 count = 0;
                 if(winPath.size() > bestPath.size()){
                     bestPath = winPath;
                 }
                 winPath.clear();
-            } else if (lastColor == off) {
+            } else if (lastColor == Color::OFF) {
                 lastColor = color;
                 count = 1;
                 winPath.clear();
@@ -336,26 +413,26 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlColumn() {
     winPath.clear();
     for (size_t c = 0; c < nColumns; c++) {
         winPath.clear();
-        int lastColor = off;
+        Color lastColor = Color::OFF;
         int count = 0;
         for (size_t r = 0; r < nRows; r++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
-            int color = LEDvalues[c][r];
+            Color color = LEDvalues[c][r];
 
             std::pair<int, int> winColor;
-            winColor.first = color;
-            winColor.second = color;
+            winColor.first = (int)color;
+            winColor.second = (int)color;
 
-            if (color == off) {
+            if (color == Color::OFF) {
                 lastColor = color;
                 count = 0;
                 if(winPath.size() > bestPath.size()){
                     bestPath = winPath;
                 }
                 winPath.clear();
-            } else if (lastColor == off) {
+            } else if (lastColor == Color::OFF) {
                 lastColor = color;
                 count = 1;
                 if(winPath.size() > bestPath.size()){
@@ -395,26 +472,26 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
     std::vector<std::pair<int, int>> bestPath;
     winPath.clear();
     for (size_t xStart = 0, yStart = 1; xStart < 3;) {
-        int lastColor = off;
+        Color lastColor = Color::OFF;
         int count = 1;
         for (size_t c = xStart, r = yStart; c < nColumns && r < nRows; c++, r++) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
-            int color = LEDvalues[c][r];
+            Color color = LEDvalues[c][r];
 
             std::pair<int, int> winColor;
-            winColor.first = color;
-            winColor.second = color;
+            winColor.first = (int)color;
+            winColor.second = (int)color;
 
-            if (color == off) {
+            if (color == Color::OFF) {
                 lastColor = color;
                 count = 0;
                 if(winPath.size() > bestPath.size()){
                     bestPath = winPath;
                 }
                 winPath.clear();
-            } else if (lastColor == off) {
+            } else if (lastColor == Color::OFF) {
                 lastColor = color;
                 count = 1;
                 winPath.clear();
@@ -453,28 +530,29 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalDownwards() {
 
 // Methode zur Überprüfung des Gewinns in den Diagonalen nach unten
 std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
-    std::vector<std::pair<int, int>> bestPath;winPath.clear();
+    std::vector<std::pair<int, int>> bestPath;
+    winPath.clear();
     for (size_t xStart = 0, yStart = 3; xStart < 3;) {
-        int lastColor = off;
+        Color lastColor = Color::OFF;
         int count = 1;
         for (size_t c = xStart, r = yStart; c < nColumns && r >= 0; c++, r--) {
             std::pair<int, int> coordinate;
             coordinate.first = c;
             coordinate.second = r;
-            int color = LEDvalues[c][r];
+            Color color = LEDvalues[c][r];
 
             std::pair<int, int> winColor;
-            winColor.first = color;
-            winColor.second = color;
+            winColor.first = (int)color;
+            winColor.second = (int)color;
 
-            if (color == off) {
+            if (color == Color::OFF) {
                 lastColor = color;
                 count = 0;
                 if(winPath.size() > bestPath.size()){
                     bestPath = winPath;
                 }
                 winPath.clear();
-            } else if (lastColor == off) {
+            } else if (lastColor == Color::OFF) {
                 lastColor = color;
                 count = 1;
                 winPath.clear();
@@ -512,9 +590,10 @@ std::vector<std::pair<int, int>> LEDMatrix::winControlDiagonalUpwards() {
 
 // Methode zur Überprüfung von unentschieden 
 bool LEDMatrix::drawControl(){
+    // Oberste Reihe kontrollieren 
     for (byte r = 0; r < nRows; r++) {
         for (byte c = 0; c < nColumns; c++) {
-            if(LEDvalues[c][r] == off || LEDvalues[c][r] > 2){
+            if(LEDvalues[c][r] == Color::OFF || (int)(LEDvalues[c][r]) >= (int)(Color::FLASH_RED)){
                 return false;
             }
         }
@@ -527,11 +606,11 @@ bool LEDMatrix::drawControl(){
 void LEDMatrix::endAnimation() {
     if (flash(1000)) {
         for(byte i = 1; i < 5; i++){ // Die 5 steht für die 4 Steine des Gewinns + die Farbe
-            LEDvalues[winPath[i].first][winPath[i].second] = winPath[0].first;
+            LEDvalues[winPath[i].first][winPath[i].second] = (Color)winPath[0].first;
         }
     } else {
         for(byte i = 1; i < 5; i++){ // Die 5 steht für die 4 Steine des Gewinns + die Farbe
-            LEDvalues[winPath[i].first][winPath[i].second] = off;
+            LEDvalues[winPath[i].first][winPath[i].second] = Color::OFF;
         }
     }
 }
@@ -546,8 +625,8 @@ void LEDMatrix::drawAnimation() {
         }
 
         for (int r = 0; r < nRows; r++) {
-            digitalWrite(pins[red][r], LOW);
-            digitalWrite(pins[green][r], LOW);
+            digitalWrite(pins[(int)Color::RED][r], LOW);
+            digitalWrite(pins[(int)Color::GREEN][r], LOW);
         }
     }
 }
@@ -555,19 +634,19 @@ void LEDMatrix::drawAnimation() {
 // Methode für die Animatiom beim Reseten 
 void LEDMatrix::resetAnimation(){
     // Kopiert die LEDValues 
-    std::vector<std::vector<int> > LEDValuesClone;
+    std::vector<std::vector<Color> > LEDValuesClone;
     for(byte c = 0; c < nColumns; c++){
-        std::vector<int> tmp;
+        std::vector<Color> tmp;
         for(byte r = 0; r < nRows; r++){
             tmp.push_back(LEDvalues[c][r]);
         }
         LEDValuesClone.push_back(tmp);
     }
 
-    bool flanke = false;
+    bool flanke = true;
     for (byte i = 1; i <= nRows;)
     {
-        bool test = flash(200);
+        bool test = flash(300);
         if(test && !flanke){
             flanke = true;
             for (byte r = 0; r < nRows; r++)
@@ -580,7 +659,7 @@ void LEDMatrix::resetAnimation(){
                         LEDvalues[c][r] = LEDValuesClone[c][r-i];
                     }
                     else {
-                        LEDvalues[c][r] = off;
+                        LEDvalues[c][r] = Color::OFF;
                     }
                 }    
             }
@@ -593,14 +672,14 @@ void LEDMatrix::resetAnimation(){
 }
 
 // Methode für das Herunterfallen des Spielsteins
-void LEDMatrix::rollingStone(int currentColumnnumber, int currentrownumber, byte color) {
+void LEDMatrix::rollingStone(int currentColumnnumber, int currentrownumber, Color color) {
     bool flanke = false;
     for (int i = 0; i <= currentrownumber;) {
         if (flash(200) && !flanke) {
             flanke = true;
             LEDvalues[currentColumnnumber][i] = color;
             if (i > 0) {
-                LEDvalues[currentColumnnumber][i - 1] = off;
+                LEDvalues[currentColumnnumber][i - 1] = Color::OFF;
             }
             i++;
         } else if (!flash(200) && flanke) {
@@ -635,7 +714,6 @@ bool LEDMatrix::flash(int periodDuration) {
     return false;
 }
 
-// Methode, die zurückgibt, ob es unentschieden ist
 bool LEDMatrix::isDraw(){
     return draw;
 }

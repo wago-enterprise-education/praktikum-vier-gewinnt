@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include <vector>
 #include "miniMax.h"
+#include <vector>
 
 // Ist die Hauptmethode. Sie durchläuft alle Wege und gibt den besten zurück
 std::pair<int, int> miniMax::run(std::vector<std::vector<signed char>> givenPlayground, int depth, int winRow){

@@ -1,9 +1,8 @@
-#include <Arduino.h>
-#include <vector>
-
 #ifndef MINIMAX_H
 #define MINIMAX_H
 
+#include <Arduino.h>
+#include <vector>
 
 class miniMax{
     public:
