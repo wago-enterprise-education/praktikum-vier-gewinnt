@@ -1,9 +1,9 @@
-title: Praktikantenprojekt Vier-Gewinnt
- author: Andreas Epp
- email: Andreas.Epp@WAGO.com
- remote_theme: andrebell/wago-howto-theme
- lang: de
- plugins:
+title: "Praktikantenprojekt: Vier-Gewinnt"
+author: Andreas Epp
+email: Andreas.Epp@WAGO.com
+remote_theme: andrebell/wago-howto-theme
+lang: de
+plugins:
    - jemoji
    - jekyll-redirect-from
    - jekyll-relative-links
