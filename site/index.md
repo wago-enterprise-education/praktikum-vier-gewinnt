@@ -1,6 +1,5 @@
  ---
  layout: page
- title: "Praktikantenprojekt: Vier-Gewinnt"
  lang: de
  lang-ref: index
  ---
