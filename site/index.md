@@ -3,9 +3,8 @@
  title: Praktikantenprojekt: Vier-Gewinnt
  lang: de
  lang-ref: index
+ redirect_from: '/'
  ---
-
- # {{ page.title }}
 
 Diese GitHub-Pages Website dokumentiert und beschreibt das Praktikantenprojekt "Vier-Gewinnt". 
 
