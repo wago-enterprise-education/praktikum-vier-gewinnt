@@ -1,10 +1,10 @@
  ---
  layout: page
- title: Praktikantenprojekt: Vier-Gewinnt
+ title: "Praktikantenprojekt: Vier-Gewinnt"
  lang: de
  lang-ref: index
- redirect_from: '/'
  ---
+ # Praktikantenprojekt: Vier-Gewinnt
 
 Diese GitHub-Pages Website dokumentiert und beschreibt das Praktikantenprojekt "Vier-Gewinnt". 
 
