@@ -1,1 +1,0 @@
-In diesem Ordner liegen sowohl Anleitungen zum Aufbau und zur Programmierung des Projekts sowie deren Lösungen, als auch Prototypen und Click-Dummy´s, die in der Planungsphase entstanden sind.
