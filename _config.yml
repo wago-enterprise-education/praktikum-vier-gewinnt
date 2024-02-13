@@ -5,6 +5,6 @@ email: Andreas.Epp@WAGO.com
 remote_theme: andrebell/wago-howto-theme
 lang: de
 plugins:
-   - jemoji
-   - jekyll-redirect-from
-   - jekyll-relative-links
+- jemoji
+- jekyll-redirect-from
+- jekyll-relative-links

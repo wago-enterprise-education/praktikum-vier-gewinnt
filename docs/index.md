@@ -2,6 +2,7 @@
 layout: page
 title: 4-Gewinnt
 lang: de
+lang-ref: index
 ---
 
 # Vier-Gewinnt
