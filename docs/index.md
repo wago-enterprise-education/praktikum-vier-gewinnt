@@ -2,11 +2,11 @@
 
 ## Kurzer Überblick
 
-Eine kurze Beschreibung des PCBs und der Bedienung kann [hier](doc/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
+Eine kurze Beschreibung des PCBs und der Bedienung kann [hier](/doc/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
 
 ## Informationen zur Programmierung des Moduls
 
-Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der Code für [Visual Studio Code](src/VSC_Vier-Gewinnt) und [Arduino](src/Arduino_Vier-Gewinnt) kann bei den jeweiligen Links heruntergeladen werden.
+Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der Code für [Visual Studio Code](/src/VSC_Vier-Gewinnt) und [Arduino](/src/Arduino_Vier-Gewinnt) kann bei den jeweiligen Links heruntergeladen werden.
 
 ## Ansprechpartner
 
