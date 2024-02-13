@@ -2,7 +2,7 @@
 
 ## Kurzer Überblick
 
-Eine kurze Beschreibung des Aufbaus und der Bedienung des Spiels kann [hier](docs/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
+Eine kurze Beschreibung des Aufbaus und der Bedienung des Spiels kann [hier](/docs/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
 
 ## Informationen zur Programmierung des Moduls
 
