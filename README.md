@@ -2,18 +2,18 @@
 
 ## Kurzer Überblick
 
-Bei diesem Projekt handelt es sich um ein Projekt für einen Praktikanten welches in der vollständigen Durchführung in etwa 1-3 Tage dauert. Basis des Projekts ist der ESP32. Ziel dabei ist, dass der Praktikant die Grundlagen der Microcontrollerprogrammierung und der Elektronik sowie des Lötens erlernt. Eine kurze Beschreibung des PCBs und der Bedienung kann [hier](doc/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
+Bei diesem Projekt handelt es sich um ein Projekt für einen Praktikanten welches in der vollständigen Durchführung in etwa 1-3 Tage dauert. Basis des Projekts ist der ESP32. Ziel dabei ist, dass der Praktikant die Grundlagen der Microcontrollerprogrammierung und der Elektronik sowie des Lötens erlernt. Eine kurze Beschreibung des PCBs und der Bedienung kann [hier](docs/Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. Bei Problemen oder Rückfragen kann sich an [uns](#ansprechpartner) gewendet werden.
 
 ## Ablauf des Praktikums
 
 ### Praktikumsdauer: 1 Tag
-1. Vollständiges Löten und Zusammenbauen des Gerätes mithilfe der [Lötanleitung](doc/LoetAnleitung.pdf)
-2. Auseinandersetzung mit dem [Aufbau und der Funktionsweise](doc/Platinenbeschreibung-VierGewinnt.pdf) des Spiels
+1. Vollständiges Löten und Zusammenbauen des Gerätes mithilfe der [Lötanleitung](docs/LoetAnleitung.pdf)
+2. Auseinandersetzung mit dem [Aufbau und der Funktionsweise](docs/Platinenbeschreibung-VierGewinnt.pdf) des Spiels
 
 ### Praktikumsdauer: 2 - 3 Tage
-1. [Aufbau und Programmierung einfacher Schaltungen auf dem Steckbrett](doc/Aufgabenstellung.pdf)
-2. Vollständiges Löten und Zusammenbauen des Gerätes mithilfe der [Lötanleitung](doc/LoetAnleitung.pdf)
-3. Auseinandersetzung mit dem [Aufbau und der Funktionsweise](doc/Platinenbeschreibung-VierGewinnt.pdf) des Spiels
+1. [Aufbau und Programmierung einfacher Schaltungen auf dem Steckbrett](docs/Aufgabenstellung.pdf)
+2. Vollständiges Löten und Zusammenbauen des Gerätes mithilfe der [Lötanleitung](docs/LoetAnleitung.pdf)
+3. Auseinandersetzung mit dem [Aufbau und der Funktionsweise](docs/Platinenbeschreibung-VierGewinnt.pdf) des Spiels
 
 ## Informationen zur Programmierung des Moduls
 
