@@ -1,3 +1,10 @@
+---
+layout: page
+title: 4-Gewinnt
+lang: de
+redirect_from: '/'
+---
+
 # Vier-Gewinnt
 
 ## Kurzer Überblick
