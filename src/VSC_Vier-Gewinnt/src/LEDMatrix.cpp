@@ -47,11 +47,7 @@ void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber,
             std::pair<int, int> tmp = findPossibleDestination(currentColumnnumber);
             rollingStone(currentColumnnumber, tmp.second, color);
         } else { // Lampe soll blinken
-            if (flash(1000)) {
-                LEDvalues[currentColumnnumber][0] = color;
-            } else {
-                LEDvalues[currentColumnnumber][0] = Color::OFF;
-            }
+            LEDvalues[currentColumnnumber][0] = color;
         }
     }
 }
@@ -171,11 +167,15 @@ void LEDMatrix::setLEDs() {
                 break;
 
             case Color::FLASH_RED: // blinkend rot
-                digitalWrite(pins[(int)Color::RED][0], HIGH);
+                if (flash(1000)) {
+                    digitalWrite(pins[(int)Color::RED][0], HIGH);
+                }
                 break;
 
             case Color::FLASH_GREEN: // blinkend grün
-                digitalWrite(pins[(int)Color::GREEN][0], HIGH);
+                if (flash(1000)) {
+                    digitalWrite(pins[(int)Color::GREEN][0], HIGH);
+                }
                 break;
         }
     }
