@@ -27,7 +27,7 @@ Um das technische Prinzip der LED-Matrix zu verstehen können Sie [diese Aufgabe
 
 ### Aufgabensatz 2
 
-In [diesem Aufgabensatz](erweiterteAufgabenstellung.pdf) können Sie selbst Hand an den Code legen, sich in den Programmcode hinein zu arbeiten und einige Zeilen Code eigenständig schreiben.
+In [diesem Aufgabensatz](ErweiterteAufgaben.pdf) können Sie selbst Hand an den Code legen, sich in den Programmcode hinein zu arbeiten und einige Zeilen Code eigenständig schreiben.
 
 ## Ansprechpartner
 
