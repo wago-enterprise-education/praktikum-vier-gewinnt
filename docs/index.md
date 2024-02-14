@@ -15,8 +15,8 @@ Wenn sie sichergestellt haben dass der Bauteilsatz vollständig ist, können Sie
 
 ## Informationen zur Programmierung des Moduls
 
-Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit dem aktuellen lauffähigen Programm für [Visual Studio Code](../src/VSC_Vier-Gewinnt) und [Arduino](../src/Arduino_Vier-Gewinnt/master) kann bei den jeweiligen Links heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
-<a href="../src/Arduino_Vier-Gewinnt" download>style.css</a>
+Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit dem aktuellen lauffähigen Programm für [Visual Studio Code](../src/VSC_Vier-Gewinnt) und [Arduino](../src/Arduino_Vier-Gewinnt.7z) kann bei den jeweiligen Links heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
+<a href="src/Arduino_Vier-Gewinnt" download>style.css</a>
 
 ## Aufgaben
 
