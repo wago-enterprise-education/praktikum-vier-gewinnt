@@ -15,8 +15,8 @@ Wenn sie sichergestellt haben dass der Bauteilsatz vollständig ist, können Sie
 
 ## Informationen zur Programmierung des Moduls
 
-Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit dem aktuellen lauffähigen Programm für [Visual Studio Code](../src/VSC_Vier-Gewinnt) und <a href="https://svgithub01001.wago.local/education/praktikum-4Gewinnt/tree/main/src/Arduino_Vier-Gewinnt" download>Arduino</a> kann bei den jeweiligen Links heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
-<a href="https://svgithub01001.wago.local/education/praktikum-4Gewinnt/blob/main/src/Arduino_Vier-Gewinnt.7z?raw=true" download>Arduino</a>
+Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit dem aktuellen lauffähigen Programmen für Visual Studio Code und Arduino und den Aufgaben können unter <a href="https://svgithub01001.wago.local/education/praktikum-4Gewinnt/blob/main/src/Bundle.7z?raw=true" download>diesem Link</a> als Zip-Datei heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
+
 
 ## Aufgaben
 
@@ -28,7 +28,7 @@ Um das technische Prinzip der LED-Matrix zu verstehen können Sie [diese Aufgabe
 
 ### Aufgabensatz 2
 
-In [diesem Aufgabensatz](ErweiterteAufgaben.pdf) können Sie selbst Hand an den Code legen, sich in den Programmcode hinein zu arbeiten und einige Zeilen Code eigenständig schreiben.
+In [diesem Aufgabensatz](ErweiterteAufgaben.pdf) können Sie selbst Hand an den Code legen, sich in den Programmcode hinein arbeiten und einige Zeilen Code eigenständig schreiben. Das dazugehörige Programm sind in vorangegangener Zip-Datei zu finden. Das Programm der Aufgabenstellung muss von Ihnen ergänzt werden.
 
 ## Ansprechpartner
 
