@@ -120,8 +120,10 @@ bool LEDMatrix::possibleDestination(int currentColumnnumber) {
 
 // Methode zum Zurücksetzen des Spiels
 void LEDMatrix::reset(byte column) {
+    if(!draw){
+        LEDvalues[column][0] = Color::OFF;
+    }
     draw = false;
-    LEDvalues[column][0] = Color::OFF;
     if(won){
         for(byte i = 1; i < 5; i++){ // Die 5 steht für die 4 Steine des Gewinns + die Farbe
             LEDvalues[winPath[i].first][winPath[i].second] = (Color)winPath[0].first;
