@@ -12,6 +12,7 @@ class LEDMatrix
 
     LEDMatrix(byte *, byte, byte);
     void setLightValue(int, int,  Color);
+    void placeStone(int, Color);
     void setLEDs();
     void printNumber(byte);
 

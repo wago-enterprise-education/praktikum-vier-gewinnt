@@ -33,7 +33,8 @@ const byte nColumns = 6;
 const byte nRows = 5;
 
 // Variablen für den Spielstatus
-
+byte currentColumn = 0;
+byte lastButton = 0;
 
 // Array für die Pin-Belegung der LED-Matrix
 byte LEDMatrixPins[nColumns * 3] = {ground1, ground2, ground3, ground4, ground5, ground6,
@@ -48,6 +49,9 @@ TaskHandle_t Task1;
 
 // Methode zum updaten der Anzeige
 void updateLEDMatrix(void * parameteter);
+
+// Methode zum Auslesen und Verarbeiten der Tastereingaben 
+void readButtons();
 
 void setup() {
     // Konfiguration der Pins
@@ -92,8 +96,13 @@ void setup() {
 
 // Regelt die Spiellogik
 void loop() {
-  lm.printNumber(1);
-  delay(1);
+    // Aufgabe 1 - Methode printNumber in LEDMatrix anpassen und alle nummern von 0 - 4 ausgeben 
+    lm.printNumber(currentColumn);
+    delay(2000);
+    currentColumn = (currentColumn+1) % 5;
+
+    readButtons();
+    delay(1);
 }
 
 // Methode zum updaten der Anzeige
@@ -103,4 +112,35 @@ void updateLEDMatrix(void * parameter){
         lm.setLEDs();
         delay(1);
     }
+}
+
+void readButtons(){
+    // Aufgabe 2 - Taster für links und rechts Programmieren
+    byte hilf = currentColumn;
+    if(digitalRead(buttonL)){
+        if(lastButton != buttonL)
+        {
+            lastButton = buttonL;
+            currentColumn = (currentColumn-1 + nColumns) % nColumns;
+        }
+    } else if(digitalRead(buttonR)){
+        if(lastButton != buttonR)
+        {
+            lastButton = buttonR;
+            currentColumn = (currentColumn+1) % nColumns;
+        }
+    }
+    // Aufgabe 3 - Stein fallen lasse
+    else if(digitalRead(buttonD)){
+
+        if(lastButton != buttonD)
+        {
+            lastButton = buttonD;
+            lm.placeStone(currentColumn, Color::GREEN);
+            currentColumn = 0;
+        }
+    } else{
+        lastButton = 0;
+    }
+    lm.setLightValue(currentColumn, hilf, Color::FLASH_GREEN);
 }

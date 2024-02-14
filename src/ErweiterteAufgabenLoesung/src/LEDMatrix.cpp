@@ -39,6 +39,24 @@ LEDMatrix::LEDMatrix(byte *p, byte initNColumns, byte initNRows) {
 
 // Public Methoden:
 
+// Methode zum Setzen des Lichtwerts einer LED
+void LEDMatrix::setLightValue(int currentColumnnumber, int previousColumnnumber, Color color) {
+    LEDvalues[previousColumnnumber][0] = Color::OFF;
+    LEDvalues[currentColumnnumber][0] = color;
+}
+
+void LEDMatrix::placeStone(int column, Color color){
+    LEDvalues[column][0] = Color::OFF;
+    for (byte i = nRows; i >= 0; i--)
+    {
+        if(LEDvalues[column][i] == Color::OFF){
+            LEDvalues[column][i] = color;
+            return;
+        }
+    }
+    
+}
+
 // Methode zum Setzen der LEDs
 void LEDMatrix::setLEDs() {
     // Schaltet alle LEDs aus
@@ -94,21 +112,45 @@ void LEDMatrix::printNumber(byte number){
 
     switch (number)
     {
+    case 0:
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN}, 
+                        {Color::GREEN, Color::OFF, Color::OFF, Color::OFF, Color::GREEN}, 
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
+        break;
     case 1:
         LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
                         {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
                         {Color::OFF, Color::GREEN, Color::OFF, Color::OFF, Color::OFF},
                         {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN},  
                         {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
-                        {Color::OFF, Color::OFF, Color::RED, Color::OFF, Color::OFF} };
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
         break;
     
     case 2:
-        LEDvalues = {   {Color::OFF, Color::OFF, Color::RED, Color::OFF, Color::OFF}, 
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
                         {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
                         {Color::GREEN, Color::OFF, Color::GREEN, Color::GREEN, Color::GREEN}, 
                         {Color::GREEN, Color::OFF, Color::GREEN, Color::OFF, Color::GREEN}, 
                         {Color::GREEN, Color::GREEN, Color::GREEN, Color::OFF, Color::GREEN}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
+        break;
+    case 3:
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::GREEN, Color::OFF, Color::GREEN, Color::OFF, Color::GREEN}, 
+                        {Color::GREEN, Color::OFF, Color::GREEN, Color::OFF, Color::GREEN}, 
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
+        break;
+    case 4:
+        LEDvalues = {   {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF}, 
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::OFF, Color::OFF}, 
+                        {Color::OFF, Color::OFF, Color::GREEN, Color::OFF, Color::OFF},
+                        {Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN, Color::GREEN}, 
                         {Color::OFF, Color::OFF, Color::OFF, Color::OFF, Color::OFF} };
         break;
     }
