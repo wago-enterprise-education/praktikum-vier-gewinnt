@@ -1,4 +1,4 @@
-<meta http-equiv="refresh" content="0; url=https://wago-enterprise-education.github.io/docs/index.md">
+<meta http-equiv="refresh" content="0; url=https://wago-enterprise-education.github.io/praktikum-vier-gewinnt/docs/index.html">
 
 # Praktikantenprojekt "Vier-Gewinnt"
 
