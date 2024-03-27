@@ -23,7 +23,7 @@ Zur Programmierung können entweder die "Arduino-IDE" oder "Visual Studio Code" 
 
 ## Hinweise
 
-Bei der Platinenversion 1.0 liegt ein Fehler vor. Beim Löten muss die Baterie falschherum angelötet werden (das schwarze Kabel in "VCC" und das rote in "GND")
+Während der Bestellung bitte darauf achten, dass bei der Option "Remove Order Number", "Specify a Location" ausgewählt ist.
 
 ## Ansprechpartner
 
