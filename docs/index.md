@@ -7,7 +7,7 @@ lang-ref: index
 
 ## Kurzer Überblick
 
-Hallo und willkommen bei Ihrem Praktikum bei WAGO. In diesem Modul geht es darum, Vier-Gewinnt aufzubauen, zu löten und gegebenenfalls zu programmieren. Eine kurze Beschreibung des Aufbaus und der Bedienung des Spiels kann [hier](Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. In dem WAGO-Karton den Sie bekommen haben befinden sich alle notwendigen Bauteile, um Vier-Gewinnt aufbauen zu können. Am besten prüfen Sie einmal ob alle Bauteile vorhanden sind. Anhand [dieser Bauteilliste](Bauteilliste.pdf) können Sie sicherstellen, dass der Bausatz vollständig und korrekt ist. Bei Problemen oder Rückfragen können Sie sich gerne an [Herrn Rehburg oder Frau Lüder wenden.](#ansprechpartner)
+Hallo und willkommen bei Ihrem Praktikum bei WAGO. In diesem Modul geht es darum, Vier-Gewinnt aufzubauen, zu löten und gegebenenfalls zu programmieren. Eine kurze Beschreibung des Aufbaus und der Bedienung des Spiels kann [hier](Platinenbeschreibung-VierGewinnt.pdf) gefunden werden. In dem WAGO-Karton den Sie bekommen haben befinden sich alle notwendigen Bauteile, um Vier-Gewinnt aufbauen zu können. Am besten prüfen Sie einmal ob alle Bauteile vorhanden sind. Anhand [dieser Bauteilliste](Bauteilliste.pdf) können Sie sicherstellen, dass der Bausatz vollständig und korrekt ist. Bei Problemen oder Rückfragen können Sie sich gerne an [Herrn Rehburg oder Herr Lauxtermann wenden.](#ansprechpartner)
 
 ## Aufbauanleitung
 
@@ -34,4 +34,4 @@ In [diesem Aufgabensatz](ErweiterteAufgaben.pdf) können Sie selbst Hand an den 
 
 <maik.rehburg@wago.com>
 
-<lisa.lueder@wago.com>
+<tobias.lauxtermann@wago.com>
