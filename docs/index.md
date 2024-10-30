@@ -15,7 +15,7 @@ Wenn Sie sichergestellt haben dass der Bauteilsatz vollständig ist, können Sie
 
 ## Informationen zur Programmierung des Moduls
 
-Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit den aktuellen lauffähigen Programmen für Visual Studio Code und Arduino und den Vorlagen der Aufgaben können unter [diesem Link](/../src/Bundle.7z) als Zip-Datei heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
+Wenn Sie das Spiel aufgebaut haben können Sie anfangen zu programmieren. Um die Programmierumgebung "Arduino" einmalig einzurichten können Sie sich an [diese Anleitung](Programmierung.pdf) halten. Zur Programmierung können wahlweise entweder die "Arduino-IDE" oder "Visual Studio Code" benutzt werden. Programmiert wird auf dem Breakout-Board "DOIT ESP32 DEVKIT V1". Der fertige Code mit den aktuellen lauffähigen Programmen für Visual Studio Code und Arduino und den Vorlagen der Aufgaben können unter [diesem Link](/../docs/Bundle.7z) als Zip-Datei heruntergeladen werden. Spielen Sie am am besten das fertige Programm einmal auf den Mikrocontroller um zu prüfen, ob Sie alles richtig verlötet haben. Die Bedienung des Geräts kann [hier](Platinenbeschreibung-VierGewinnt.pdf) nachgelesen werden.
 
 
 ## Aufgaben
