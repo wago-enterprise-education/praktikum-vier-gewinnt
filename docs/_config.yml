@@ -2,7 +2,7 @@ name: vier-gewinnt site
 title: null
 author: Max Steidle, Lucas Krietenstein, Andreas Epp
 email: Andreas.Epp@WAGO.com
-remote_theme: andrebell/wago-howto-theme
+remote_theme: wago-enterprise-education/wago-github-pages-theme
 lang: de
 plugins:
 - jemoji
